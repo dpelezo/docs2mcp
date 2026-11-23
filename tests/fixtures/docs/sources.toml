@@ -1,0 +1,66 @@
+# Documentation sources for the five eval APIs.
+#
+# scripts/snapshot_docs.py fetches every page listed here, trims it, and saves it:
+#   - redistribute = true  -> tests/fixtures/docs/<id>/ (committed, used by offline unit tests)
+#   - redistribute = false -> .cache/docs/<id>/      (git-ignored, used by integration tests and evals)
+# It also records retrieval date, size and SHA-256 of each committed file in manifest.json.
+#
+# Licence notes were checked on 2026-11-23 against each project's public repository.
+# Only content we may redistribute is committed. Change `redistribute` only after checking the terms.
+
+[[api]]
+id = "pokeapi"
+name = "PokéAPI"
+base_url = "https://pokeapi.co/api/v2"
+redistribute = true
+licence = "BSD-3-Clause. Docs site source: github.com/PokeAPI/pokeapi.co (LICENSE.rst). Pokémon names are trademarks of Nintendo."
+openapi = "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml"
+openapi_note = "openapi.yml in github.com/PokeAPI/pokeapi"
+pages = ["https://pokeapi.co/docs/v2"]
+
+[[api]]
+id = "frankfurter"
+name = "Frankfurter"
+base_url = "https://api.frankfurter.dev/v1"
+redistribute = true
+licence = "MIT. Source: github.com/lineofflight/frankfurter (LICENSE)."
+openapi = "https://api.frankfurter.dev/v1/openapi.json"
+openapi_note = "lib/public/v1/openapi.json in github.com/lineofflight/frankfurter, served at /v1/openapi.json"
+pages = ["https://frankfurter.dev/"]
+
+[[api]]
+id = "open_meteo"
+name = "Open-Meteo"
+base_url = "https://api.open-meteo.com/v1"
+redistribute = false
+licence = "Docs site is AGPL-3.0 (github.com/open-meteo/open-meteo-website). Not committed; cached locally."
+openapi = ""
+openapi_note = "No OpenAPI file in github.com/open-meteo/open-meteo or open-meteo-website (checked 2026-11-23). Report docs2mcp's score alone."
+pages = [
+  "https://open-meteo.com/en/docs",
+  "https://open-meteo.com/en/docs/geocoding-api",
+]
+
+[[api]]
+id = "open_library"
+name = "Open Library"
+base_url = "https://openlibrary.org"
+redistribute = false
+licence = "Site source is AGPL-3.0 (github.com/internetarchive/openlibrary). Not committed; cached locally."
+openapi = ""
+openapi_note = "No OpenAPI file in github.com/internetarchive/openlibrary (checked 2026-11-23). Report docs2mcp's score alone."
+pages = [
+  "https://openlibrary.org/dev/docs/api/search",
+  "https://openlibrary.org/dev/docs/api/books",
+  "https://openlibrary.org/dev/docs/api/authors",
+]
+
+[[api]]
+id = "rest_countries"
+name = "REST Countries"
+base_url = "https://restcountries.com/v3.1"
+redistribute = false
+licence = "Terms not confirmed. Not committed; cached locally."
+openapi = ""
+openapi_note = "No official OpenAPI spec known; not yet checked. Report docs2mcp's score alone unless one is found."
+pages = ["https://restcountries.com/"]

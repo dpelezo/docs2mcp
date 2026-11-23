@@ -66,13 +66,16 @@ select = [
     "RUF",      # ruff-specific
 ]
 
+[tool.ruff.lint.isort]
+known-first-party = ["docs2mcp", "scripts"]
+
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101", "PLR2004"]  # assert and magic numbers are fine in tests
 
 # --- Types ------------------------------------------------------------------
 
 [tool.pyright]
-include = ["src", "tests"]
+include = ["src", "tests", "scripts"]
 pythonVersion = "3.14"
 typeCheckingMode = "strict"
 venvPath = "."
@@ -82,6 +85,7 @@ venv = ".venv"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = [
     "-ra",
     "--strict-markers",
