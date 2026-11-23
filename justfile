@@ -25,5 +25,9 @@ typecheck:
 test:
     uv run pytest -m unit
 
+# Regenerate docs/spec.schema.json after changing the spec models
+schema:
+    uv run docs2mcp schema > docs/spec.schema.json
+
 # Everything CI runs; must pass before every commit
 check: lint typecheck test

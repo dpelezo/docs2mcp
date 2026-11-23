@@ -1,0 +1,329 @@
+{
+  "$defs": {
+    "AuthScheme": {
+      "additionalProperties": false,
+      "description": "How requests authenticate. The eval APIs all use `none`.",
+      "properties": {
+        "location": {
+          "anyOf": [
+            {
+              "enum": [
+                "header",
+                "query"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where an API key is sent. Required for `api_key`.",
+          "title": "Location"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Header or query parameter name. Required for `api_key`.",
+          "title": "Name"
+        },
+        "type": {
+          "$ref": "#/$defs/AuthType",
+          "default": "none"
+        }
+      },
+      "title": "AuthScheme",
+      "type": "object"
+    },
+    "AuthType": {
+      "enum": [
+        "none",
+        "api_key",
+        "bearer",
+        "basic"
+      ],
+      "title": "AuthType",
+      "type": "string"
+    },
+    "Endpoint": {
+      "additionalProperties": false,
+      "description": "One HTTP operation.",
+      "properties": {
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable snake_case identifier, unique within the spec.",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "method": {
+          "$ref": "#/$defs/HttpMethod"
+        },
+        "parameters": {
+          "items": {
+            "$ref": "#/$defs/Parameter"
+          },
+          "title": "Parameters",
+          "type": "array"
+        },
+        "path": {
+          "description": "Path relative to base_url, e.g. /v1/forecast/{city}.",
+          "pattern": "^/",
+          "title": "Path",
+          "type": "string"
+        },
+        "response": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ResponseShape"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "maxLength": 2083,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Documentation page this endpoint was extracted from.",
+          "title": "Source Url"
+        },
+        "summary": {
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "method",
+        "path",
+        "summary"
+      ],
+      "title": "Endpoint",
+      "type": "object"
+    },
+    "HttpMethod": {
+      "enum": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "title": "HttpMethod",
+      "type": "string"
+    },
+    "JsonValue": {},
+    "ParamLocation": {
+      "enum": [
+        "path",
+        "query",
+        "header",
+        "body"
+      ],
+      "title": "ParamLocation",
+      "type": "string"
+    },
+    "ParamType": {
+      "enum": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "array",
+        "object"
+      ],
+      "title": "ParamType",
+      "type": "string"
+    },
+    "Parameter": {
+      "additionalProperties": false,
+      "description": "One input to an endpoint.",
+      "properties": {
+        "default": {
+          "$ref": "#/$defs/JsonValue",
+          "default": null
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "enum": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Enum"
+        },
+        "items_type": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ParamType"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Element type when `type` is `array`."
+        },
+        "location": {
+          "$ref": "#/$defs/ParamLocation"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "required": {
+          "default": false,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "type": {
+          "$ref": "#/$defs/ParamType"
+        }
+      },
+      "required": [
+        "name",
+        "location",
+        "type"
+      ],
+      "title": "Parameter",
+      "type": "object"
+    },
+    "ResponseShape": {
+      "additionalProperties": false,
+      "description": "What a successful response looks like, as far as the docs say.",
+      "properties": {
+        "content_type": {
+          "default": "application/json",
+          "title": "Content Type",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "example": {
+          "$ref": "#/$defs/JsonValue",
+          "default": null
+        },
+        "key_fields": {
+          "description": "Dotted paths to the fields a caller is most likely to need.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Key Fields",
+          "type": "array"
+        }
+      },
+      "title": "ResponseShape",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Everything extraction learned about one API.",
+  "properties": {
+    "auth": {
+      "$ref": "#/$defs/AuthScheme"
+    },
+    "base_url": {
+      "format": "uri",
+      "maxLength": 2083,
+      "minLength": 1,
+      "title": "Base Url",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "docs_url": {
+      "anyOf": [
+        {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Docs Url"
+    },
+    "endpoints": {
+      "items": {
+        "$ref": "#/$defs/Endpoint"
+      },
+      "minItems": 1,
+      "title": "Endpoints",
+      "type": "array"
+    },
+    "name": {
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "spec_version": {
+      "const": "1",
+      "default": "1",
+      "title": "Spec Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "base_url",
+    "endpoints"
+  ],
+  "title": "ApiSpec",
+  "type": "object"
+}
