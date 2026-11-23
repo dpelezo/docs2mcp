@@ -14,3 +14,8 @@ def test_version_flag_prints_the_package_version(capsys: pytest.CaptureFixture[s
 def test_no_arguments_prints_help(capsys: pytest.CaptureFixture[str]) -> None:
     assert main([]) == 0
     assert "usage: docs2mcp" in capsys.readouterr().out
+
+
+def test_schema_command_prints_the_spec_json_schema(capsys: pytest.CaptureFixture[str]) -> None:
+    assert main(["schema"]) == 0
+    assert '"title": "ApiSpec"' in capsys.readouterr().out
