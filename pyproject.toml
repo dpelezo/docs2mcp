@@ -1,0 +1,100 @@
+[project]
+name = "docs2mcp"
+version = "0.1.0"
+description = "Turn messy API docs into curated, task-shaped MCP servers, with an eval that measures whether agents do better."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Domingos Pelezo", email = "dopelezo@gmail.com" }]
+requires-python = ">=3.14"
+keywords = ["mcp", "llm", "agents", "openapi", "evals"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic>=2.14.4",
+    "pydantic-settings>=2.16.3",
+]
+
+[project.urls]
+Repository = "https://github.com/dpelezo/docs2mcp"
+
+[project.scripts]
+docs2mcp = "docs2mcp.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.11.32,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.7.0",
+    "pyright>=1.1.414",
+    "pytest>=9.2.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.6",
+]
+
+# --- Lint and format -------------------------------------------------------
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # import order
+    "B",        # bugbear
+    "UP",       # pyupgrade
+    "SIM",      # simplify
+    "C4",       # comprehensions
+    "RET",      # return statements
+    "ARG",      # unused arguments
+    "PT",       # pytest style
+    "N",        # naming
+    "S",        # bandit security checks
+    "BLE",      # blind except
+    "TRY",      # exception handling
+    "PL",       # pylint
+    "ERA",      # commented-out code
+    "RUF",      # ruff-specific
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLR2004"]  # assert and magic numbers are fine in tests
+
+# --- Types ------------------------------------------------------------------
+
+[tool.pyright]
+include = ["src", "tests"]
+pythonVersion = "3.14"
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+
+# --- Tests ------------------------------------------------------------------
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=docs2mcp",
+    "--cov-report=term-missing",
+    "--cov-fail-under=80",
+]
+markers = [
+    "unit: fast tests with no network access (everything under tests/unit)",
+    "integration: tests against real services (everything under tests/integration)",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["src/docs2mcp"]
