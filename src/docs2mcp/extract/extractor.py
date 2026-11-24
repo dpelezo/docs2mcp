@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from pydantic import ValidationError
 
 from docs2mcp.extract.merge import (
+    apply_shared_parameters,
     build_spec,
     choose_auth,
     choose_base_url,
@@ -13,6 +14,7 @@ from docs2mcp.extract.merge import (
     expand_resource_templates,
     merge_endpoints,
     outside_base,
+    route_key,
     to_endpoint,
 )
 from docs2mcp.extract.model import ExtractionModel, ModelOutputError, Turn
@@ -41,6 +43,7 @@ class ExtractionReport:
     merged: list[str] = field(default_factory=list[str])
     expanded: list[str] = field(default_factory=list[str])
     out_of_scope: list[str] = field(default_factory=list[str])
+    shared_parameters: list[str] = field(default_factory=list[str])
 
     @property
     def calls(self) -> int:
@@ -116,6 +119,7 @@ class Extractor:
         notes: list[str] = []
         endpoints: list[Endpoint] = []
         templates: dict[tuple[str, str], Endpoint] = {}
+        shares: dict[tuple[str, str], list[str]] = {}
         for wire in accepted.endpoints:
             if outside_base(wire.served_from, wire.path, chosen_base):
                 report.out_of_scope.append(
@@ -131,8 +135,12 @@ class Extractor:
                 templates.setdefault((endpoint.method, endpoint.path), endpoint)
             else:
                 endpoints.append(endpoint)
+                if wire.same_parameters_as:
+                    refs = shares.setdefault(route_key(endpoint), [])
+                    refs.extend(r for r in wire.same_parameters_as if r not in refs)
         endpoints = expand_resource_templates(endpoints, list(templates.values()), report.expanded)
         merged = merge_endpoints(endpoints, notes, report.merged)
+        merged = apply_shared_parameters(merged, shares, chosen_base, report.shared_parameters)
         report.repairs = notes
         if not merged:
             msg = "no valid endpoints were extracted; see the report"

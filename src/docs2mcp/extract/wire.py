@@ -53,6 +53,13 @@ class WireEndpoint(_Wire):
             "API's base URL when the docs give only a relative path."
         )
     )
+    same_parameters_as: list[str] = Field(
+        description=(
+            "Paths of other endpoints whose parameters the docs say this endpoint also accepts, "
+            "as written in the docs (e.g. ['/v2/rates'] for 'supports the same parameters as "
+            "/v2/rates'). Empty when the docs say nothing like that."
+        )
+    )
     for_every_resource: bool = Field(
         description=(
             "true only if the docs say this one route works for every resource of the API, with "
