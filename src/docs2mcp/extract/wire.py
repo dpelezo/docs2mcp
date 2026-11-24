@@ -46,6 +46,13 @@ class WireEndpoint(_Wire):
         description="Dotted paths of the most useful response fields; empty if not documented."
     )
     source_chunk_id: str = Field(description="Id of the chunk that documents this endpoint.")
+    served_from: str = Field(
+        description=(
+            "The base URL the docs show this endpoint being called on: scheme, host and any "
+            "version path before the endpoint path, e.g. https://api.example.com/v2. Use the "
+            "API's base URL when the docs give only a relative path."
+        )
+    )
     for_every_resource: bool = Field(
         description=(
             "true only if the docs say this one route works for every resource of the API, with "

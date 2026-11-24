@@ -12,6 +12,7 @@ from docs2mcp.extract.merge import (
     describe_error,
     expand_resource_templates,
     merge_endpoints,
+    outside_base,
     to_endpoint,
 )
 from docs2mcp.extract.model import ExtractionModel, ModelOutputError, Turn
@@ -39,6 +40,7 @@ class ExtractionReport:
     repairs: list[str] = field(default_factory=list[str])
     merged: list[str] = field(default_factory=list[str])
     expanded: list[str] = field(default_factory=list[str])
+    out_of_scope: list[str] = field(default_factory=list[str])
 
     @property
     def calls(self) -> int:
@@ -115,6 +117,11 @@ class Extractor:
         endpoints: list[Endpoint] = []
         templates: dict[tuple[str, str], Endpoint] = {}
         for wire in accepted.endpoints:
+            if outside_base(wire.served_from, wire.path, chosen_base):
+                report.out_of_scope.append(
+                    f"{wire.method} {wire.path}: served from {wire.served_from}, not {chosen_base}"
+                )
+                continue
             try:
                 endpoint = to_endpoint(wire, chosen_base, lookup, notes)
             except ValidationError as error:  # cannot happen for endpoints validated per batch

@@ -21,6 +21,11 @@ a single descriptive placeholder.
 default. allowed_values: only values the docs list explicitly.
 - Keep summary and description to one short sentence each. Do not copy response examples.
 - source_chunk_id: the id of the chunk where the endpoint is documented.
+- served_from: the base URL the docs show for this endpoint (scheme, host and any version \
+path), copied from its example URLs. It is how out-of-scope endpoints are found, so do not \
+normalise it to the API's main base URL: an image host, a different API version or a \
+different service keeps its own URL. When the docs give only a relative path, use the \
+API's base URL.
 - for_every_resource: true only when the docs describe one generic route that works for every \
 resource of the API (for example "calling any endpoint without an id returns a list: \
 GET /{endpoint}/"). Record such a route once, with the resource as its first placeholder; it is \

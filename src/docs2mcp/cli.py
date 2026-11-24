@@ -129,6 +129,7 @@ def report_json(report: ExtractionReport) -> str:
         "repairs": report.repairs,
         "merged": report.merged,
         "expanded": report.expanded,
+        "out_of_scope": report.out_of_scope,
         "batches": [asdict(b) for b in report.batches],
     }
     return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
@@ -165,6 +166,10 @@ def _run_extract(args: argparse.Namespace) -> int:
     )
     for note in report.expanded:
         print(f"  resource template {note}")
+    if report.out_of_scope:
+        print(f"{len(report.out_of_scope)} endpoints dropped as served from another base URL:")
+        for note in report.out_of_scope:
+            print(f"  {note}")
     for batch in report.failed_batches:
         print(f"  batch {batch.chunk_ids[0]}..{batch.chunk_ids[-1]} failed: {batch.error}")
     print(f"Wrote {args.out} and {report_path}")

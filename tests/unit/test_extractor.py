@@ -149,3 +149,24 @@ def test_flagged_resource_templates_are_expanded_once_and_reported() -> None:
         "/pokemon/{id}",
     ]
     assert report.expanded == ["GET /{endpoint}: expanded into 2 routes, one per resource"]
+
+
+def test_endpoints_served_from_another_base_url_are_dropped_and_reported() -> None:
+    model = ScriptedModel(
+        [
+            batch(
+                endpoint("get_rates", "/rates", served_from="https://api.frankfurter.dev/v2"),
+                endpoint("v1_latest", "/latest", served_from="https://api.frankfurter.dev/v1"),
+            ),
+            batch(),  # the second batch documents nothing
+        ]
+    )
+
+    spec, report = Extractor(model, batch_tokens=6000).run(
+        CHUNKS, base_url="https://api.frankfurter.dev/v2"
+    )
+
+    assert [e.path for e in spec.endpoints] == ["/rates"]
+    assert report.out_of_scope == [
+        "GET /latest: served from https://api.frankfurter.dev/v1, not https://api.frankfurter.dev/v2"
+    ]
