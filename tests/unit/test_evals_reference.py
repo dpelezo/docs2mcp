@@ -163,6 +163,7 @@ def test_the_committed_references_cover_the_eval_apis_so_far() -> None:
         "pokeapi",
         "postcodes_io",
         "open_library",
+        "open_meteo",
     }
 
 
