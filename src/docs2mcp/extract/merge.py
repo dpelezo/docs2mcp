@@ -12,6 +12,10 @@ Safe fixes:
 - a default outside its allowed values is dropped;
 - duplicate endpoints are merged, and repeated operation names get a suffix.
 
+Endpoints that Claude reports as served from a different base URL (another host,
+or another API version) are out of scope for this spec and are dropped with a
+note. See ADR 0007.
+
 One transformation is not a repair: a route Claude flags as working for every
 resource (`GET /{endpoint}`) is expanded into one route per resource the docs
 document (`GET /pokemon`, `GET /ability`, ...). See ADR 0006.
@@ -56,6 +60,40 @@ def normalize_base_url(url: str) -> str | None:
         return None
     path = parts.path.rstrip("/")
     return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), path, "", ""))
+
+
+def _site(url: str) -> tuple[str, str] | None:
+    """Host and path of an http(s) URL, ignoring scheme, `www.` and trailing slashes."""
+    parts = urlsplit(url.strip())
+    if parts.scheme not in {"http", "https"} or not parts.hostname:
+        return None
+    host = parts.hostname.lower().removeprefix("www.")
+    return host, parts.path.rstrip("/")
+
+
+def outside_base(served_from: str, path: str, base_url: str) -> bool:
+    """Whether the endpoint's full URL is not under `base_url`.
+
+    The full URL is `path` if it is absolute, otherwise `served_from` + `path`.
+    An empty or unparsable `served_from` counts as the base URL itself.
+    """
+    base = _site(base_url)
+    if base is None:
+        return False
+    raw = path.strip()
+    if raw.startswith(("http://", "https://")):
+        target = _site(raw)
+    else:
+        origin = _site(served_from) if served_from.strip() else None
+        if origin is None:
+            return False
+        target = (origin[0], origin[1] + "/" + raw.lstrip("/"))
+    if target is None:
+        return False
+    host, full_path = target
+    base_host, base_path = base
+    within = full_path == base_path or full_path.startswith(base_path + "/") or not base_path
+    return host != base_host or not within
 
 
 def choose_base_url(candidates: Iterable[str], override: str | None = None) -> str:

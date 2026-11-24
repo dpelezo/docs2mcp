@@ -10,6 +10,7 @@ from docs2mcp.extract.merge import (
     identifier,
     merge_endpoints,
     normalize_path,
+    outside_base,
     to_endpoint,
     to_parameter,
 )
@@ -273,3 +274,24 @@ def test_a_template_that_cannot_be_expanded_is_kept_as_documented(
     assert result == [*endpoints, template]  # kept once
     assert len(expanded) == 2
     assert reason in expanded[0]
+
+
+@pytest.mark.parametrize(
+    ("served_from", "path", "base_url", "outside"),
+    [
+        ("https://covers.openlibrary.org", "/a/olid/{olid}.jpg", "https://openlibrary.org", True),
+        ("https://api.frankfurter.dev/v1", "/latest", "https://api.frankfurter.dev/v2", True),
+        ("https://api.frankfurter.dev/v20", "/rates", "https://api.frankfurter.dev/v2", True),
+        ("", "https://covers.openlibrary.org/b/id/1.jpg", "https://openlibrary.org", True),
+        ("https://api.frankfurter.dev/v2", "/rates", "https://api.frankfurter.dev/v2", False),
+        ("https://api.open-meteo.com", "/v1/forecast", "https://api.open-meteo.com/v1", False),
+        ("http://www.openlibrary.org/", "/search.json", "https://openlibrary.org", False),
+        ("https://pokeapi.co/api/v2/", "/api/v2/pokemon/{id}", "https://pokeapi.co/api/v2", False),
+        ("", "https://openlibrary.org/search.json", "https://openlibrary.org", False),
+        ("", "/rates", "https://api.frankfurter.dev/v2", False),
+        ("see the docs", "/rates", "https://api.frankfurter.dev/v2", False),
+        ("https://api.frankfurter.dev/v1", "/latest", "not a url", False),
+    ],
+)
+def test_outside_base(served_from: str, path: str, base_url: str, outside: bool) -> None:
+    assert outside_base(served_from, path, base_url) is outside
