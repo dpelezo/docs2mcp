@@ -57,7 +57,7 @@ uv run docs2mcp ingest https://openlibrary.org/dev/docs/api/search \
   https://openlibrary.org/dev/docs/api/books --out ingest/open_library
 ```
 
-This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. `just integration` runs the live tests against real sites.
+This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. `just integration` runs the live tests against real sites. How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
 
 ### Extract an API spec
 
@@ -68,7 +68,7 @@ uv run docs2mcp extract ingest/pokeapi --out specs/pokeapi/spec.json --record re
 uv run docs2mcp extract ingest/pokeapi --out specs/pokeapi/spec.json --replay recordings/pokeapi  # no API calls
 ```
 
-Claude reads the chunks in batches and fills a flat schema; code validates each endpoint, repairs what is mechanical, sends the rest back to Claude with the errors, and merges everything into `spec.json`. `extraction_report.json` lists calls, tokens, repairs and rejected endpoints. How it works: [ADR 0004](docs/adr/0004-extraction.md). How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
+Claude reads the chunks in batches and fills a flat schema; code validates each endpoint, repairs what is mechanical, sends the rest back to Claude with the errors, and merges everything into `spec.json`. `extraction_report.json` lists calls, tokens, merged duplicates, repairs and rejected endpoints. How it works: [ADR 0004](docs/adr/0004-extraction.md).
 
 ## How this repo is built
 

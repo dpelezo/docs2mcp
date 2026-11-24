@@ -36,6 +36,7 @@ class ExtractionReport:
     model: str
     batches: list[BatchLog] = field(default_factory=list[BatchLog])
     repairs: list[str] = field(default_factory=list[str])
+    merged: list[str] = field(default_factory=list[str])
 
     @property
     def calls(self) -> int:
@@ -115,7 +116,7 @@ class Extractor:
                 endpoints.append(to_endpoint(wire, chosen_base, lookup, notes))
             except ValidationError as error:  # cannot happen for endpoints validated per batch
                 report.batches[-1].rejected.append(describe_error(wire, error))
-        merged = merge_endpoints(endpoints, notes)
+        merged = merge_endpoints(endpoints, notes, report.merged)
         report.repairs = notes
         if not merged:
             msg = "no valid endpoints were extracted; see the report"

@@ -186,12 +186,14 @@ def test_merge_endpoints_combines_duplicates_and_makes_ids_unique() -> None:
     )
     other = to_endpoint(endpoint("get_pokemon", "/berry"), BASE, CHUNKS, notes)
 
-    merged = merge_endpoints([first, duplicate, other], notes)
+    merges: list[str] = []
+    merged = merge_endpoints([first, duplicate, other], notes, merges)
 
     assert [e.id for e in merged] == ["get_pokemon", "get_pokemon_2"]
     assert [p.name for p in merged[0].parameters] == ["name", "lang"]
     assert merged[0].description == "Longer description of the endpoint."
-    assert any("merged a duplicate" in n for n in notes)
+    assert merges == ["GET /pokemon/{name}: merged a duplicate from another chunk"]
+    assert not any("merged a duplicate" in n for n in notes)
     assert any("renamed id to 'get_pokemon_2'" in n for n in notes)
 
 

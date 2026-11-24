@@ -40,7 +40,7 @@ def test_extracts_merges_and_reports_across_batches() -> None:
     assert [(e.id, e.path) for e in spec.endpoints] == [("get_rates", "/rates")]
     assert [p.name for p in spec.endpoints[0].parameters] == ["base", "symbols"]
     assert (report.calls, report.input_tokens, report.output_tokens) == (2, 2000, 400)
-    assert any("merged a duplicate" in r for r in report.repairs)
+    assert report.merged == ["GET /rates: merged a duplicate from another chunk"]
     assert report.rejected == []
 
 
