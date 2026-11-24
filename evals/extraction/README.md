@@ -20,7 +20,7 @@ Baseline: extraction as merged in #11, `claude-haiku-5-5`, one run per API.
 | API | Endpoints found | Endpoint precision | Parameters found | Parameter precision | Calls | Input / output tokens |
 |---|---|---|---|---|---|---|
 | Frankfurter | 8 / 9 (89%) | 73% (11 extracted) | 11 / 20 (55%) | 92% | 6 | 87,755 / 13,259 |
-| PokéAPI | not run yet | | | | | |
+| PokéAPI | 51 / 102 (50%) | 96% (53 extracted) | n/a: matched endpoints have only path parameters | n/a | 8 | 105,325 / 16,666 |
 | Open-Meteo, Open Library, REST Countries | need hand-written references | | | | | |
 
 Notes on the Frankfurter baseline:
@@ -29,3 +29,13 @@ Notes on the Frankfurter baseline:
 - **Extras:** `/rates.csv` is a format of `/rates`. `/latest` and `/{date}` come from the v1 docs page that the crawl reached from the site root.
 - **Parameters:** 7 of the 9 misses are on `/providers/{provider}/rates`. The docs only say it "supports the same parameters as `/v2/rates`".
 - **Cost:** the crawl fetched 20 pages (the default limit), but only the home page documents v2. Each call also carries about 10,000 tokens of fixed prompt and schema.
+
+Notes on the PokéAPI baseline:
+
+- **Found:** all 51 `/<resource>/{id}` detail endpoints, from one docs page.
+- **Missed:** the 50 list endpoints (`/pokemon`, `/ability`, …) and `/meta`.
+  - The docs describe lists once, generically: calling any endpoint without an id returns a paginated list, at `GET /api/v2/{endpoint}/`. Claude extracted exactly that, as one templated endpoint with `limit` and `offset`. It counts as an extra (`/{}`), and the 50 concrete routes count as misses.
+  - `/meta` does not appear as an endpoint on the docs page.
+- **Extra:** `/item-price/{id}` is documented on the docs page but is not in OpenAPI 2.10.0.
+- **Parameters:** not measurable yet. Every matched endpoint has only a path parameter, so the 0/0 ratio is the "nothing to count" 1.0 from ADR 0005, not a result.
+  - When list endpoints are matched, note that the OpenAPI file lists a `q` parameter, while the docs say the public deployment allows only `limit` and `offset`.

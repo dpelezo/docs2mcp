@@ -6,7 +6,7 @@ Turn messy API documentation into a curated, task-shaped [MCP](https://modelcont
 ![Python 3.14](https://img.shields.io/badge/python-3.14-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-> **Status: in progress (week 1 of 4).** The spec models, `docs2mcp ingest`, `docs2mcp extract` and `docs2mcp score` work. Extraction has a first baseline on Frankfurter: 8 of 9 endpoints and 55% of their parameters ([details](evals/extraction/README.md)). Design, generation and the tool-use eval do not exist yet. The README will open with the eval numbers once they exist.
+> **Status: in progress (week 1 of 4).** The spec models, `docs2mcp ingest`, `docs2mcp extract` and `docs2mcp score` work. Extraction has first baselines: Frankfurter 8 of 9 endpoints and 55% of their parameters; PokéAPI 51 of 102 endpoints, all of its detail routes but none of its list routes ([details](evals/extraction/README.md)). Design, generation and the tool-use eval do not exist yet. The README will open with the eval numbers once they exist.
 
 ## Why
 
