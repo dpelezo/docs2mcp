@@ -36,6 +36,13 @@ class Settings(BaseSettings):
     chunk_max_tokens: int = Field(default=1500, ge=200)
     chunk_min_tokens: int = Field(default=80, ge=0)
 
+    # Extract
+    extract_batch_tokens: int = Field(default=6000, ge=500, description="Input tokens per call.")
+    extract_max_output_tokens: int = Field(
+        default=16000, ge=1000, description="Output cap per call; a cut-off reply splits the batch."
+    )
+    extract_max_retries: int = Field(default=2, ge=0, description="Feedback rounds per batch.")
+
     def require_anthropic_key(self) -> str:
         """Return the API key, or fail with a clear message if it is missing."""
         if self.anthropic_api_key is None:

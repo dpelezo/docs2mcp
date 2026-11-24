@@ -5,6 +5,6 @@ See docs/adr/0003-ingest-pipeline.md.
 """
 
 from docs2mcp.ingest.models import Chunk, Page, SkippedUrl
-from docs2mcp.ingest.pipeline import IngestResult, ingest
+from docs2mcp.ingest.pipeline import IngestResult, ingest, read_chunks, read_pages
 
-__all__ = ["Chunk", "IngestResult", "Page", "SkippedUrl", "ingest"]
+__all__ = ["Chunk", "IngestResult", "Page", "SkippedUrl", "ingest", "read_chunks", "read_pages"]
