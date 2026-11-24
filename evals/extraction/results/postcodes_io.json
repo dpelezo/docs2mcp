@@ -6,7 +6,8 @@
     "ingest": "docs2mcp ingest <the 22 pages in sources.toml> --max-pages 22 (22 pages, 88 chunks, ~27,798 tokens)",
     "calls": 6,
     "input_tokens": 66985,
-    "output_tokens": 10189
+    "output_tokens": 10189,
+    "rescored": "2026-11-24, same spec.json, after the reference gained 4 documented POST /postcodes query parameters (approved)"
   },
   "api": "postcodes_io",
   "endpoints": {
@@ -17,11 +18,11 @@
     "precision": 1.0
   },
   "parameters": {
-    "matched": 16,
-    "expected": 23,
+    "matched": 20,
+    "expected": 27,
     "found": 20,
-    "recall": 0.6957,
-    "precision": 0.8
+    "recall": 0.7407,
+    "precision": 1.0
   },
   "required_mismatches": 4,
   "missing_endpoints": [],
@@ -65,19 +66,14 @@
     {
       "route": "POST /postcodes",
       "parameters": {
-        "matched": 0,
-        "expected": 0,
+        "matched": 4,
+        "expected": 4,
         "found": 4,
         "recall": 1.0,
-        "precision": 0.0
+        "precision": 1.0
       },
       "missing": [],
-      "extra": [
-        "query:filter",
-        "query:limit",
-        "query:radius",
-        "query:widesearch"
-      ],
+      "extra": [],
       "required_mismatches": []
     },
     {

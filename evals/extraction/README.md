@@ -3,7 +3,7 @@
 How well `docs2mcp extract` recovers an API's real endpoints and parameters from its docs. The rules are in [ADR 0005](../../docs/adr/0005-extraction-scoring.md).
 
 - `reference/<id>.json` is the ground truth. PokéAPI, Frankfurter and Postcodes.io are generated from their own OpenAPI files with `just references`. Open Library's and both Open-Meteo ones are written by hand from their docs pages (`source.kind: "manual"`).
-- `additions/<id>.json` adds the routes and parameters an official file leaves out but the docs document and the server serves, each with its evidence. Today that is only Postcodes.io: 3 routes and 8 parameters. The reference marks every addition with a `note`, and `just references` fails if the official file already covers one, so stale additions get noticed.
+- `additions/<id>.json` adds the routes and parameters an official file leaves out but the docs document and the server serves, each with its evidence. Today that is only Postcodes.io: 3 routes and 12 parameters. The reference marks every addition with a `note`, and `just references` fails if the official file already covers one, so stale additions get noticed.
 - `results/<id>.json` is the score of one recorded run, with the run's code version, model, ingest command and token use.
 
 ## Score a run
@@ -22,11 +22,11 @@ Baseline: extraction as merged in #11, `claude-haiku-5-5`, one run per API. Each
 |---|---|---|---|---|---|---|
 | Open-Meteo forecast | 1 / 1 (100%) | 100% | 26 / 27 (96%) | 100% | 2 | 17,452 / 3,962 |
 | Open-Meteo geocoding | 2 / 2 (100%) | 100% | 7 / 7 (100%) | 100% | 1 | 5,175 / 1,578 |
-| Postcodes.io | 14 / 14 (100%) | 100% | 16 / 23 (70%) | 80% | 6 | 66,985 / 10,189 |
+| Postcodes.io | 14 / 14 (100%) | 100% | 20 / 27 (74%) | 100% | 6 | 66,985 / 10,189 |
 | Open Library | 11 / 11 (100%) | 92% (12 extracted) | 14 / 18 (78%) | 100% | 2 | 19,153 / 6,494 |
 | Frankfurter | 8 / 9 (89%) | 73% (11 extracted) | 11 / 20 (55%) | 92% | 6 | 87,755 / 13,259 |
 | PokéAPI | 51 / 102 (50%) | 96% (53 extracted) | n/a: matched endpoints have only path parameters | n/a | 8 | 105,325 / 16,666 |
-| **Total** | **87 / 139 (63%)** | **94% (93 extracted)** | **74 / 95 (78%)** | **94%** | **25** | **301,845 / 52,148** |
+| **Total** | **87 / 139 (63%)** | **94% (93 extracted)** | **78 / 99 (79%)** | **99%** | **25** | **301,845 / 52,148** |
 
 Every run produced a valid `spec.json` with no rejected endpoints and no failed batches. PokéAPI's 50 list routes, which its docs describe only once as a generic route, account for most of the misses. Without them, endpoints found is 87 / 89 (98%); the other two misses are routes their docs never mention (Frankfurter's `/coverage`, PokéAPI's `/meta`).
 
@@ -39,7 +39,7 @@ Every run produced a valid `spec.json` with no rejected endpoints and no failed 
 
 - **Endpoints:** all 14 found, including the 3 added by hand.
 - **Missed parameters (7):** the official file's aliases `query`, `latitude` and `longitude`, plus `filter` on `GET /postcodes`. Also `limit` and `radius` on `GET /postcodes/{postcode}/nearest`, which its docs page documents.
-- **Extras (4) are a reference gap, not extraction errors.** `filter`, `limit`, `radius` and `widesearch` on `POST /postcodes` are documented as query parameters on the bulk lookup and bulk reverse geocode pages. Neither the official file nor the additions have them. Fixing the reference needs its own approved PR, and the score will be re-run when it lands.
+- **No extras.** The first scoring counted `filter`, `limit`, `radius` and `widesearch` on `POST /postcodes` as extras, but they are documented query parameters on the bulk pages. The reference was missing them, not the extraction. They were added to the reference (approved), and the same `spec.json` was re-scored: parameter precision went from 80% to 100%.
 - **Required/optional mismatches (4):** `q`, `lon` and `lat` on `GET /postcodes`, and `q` on `GET /places`, were extracted as required. Each is required for one mode of a route that serves several (search, or reverse geocoding), so the reference marks them optional.
 
 ### Notes on the Open Library baseline
