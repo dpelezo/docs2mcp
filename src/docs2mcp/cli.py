@@ -9,6 +9,7 @@ from pathlib import Path
 
 from docs2mcp import __version__
 from docs2mcp.config import Settings, get_settings
+from docs2mcp.evals import Reference, format_score, score, score_json
 from docs2mcp.extract import (
     AnthropicModel,
     ExtractionModel,
@@ -18,7 +19,7 @@ from docs2mcp.extract import (
     ReplayModel,
 )
 from docs2mcp.ingest import ingest, read_chunks, read_pages
-from docs2mcp.spec import json_schema
+from docs2mcp.spec import ApiSpec, json_schema
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -67,7 +68,23 @@ def build_parser() -> argparse.ArgumentParser:
     recording.add_argument(
         "--replay", type=Path, help="use replies saved with --record; no API calls"
     )
-    # design, generate and eval arrive with their milestones.
+    score_cmd = commands.add_parser(
+        "score",
+        help="score an extracted spec against a reference",
+        description=(
+            "Compare spec.json with a reference built from the API's OpenAPI file or the docs. "
+            "Rules: docs/adr/0005-extraction-scoring.md."
+        ),
+    )
+    score_cmd.add_argument("spec", type=Path, help="spec.json written by docs2mcp extract")
+    score_cmd.add_argument(
+        "--reference",
+        type=Path,
+        required=True,
+        help="reference JSON, e.g. evals/extraction/reference/pokeapi.json",
+    )
+    score_cmd.add_argument("--out", type=Path, help="also write the full score as JSON here")
+    # design, generate and the tool-use eval arrive with their milestones.
     return parser
 
 
@@ -151,6 +168,19 @@ def _run_extract(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_score(args: argparse.Namespace) -> int:
+    spec = ApiSpec.model_validate_json(args.spec.read_text(encoding="utf-8"))
+    reference = Reference.model_validate_json(args.reference.read_text(encoding="utf-8"))
+    result = score(spec, reference)
+    print(format_score(result))
+    if args.out is not None:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        text = json.dumps(score_json(result), indent=2, ensure_ascii=False) + "\n"
+        args.out.write_text(text, encoding="utf-8")
+        print(f"Wrote {args.out}")
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -161,6 +191,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             return _run_ingest(args)
         case "extract":
             return _run_extract(args)
+        case "score":
+            return _run_score(args)
         case _:
             parser.print_help()
     return 0
