@@ -15,6 +15,7 @@ These rules apply to any AI assistant (Claude Code, Codex, Cursor and others) an
 - Never print, log or commit secrets. Refer to environment variables by name only; `.env` is ignored by git.
 - Unit tests never call a live model or the network. Use recorded responses. Live calls belong in the eval suite and in `tests/integration/`.
 - Keep the eval honest: never change a task, an expected answer or a scorer in the same pull request as the code it measures.
+- Anchor `.gitignore` entries for output folders to the repo root (`/ingest/`, not `ingest/`). An unanchored name also matches source folders such as `src/docs2mcp/ingest/`, and new files there are silently ignored.
 
 ## Before saying "done"
 
