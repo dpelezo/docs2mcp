@@ -1,0 +1,182 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "extraction as merged in #11 (ef5c57a); unchanged since",
+    "model": "claude-haiku-5-5",
+    "ingest": "docs2mcp ingest <the 3 pages in sources.toml> --max-pages 3 (3 pages, 25 chunks, ~8,098 tokens)",
+    "calls": 2,
+    "input_tokens": 19153,
+    "output_tokens": 6494
+  },
+  "api": "open_library",
+  "endpoints": {
+    "matched": 11,
+    "expected": 11,
+    "found": 12,
+    "recall": 1.0,
+    "precision": 0.9167
+  },
+  "parameters": {
+    "matched": 14,
+    "expected": 18,
+    "found": 14,
+    "recall": 0.7778,
+    "precision": 1.0
+  },
+  "required_mismatches": 0,
+  "missing_endpoints": [],
+  "extra_endpoints": [
+    "GET /a/olid/{}-M.jpg"
+  ],
+  "matched": [
+    {
+      "route": "GET /search.json",
+      "parameters": {
+        "matched": 7,
+        "expected": 10,
+        "found": 7,
+        "recall": 0.7,
+        "precision": 1.0
+      },
+      "missing": [
+        "query:author",
+        "query:editions.sort",
+        "query:title"
+      ],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /search/authors.json",
+      "parameters": {
+        "matched": 1,
+        "expected": 1,
+        "found": 1,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /authors/{}.json",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /authors/{}/works.json",
+      "parameters": {
+        "matched": 2,
+        "expected": 2,
+        "found": 2,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /works/{}.json",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /works/{}/editions.json",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /works/{}/bookshelves.json",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /works/{}/ratings.json",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /books/{}.json",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /isbn/{}.json",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /api/books",
+      "parameters": {
+        "matched": 4,
+        "expected": 5,
+        "found": 4,
+        "recall": 0.8,
+        "precision": 1.0
+      },
+      "missing": [
+        "query:details"
+      ],
+      "extra": [],
+      "required_mismatches": []
+    }
+  ]
+}

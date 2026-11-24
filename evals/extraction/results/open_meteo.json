@@ -1,0 +1,46 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "extraction as merged in #11 (ef5c57a); unchanged since",
+    "model": "claude-haiku-5-5",
+    "ingest": "docs2mcp ingest https://open-meteo.com/en/docs --max-pages 1 (1 page, 12 chunks, ~7,022 tokens)",
+    "calls": 2,
+    "input_tokens": 17452,
+    "output_tokens": 3962
+  },
+  "api": "open_meteo",
+  "endpoints": {
+    "matched": 1,
+    "expected": 1,
+    "found": 1,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "parameters": {
+    "matched": 26,
+    "expected": 27,
+    "found": 26,
+    "recall": 0.963,
+    "precision": 1.0
+  },
+  "required_mismatches": 0,
+  "missing_endpoints": [],
+  "extra_endpoints": [],
+  "matched": [
+    {
+      "route": "GET /forecast",
+      "parameters": {
+        "matched": 26,
+        "expected": 27,
+        "found": 26,
+        "recall": 0.963,
+        "precision": 1.0
+      },
+      "missing": [
+        "query:minutely_15"
+      ],
+      "extra": [],
+      "required_mismatches": []
+    }
+  ]
+}
