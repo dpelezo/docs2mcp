@@ -27,7 +27,7 @@ These rules apply to any AI assistant (Claude Code, Codex, Cursor and others) an
 ## Project facts
 
 - Python 3.14 managed by uv (`uv.lock` is committed). Package code lives in `src/docs2mcp/`.
-- Commands: `just setup`, `just check`, `just lint`, `just typecheck`, `just test`.
+- Commands: `just setup`, `just check`, `just lint`, `just typecheck`, `just test` (unit, 80% coverage floor), `just integration` (live, needs network).
 - Settings come from environment variables (see `.env.example`), loaded by `docs2mcp.config.Settings`.
 - `main` is protected: changes land through pull requests with passing CI and linear history.
 - Decisions are recorded in `docs/adr/`. Read them before proposing a change to the design.

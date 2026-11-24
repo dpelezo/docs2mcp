@@ -96,8 +96,7 @@ addopts = [
     "--strict-config",
     "--cov=docs2mcp",
     "--cov-report=term-missing",
-    "--cov-fail-under=80",
-]
+]  # the 80% coverage floor applies to unit tests only: see `just test` and CI
 markers = [
     "unit: fast tests with no network access (everything under tests/unit)",
     "integration: tests against real services (everything under tests/integration)",
