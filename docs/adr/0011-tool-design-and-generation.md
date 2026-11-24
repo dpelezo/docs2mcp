@@ -27,7 +27,7 @@ A strict Pydantic model, like `ApiSpec` (ADR 0002), published as JSON Schema:
   - a `description` written for an LLM;
   - typed `parameters`, each with a description, and with enum and default where the spec has them;
   - one or more `routes`.
-- **Routes:** each names one endpoint of the spec, and says which tool arguments select it (`requires`) and how arguments map to the endpoint's parameters. A call takes the **first route whose required arguments are all present**. So `pokemon(name)` gets one Pokémon, and `pokemon()` lists them.
+- **Routes:** each names one endpoint of the spec, and says which tool arguments select it (`requires`), how arguments map to the endpoint's parameters, and which optional parameters it deliberately leaves out (`omitted`, each with a reason). A call takes the **first route whose required arguments are all present**. So `pokemon(name)` gets one Pokémon, and `pokemon()` lists them.
 - **Excluded endpoints**, each with a reason, such as "image host, not JSON".
 - **`approved`**: false until a person sets it. `generate` refuses an unapproved file.
 
@@ -37,6 +37,7 @@ A design is rejected unless:
 
 - every spec endpoint is in exactly one route or is excluded with a reason;
 - every route can build its request: each required endpoint parameter, path parameters included, is filled by an argument that the route requires or that is itself required;
+- every endpoint parameter is handled on its route: passed from an argument, set by a constant, or listed in `omitted` with a reason, and a required parameter is never omitted. *(Amended 2026-11-24: the first live design runs dropped optional parameters without any error; see ADR 0012.)*
 - argument types and enums are compatible with the endpoint parameters they fill;
 - routes in a tool are unambiguous: no later route is unreachable because an earlier one always matches first;
 - tool names are unique, and descriptions fit a token budget.
