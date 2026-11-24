@@ -16,17 +16,17 @@ uv run docs2mcp score specs/frankfurter/spec.json \
 
 ## Results
 
-Latest run: crawl depth and permalink cleanup, `claude-haiku-5-5`. Every API was ingested with `docs2mcp ingest <the pages in sources.toml> --depth 0`, so exactly the listed pages and nothing they link to. Frankfurter and Postcodes.io ran 3 times; the table shows run 1 and the notes give the spread.
+Latest run: prompt caching (ADR 0009), `claude-haiku-5-5`, one run per API on the chunks from the crawl-depth change. Every API was ingested with `docs2mcp ingest <the pages in sources.toml> --depth 0`, so exactly the listed pages and nothing they link to. Input tokens are the total input; the cached share is in the notes.
 
 | API | Endpoints found | Endpoint precision | Parameters found | Parameter precision | Calls | Input / output tokens |
 |---|---|---|---|---|---|---|
-| Open-Meteo forecast | 1 / 1 (100%) | 100% | 26 / 27 (96%) | 100% | 2 | 19,178 / 3,759 |
-| Open-Meteo geocoding | 2 / 2 (100%) | 100% | 7 / 7 (100%) | 100% | 1 | 6,038 / 1,679 |
-| Postcodes.io | 14 / 14 (100%) | 100% | 24 / 27 (89%) | 100% | 5 | 63,658 / 9,073 |
-| Open Library | 11 / 11 (100%) | 100% | 14 / 18 (78%) | 100% | 2 | 20,879 / 6,336 |
-| Frankfurter | 8 / 9 (89%) | 89% (9 extracted) | 19 / 20 (95%) | 90% | 1 | 8,132 / 4,970 |
-| PokéAPI | 101 / 102 (99%) | 98% (103 extracted) | 100 / 144 (69%) | 100% | 8 | 112,229 / 17,923 |
-| **Total** | **137 / 139 (99%)** | **98% (140 extracted)** | **190 / 243 (78%)** | **99%** | **19** | **230,114 / 43,740** |
+| Open-Meteo forecast | 1 / 1 (100%) | 100% | 26 / 27 (96%) | 100% | 2 | 19,178 / 3,860 |
+| Open-Meteo geocoding | 2 / 2 (100%) | 100% | 7 / 7 (100%) | 100% | 1 | 6,038 / 1,825 |
+| Postcodes.io | 14 / 14 (100%) | 100% | 24 / 27 (89%) | 100% | 5 | 63,658 / 8,947 |
+| Open Library | 11 / 11 (100%) | 100% | 14 / 18 (78%) | 100% | 2 | 20,879 / 7,357 |
+| Frankfurter | 8 / 9 (89%) | 100% (8 extracted) | 18 / 20 (90%) | 95% | 1 | 8,132 / 5,393 |
+| PokéAPI | 101 / 102 (99%) | 98% (103 extracted) | 100 / 144 (69%) | 100% | 8 | 112,229 / 17,651 |
+| **Total** | **137 / 139 (99%)** | **99% (139 extracted)** | **189 / 243 (78%)** | **99%** | **19** | **230,114 / 45,033** |
 
 Every run produced a valid `spec.json` with no rejected endpoints and no failed batches. The two missed endpoints are routes their docs never mention (Frankfurter's `/coverage`, PokéAPI's `/meta`).
 
@@ -41,6 +41,7 @@ Each change is measured on the same ingested chunks, before and after, except cr
 | Out-of-scope endpoints (ADR 0007) | 137 / 139 (99%) | 98% | 178 / 243 (73%) | 99% |
 | Shared parameters (ADR 0008) | 137 / 139 (99%) | 98% | 186 / 243 (77%) | 99% |
 | Crawl depth 0, permalink cleanup | 137 / 139 (99%) | 98% | 190 / 243 (78%) | 99% |
+| Prompt caching (ADR 0009) | 137 / 139 (99%) | 99% | 189 / 243 (78%) | 99% |
 
 - **PokéAPI:** 51 → 101 endpoints. Claude flagged `GET /{endpoint}` and it expanded into 51 list routes. The parameter denominator grows because the list routes' `limit`, `offset` and `q` are now scored.
 - **Frankfurter:** nothing was flagged, so its v1 `/{date}` was correctly left alone. This run extracted two more v1 routes, so precision fell from 73% to 62%, and 4 more parameters, so recall rose from 55% to 75%. That is run-to-run variation, and all the extras come from the v1 page that change 4 (crawl scope) removes.
@@ -82,6 +83,20 @@ Crawl depth 0 and permalink cleanup (approved change to the eval's input):
 - **Frankfurter:** same quality from a tenth of the input. Its v1 page is no longer read, so nothing needs to be dropped as out of scope any more.
 - **Postcodes.io:** parameters found rose to 24 of 27 in all three runs, above every earlier run (20 to 22). It now finds `limit` and `radius` on `/postcodes/{postcode}/nearest` and the `query` aliases. Cleaner headings and fewer, fuller chunks are the likely cause, but this is not proven by a controlled test.
 - **The other four** got the same chunks as before (no permalinks, and already one or three listed pages), and they moved by at most 1 parameter (variation).
+
+Prompt caching (ADR 0009), one run per API on the same chunks:
+
+| | Before (crawl-depth run) | After |
+|---|---|---|
+| Total input tokens | 230,114 | 230,114 |
+| Read from cache | 0 | **57,330** (18 calls × 3,185) |
+| Written to cache | 0 | 3,185 (once) |
+| Input cost, at Haiku 5.5 prices | $0.0230 | **$0.0179 (-22%)** |
+
+- **The cached prefix is 3,185 tokens,** about five times the 630-token system prompt, so part of the structured-output overhead is cached as well. The docs do not say whether the output schema is part of the prefix; this measures it.
+- **One write served every API.** The first PokéAPI call wrote the cache, and every later call in the run, across all six APIs, read it. They share the same system prompt and schema, and ran within the 5-minute lifetime.
+- **Quality is unchanged,** as expected, since caching does not change what the model sees. Frankfurter extracted no `/rates.csv` this time (8 extracted, 100% precision) and one parameter fewer, which is variation. The other five matched the previous run exactly, and Postcodes.io scored 24 / 27 for the fourth run in a row.
+- **About 2,300 tokens per call are still not cached,** the rest of the fixed overhead after the breakpoint. It is not reachable from our side.
 
 ### Notes on the Open-Meteo results
 

@@ -1,59 +1,35 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/ingest-depth-and-anchors (crawl depth, permalink cleanup)",
+    "code": "feat/prompt-caching (ADR 0009)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest <the pages in sources.toml> --depth 0 (1 page, 12 chunks, ~2,617 tokens)",
     "calls": 1,
     "input_tokens": 8132,
-    "output_tokens": 4970,
-    "repeats": {
-      "runs": 3,
-      "recorded": "run 1 of 3",
-      "endpoint_precision": [
-        0.8889,
-        0.8889,
-        0.8889
-      ],
-      "endpoint_recall": [
-        0.8889,
-        0.8889,
-        0.8889
-      ],
-      "parameter_recall": [
-        0.95,
-        0.9,
-        0.9
-      ],
-      "parameter_precision": [
-        0.9048,
-        0.9474,
-        0.9474
-      ]
-    }
+    "output_tokens": 5393,
+    "cache_read_tokens": 3185,
+    "cache_write_tokens": 0
   },
   "api": "frankfurter",
   "endpoints": {
     "matched": 8,
     "expected": 9,
-    "found": 9,
+    "found": 8,
     "recall": 0.8889,
-    "precision": 0.8889
+    "precision": 1.0
   },
   "parameters": {
-    "matched": 19,
+    "matched": 18,
     "expected": 20,
-    "found": 21,
-    "recall": 0.95,
-    "precision": 0.9048
+    "found": 19,
+    "recall": 0.9,
+    "precision": 0.9474
   },
   "required_mismatches": 0,
   "missing_endpoints": [
     "GET /coverage"
   ],
-  "extra_endpoints": [
-    "GET /rates.csv"
-  ],
+  "extra_endpoints": [],
   "matched": [
     {
       "route": "GET /rates",
@@ -112,16 +88,16 @@
     {
       "route": "GET /providers/{}/rate/{}/{}",
       "parameters": {
-        "matched": 1,
+        "matched": 0,
         "expected": 1,
-        "found": 2,
-        "recall": 1.0,
-        "precision": 0.5
+        "found": 0,
+        "recall": 0.0,
+        "precision": 1.0
       },
-      "missing": [],
-      "extra": [
-        "query:providers"
+      "missing": [
+        "query:date"
       ],
+      "extra": [],
       "required_mismatches": []
     },
     {

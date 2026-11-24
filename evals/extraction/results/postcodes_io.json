@@ -1,36 +1,14 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/ingest-depth-and-anchors (crawl depth, permalink cleanup)",
+    "code": "feat/prompt-caching (ADR 0009)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest <the pages in sources.toml> --depth 0 (22 pages, 73 chunks, ~25,418 tokens)",
     "calls": 5,
     "input_tokens": 63658,
-    "output_tokens": 9073,
-    "repeats": {
-      "runs": 3,
-      "recorded": "run 1 of 3",
-      "endpoint_precision": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "endpoint_recall": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "parameter_recall": [
-        0.8889,
-        0.8889,
-        0.8889
-      ],
-      "parameter_precision": [
-        1.0,
-        1.0,
-        1.0
-      ]
-    }
+    "output_tokens": 8947,
+    "cache_read_tokens": 15925,
+    "cache_write_tokens": 0
   },
   "api": "postcodes_io",
   "endpoints": {
