@@ -1,5 +1,14 @@
 """Measure docs2mcp's output against ground truth."""
 
+from docs2mcp.evals.design import (
+    DesignMetrics,
+    ToolMetrics,
+    format_metrics,
+    input_schema,
+    listed_tool,
+    measure_design,
+    metrics_json,
+)
 from docs2mcp.evals.extraction import (
     Counts,
     EndpointResult,
@@ -25,6 +34,7 @@ from docs2mcp.evals.reference import (
 __all__ = [
     "AdditionError",
     "Counts",
+    "DesignMetrics",
     "EndpointResult",
     "ExtractionScore",
     "OpenApiError",
@@ -34,9 +44,15 @@ __all__ = [
     "ReferenceEndpoint",
     "ReferenceParameter",
     "ReferenceSource",
+    "ToolMetrics",
     "apply_additions",
     "endpoints_from_openapi",
+    "format_metrics",
     "format_score",
+    "input_schema",
+    "listed_tool",
+    "measure_design",
+    "metrics_json",
     "route_key",
     "score",
     "score_json",
