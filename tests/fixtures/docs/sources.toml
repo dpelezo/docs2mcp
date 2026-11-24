@@ -24,7 +24,7 @@ name = "Frankfurter"
 base_url = "https://api.frankfurter.dev/v2"
 redistribute = true
 licence = "MIT. Source: github.com/lineofflight/frankfurter (LICENSE)."
-openapi = "https://api.frankfurter.dev/v2/openapi.json"
+openapi = "https://raw.githubusercontent.com/lineofflight/frankfurter/main/lib/public/v2/openapi.json"
 openapi_note = "The docs page documents v2. lib/public/v2/openapi.json in github.com/lineofflight/frankfurter, served at /v2/openapi.json (v1 also exists)"
 pages = ["https://frankfurter.dev/"]
 
