@@ -24,3 +24,6 @@ coverage.xml
 
 # Local documentation cache for content we do not redistribute
 .cache/
+
+# docs2mcp ingest output (regenerate with `docs2mcp ingest`)
+ingest/
