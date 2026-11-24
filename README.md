@@ -6,7 +6,7 @@ Turn messy API documentation into a curated, task-shaped [MCP](https://modelcont
 ![Python 3.14](https://img.shields.io/badge/python-3.14-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-> **Status: in progress (week 1 of 4).** The repository scaffold is in place. Nothing below "Planned" works yet, and there are no results to report. The README will open with the eval numbers once they exist.
+> **Status: in progress (week 1 of 4).** The spec models and `docs2mcp ingest` work; extraction, design, generation and the eval do not exist yet, so there are no results to report. The README will open with the eval numbers once they exist.
 
 ## Why
 
@@ -47,6 +47,17 @@ just check     # lint, type check and unit tests, the same as CI
 ```
 
 Settings are read from environment variables; see [`.env.example`](.env.example).
+
+### Ingest a documentation site
+
+```bash
+uv run docs2mcp ingest https://pokeapi.co/docs/v2 --out ingest/pokeapi
+# Docs split across sibling folders: pass each one
+uv run docs2mcp ingest https://openlibrary.org/dev/docs/api/search \
+  https://openlibrary.org/dev/docs/api/books --out ingest/open_library
+```
+
+This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
 
 ## How this repo is built
 
