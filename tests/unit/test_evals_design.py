@@ -37,6 +37,45 @@ def test_a_grouped_design_is_counted() -> None:
     )
     assert metrics.description_tokens == prose
     assert metrics.tool_list_tokens >= metrics.per_tool[0].tokens > 0
+    assert (metrics.parameters_exposed, metrics.parameters_total) == (3, 3)
+    assert metrics.unexposed == []
+
+
+def test_parameters_no_route_fills_are_unexposed() -> None:
+    partial = Tool(
+        name="pokemon",
+        description="Get or list Pokémon.",
+        parameters=[arg("name"), arg("limit", "integer")],
+        routes=[
+            Route(endpoint="get_pokemon", requires=["name"], arguments={"name": "id_or_name"}),
+            Route(endpoint="list_pokemon", arguments={"limit": "limit"}),
+        ],
+    )
+    metrics = measure_design(toolset(partial), SPEC)
+
+    assert (metrics.parameters_exposed, metrics.parameters_total) == (2, 3)
+    assert metrics.unexposed == ["list_pokemon.offset"]
+    assert "parameters: 2 of 3 exposed" in format_metrics(metrics)
+    assert "not exposed: list_pokemon.offset" in format_metrics(metrics)
+
+
+def test_constants_count_as_exposed() -> None:
+    fixed = Tool(
+        name="pokemon_page",
+        description="List Pokémon, 20 at a time.",
+        parameters=[arg("offset", "integer")],
+        routes=[
+            Route(endpoint="list_pokemon", arguments={"offset": "offset"}, constants={"limit": 20})
+        ],
+    )
+    name_only = Tool(
+        name="pokemon",
+        description="Get one Pokémon.",
+        parameters=[arg("name", required=True)],
+        routes=[Route(endpoint="get_pokemon", arguments={"name": "id_or_name"})],
+    )
+    metrics = measure_design(toolset(fixed, name_only), SPEC)
+    assert (metrics.parameters_exposed, metrics.parameters_total) == (3, 3)
 
 
 def test_an_invalid_design_is_measured_and_its_problems_listed() -> None:
@@ -65,6 +104,7 @@ def test_unknown_endpoints_are_not_counted_as_covered() -> None:
     metrics = measure_design(toolset(ghost, excluded=excluded), SPEC)
 
     assert (metrics.covered, metrics.excluded) == (0, 0)
+    assert metrics.parameters_total == 0
     assert not metrics.valid
 
 

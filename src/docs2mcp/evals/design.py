@@ -12,6 +12,11 @@ The rules (approved 2026-11-24, before any design prompt was written):
   chunking, so it compares designs; it is not an exact count for any one model.
 - `description_tokens` is the part of that written in prose: tool and argument
   descriptions.
+- `parameters_exposed` / `parameters_total` (added 2026-11-24): every parameter
+  of every routed endpoint, counted once per route, and how many of them a route
+  fills from an argument or a constant. A parameter no route fills is one the
+  agent cannot use; `unexposed` lists them as `endpoint.parameter`. Endpoints
+  that are excluded, or not in the spec, are not counted.
 - Fewer tools and fewer tokens are not better on their own. The week 3 eval
   decides whether a design helps an agent; these numbers say what it costs.
 """
@@ -45,6 +50,9 @@ class DesignMetrics:
     routes: int
     tool_list_tokens: int
     description_tokens: int
+    parameters_exposed: int
+    parameters_total: int
+    unexposed: list[str] = field(default_factory=list[str])
     problems: list[str] = field(default_factory=list[str])
     per_tool: list[ToolMetrics] = field(default_factory=list[ToolMetrics])
 
@@ -81,11 +89,30 @@ def _tokens(value: object) -> int:
     return estimate_tokens(json.dumps(value, ensure_ascii=False, separators=(",", ":")))
 
 
+def _parameters(toolset: ToolSet, spec: ApiSpec) -> tuple[int, int, list[str]]:
+    endpoints = {e.id: e for e in spec.endpoints}
+    exposed, total, unexposed = 0, 0, list[str]()
+    for tool in toolset.tools:
+        for route in tool.routes:
+            endpoint = endpoints.get(route.endpoint)
+            if endpoint is None:
+                continue
+            filled = set(route.arguments.values()) | set(route.constants)
+            for parameter in endpoint.parameters:
+                total += 1
+                if parameter.name in filled:
+                    exposed += 1
+                else:
+                    unexposed.append(f"{endpoint.id}.{parameter.name}")
+    return exposed, total, unexposed
+
+
 def measure_design(toolset: ToolSet, spec: ApiSpec) -> DesignMetrics:
     known = {e.id for e in spec.endpoints}
     routed = {r.endpoint for t in toolset.tools for r in t.routes} & known
     excluded = {x.endpoint for x in toolset.excluded} & known
     problems = validate_toolset(toolset, spec)
+    exposed, total, unexposed = _parameters(toolset, spec)
     per_tool = [
         ToolMetrics(
             name=t.name,
@@ -110,6 +137,9 @@ def measure_design(toolset: ToolSet, spec: ApiSpec) -> DesignMetrics:
         routes=sum(len(t.routes) for t in toolset.tools),
         tool_list_tokens=_tokens([listed_tool(t) for t in toolset.tools]),
         description_tokens=prose,
+        parameters_exposed=exposed,
+        parameters_total=total,
+        unexposed=unexposed,
         problems=problems,
         per_tool=per_tool,
     )
@@ -129,8 +159,11 @@ def format_metrics(metrics: DesignMetrics) -> str:
         f"of {metrics.endpoints}",
         f"  tools: {metrics.tools}, routes: {metrics.routes} "
         f"(at most {metrics.max_routes_per_tool} in one tool)",
+        f"  parameters: {metrics.parameters_exposed} of {metrics.parameters_total} exposed",
         f"  tool list: ~{metrics.tool_list_tokens:,} tokens, "
         f"of which descriptions ~{metrics.description_tokens:,}",
     ]
+    if metrics.unexposed:
+        lines.append(f"  not exposed: {', '.join(metrics.unexposed)}")
     lines.extend(f"  - {problem}" for problem in metrics.problems)
     return "\n".join(lines)
