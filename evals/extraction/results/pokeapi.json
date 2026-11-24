@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
+    "code": "feat/ingest-depth-and-anchors (crawl depth, permalink cleanup)",
     "model": "claude-haiku-5-5",
-    "ingest": "docs2mcp ingest https://pokeapi.co/docs/v2 (1 page, 172 chunks); the same chunks as the previous run",
+    "ingest": "docs2mcp ingest <the pages in sources.toml> --depth 0 (1 page, 172 chunks, ~41,478 tokens)",
     "calls": 8,
     "input_tokens": 112229,
-    "output_tokens": 18641
+    "output_tokens": 17923
   },
   "api": "pokeapi",
   "endpoints": {

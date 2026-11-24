@@ -6,7 +6,7 @@ Turn messy API documentation into a curated, task-shaped [MCP](https://modelcont
 ![Python 3.14](https://img.shields.io/badge/python-3.14-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-> **Status: in progress (week 1 of 4).** The spec models, `docs2mcp ingest`, `docs2mcp extract` and `docs2mcp score` work. Extraction is measured on all six eval APIs: every run produces a valid spec, finding 137 of 139 endpoints at 98% precision and 77% of their parameters at 99% precision ([details](evals/extraction/README.md)). Design, generation and the tool-use eval do not exist yet. The README will open with the eval numbers once they exist.
+> **Status: in progress (week 1 of 4).** The spec models, `docs2mcp ingest`, `docs2mcp extract` and `docs2mcp score` work. Extraction is measured on all six eval APIs: every run produces a valid spec, finding 137 of 139 endpoints at 98% precision and 78% of their parameters at 99% precision ([details](evals/extraction/README.md)). Design, generation and the tool-use eval do not exist yet. The README will open with the eval numbers once they exist.
 
 ## Why
 
@@ -55,9 +55,11 @@ uv run docs2mcp ingest https://pokeapi.co/docs/v2 --out ingest/pokeapi
 # Docs split across sibling folders: pass each one
 uv run docs2mcp ingest https://openlibrary.org/dev/docs/api/search \
   https://openlibrary.org/dev/docs/api/books --out ingest/open_library
+# Only the pages given, no links followed
+uv run docs2mcp ingest https://frankfurter.dev/ --out ingest/frankfurter --depth 0
 ```
 
-This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. `just integration` runs the live tests against real sites. How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
+This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. The crawl follows in-scope links up to `--max-pages` (default 20); `--depth N` limits it to N links from a start URL. `just integration` runs the live tests against real sites. How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
 
 ### Extract an API spec
 

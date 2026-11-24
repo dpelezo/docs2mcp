@@ -16,23 +16,23 @@ uv run docs2mcp score specs/frankfurter/spec.json \
 
 ## Results
 
-Latest run: shared parameters (ADR 0008), `claude-haiku-5-5`, on the same ingested chunks as the baseline. Frankfurter ran 3 times; the table shows run 1 and the notes give the spread. Each ingest used exactly the pages in `sources.toml`, except Frankfurter (see its notes).
+Latest run: crawl depth and permalink cleanup, `claude-haiku-5-5`. Every API was ingested with `docs2mcp ingest <the pages in sources.toml> --depth 0`, so exactly the listed pages and nothing they link to. Frankfurter and Postcodes.io ran 3 times; the table shows run 1 and the notes give the spread.
 
 | API | Endpoints found | Endpoint precision | Parameters found | Parameter precision | Calls | Input / output tokens |
 |---|---|---|---|---|---|---|
-| Open-Meteo forecast | 1 / 1 (100%) | 100% | 26 / 27 (96%) | 100% | 2 | 19,178 / 3,616 |
-| Open-Meteo geocoding | 2 / 2 (100%) | 100% | 7 / 7 (100%) | 100% | 1 | 6,038 / 1,623 |
-| Postcodes.io | 14 / 14 (100%) | 100% | 21 / 27 (78%) | 100% | 6 | 72,163 / 11,197 |
-| Open Library | 11 / 11 (100%) | 100% | 14 / 18 (78%) | 100% | 2 | 20,879 / 7,439 |
-| Frankfurter | 8 / 9 (89%) | 89% (9 extracted) | 18 / 20 (90%) | 90% | 6 | 92,933 / 13,154 |
-| PokéAPI | 101 / 102 (99%) | 98% (103 extracted) | 100 / 144 (69%) | 100% | 8 | 112,229 / 18,641 |
-| **Total** | **137 / 139 (99%)** | **98% (140 extracted)** | **186 / 243 (77%)** | **99%** | **25** | **323,420 / 55,670** |
+| Open-Meteo forecast | 1 / 1 (100%) | 100% | 26 / 27 (96%) | 100% | 2 | 19,178 / 3,759 |
+| Open-Meteo geocoding | 2 / 2 (100%) | 100% | 7 / 7 (100%) | 100% | 1 | 6,038 / 1,679 |
+| Postcodes.io | 14 / 14 (100%) | 100% | 24 / 27 (89%) | 100% | 5 | 63,658 / 9,073 |
+| Open Library | 11 / 11 (100%) | 100% | 14 / 18 (78%) | 100% | 2 | 20,879 / 6,336 |
+| Frankfurter | 8 / 9 (89%) | 89% (9 extracted) | 19 / 20 (95%) | 90% | 1 | 8,132 / 4,970 |
+| PokéAPI | 101 / 102 (99%) | 98% (103 extracted) | 100 / 144 (69%) | 100% | 8 | 112,229 / 17,923 |
+| **Total** | **137 / 139 (99%)** | **98% (140 extracted)** | **190 / 243 (78%)** | **99%** | **19** | **230,114 / 43,740** |
 
 Every run produced a valid `spec.json` with no rejected endpoints and no failed batches. The two missed endpoints are routes their docs never mention (Frankfurter's `/coverage`, PokéAPI's `/meta`).
 
 ### History
 
-Each change is measured on the same ingested chunks, before and after. Moves on APIs a change does not touch show run-to-run variation; from ADR 0007 on, the targeted APIs run 3 times.
+Each change is measured on the same ingested chunks, before and after, except crawl depth, which changes the chunks themselves. Moves on APIs a change does not touch show run-to-run variation; from ADR 0007 on, the targeted APIs run 3 times.
 
 | Change | Endpoints found | Endpoint precision | Parameters found | Parameter precision |
 |---|---|---|---|---|
@@ -40,6 +40,7 @@ Each change is measured on the same ingested chunks, before and after. Moves on 
 | Resource templates (ADR 0006) | 137 / 139 (99%) | 94% | 184 / 243 (76%) | 99% |
 | Out-of-scope endpoints (ADR 0007) | 137 / 139 (99%) | 98% | 178 / 243 (73%) | 99% |
 | Shared parameters (ADR 0008) | 137 / 139 (99%) | 98% | 186 / 243 (77%) | 99% |
+| Crawl depth 0, permalink cleanup | 137 / 139 (99%) | 98% | 190 / 243 (78%) | 99% |
 
 - **PokéAPI:** 51 → 101 endpoints. Claude flagged `GET /{endpoint}` and it expanded into 51 list routes. The parameter denominator grows because the list routes' `limit`, `offset` and `q` are now scored.
 - **Frankfurter:** nothing was flagged, so its v1 `/{date}` was correctly left alone. This run extracted two more v1 routes, so precision fell from 73% to 62%, and 4 more parameters, so recall rose from 55% to 75%. That is run-to-run variation, and all the extras come from the v1 page that change 4 (crawl scope) removes.
@@ -66,6 +67,22 @@ Shared parameters (ADR 0008), Frankfurter over 3 runs before and 3 after:
 - **Remaining misses:** `date` on `/providers/{provider}/rate/{base}/{quote}` in 2 of 3 runs. Its reference `/v2/rate` never matches, because the docs leave off the route's placeholders.
 - **No other API copied anything.** Their parameters moved by at most 1 (variation).
 
+Crawl depth 0 and permalink cleanup (approved change to the eval's input):
+
+| | Before (ADR 0008 run) | After, 3 runs |
+|---|---|---|
+| Frankfurter input | 20 pages, 182 chunks, ~31,645 tokens | 1 page, 12 chunks, ~2,617 tokens |
+| Frankfurter calls, input tokens | 6, 92,933 | **1, 8,132 (-91%)** |
+| Frankfurter parameters found / precision | 90% / 90% (runs 90-95%) | 95%, 90%, 90% / 90%, 95%, 95% |
+| Postcodes.io input | 88 chunks, 98 permalinks, ~27,798 tokens | 73 chunks, 0 permalinks, ~25,418 tokens |
+| Postcodes.io calls, input tokens | 6, 72,163 | **5, 63,658 (-12%)** |
+| Postcodes.io parameters found | 21 / 27 (earlier runs: 20-22) | **24 / 27 in all 3 runs** |
+| All six: calls, input tokens | 25, 323,420 | **19, 230,114 (-29%)** |
+
+- **Frankfurter:** same quality from a tenth of the input. Its v1 page is no longer read, so nothing needs to be dropped as out of scope any more.
+- **Postcodes.io:** parameters found rose to 24 of 27 in all three runs, above every earlier run (20 to 22). It now finds `limit` and `radius` on `/postcodes/{postcode}/nearest` and the `query` aliases. Cleaner headings and fewer, fuller chunks are the likely cause, but this is not proven by a controlled test.
+- **The other four** got the same chunks as before (no permalinks, and already one or three listed pages), and they moved by at most 1 parameter (variation).
+
 ### Notes on the Open-Meteo results
 
 - **Forecast:** the only miss is `minutely_15`, which the page documents in its 15-Minutely section, not in the parameter table.
@@ -74,7 +91,7 @@ Shared parameters (ADR 0008), Frankfurter over 3 runs before and 3 after:
 ### Notes on the Postcodes.io results
 
 - **Endpoints:** all 14 found, including the 3 added by hand.
-- **Missed parameters (7 in the latest run):** the aliases `query`, `latitude` and `longitude` and `filter` on `GET /postcodes`; `query` on `GET /places`; and `limit` and `radius` on `GET /postcodes/{postcode}/nearest`, which its docs page documents. The `query` aliases come and go between runs (missed in the baseline and this run, found in the ADR 0006 run).
+- **Missed parameters (3, the same in all 3 latest runs):** the official file's aliases `latitude` and `longitude`, and `filter`, on `GET /postcodes`. None of the three is on the `GET /postcodes` docs pages.
 - **No extras.** The baseline's first scoring counted `filter`, `limit`, `radius` and `widesearch` on `POST /postcodes` as extras, but they are documented query parameters on the bulk pages. The reference was missing them, not the extraction. They were added to the reference (approved), and the same `spec.json` was re-scored: parameter precision went from 80% to 100%.
 - **Required/optional mismatches (4):** `q`, `lon` and `lat` on `GET /postcodes`, and `q` on `GET /places`, were extracted as required. Each is required for one mode of a route that serves several (search, or reverse geocoding), so the reference marks them optional.
 
@@ -88,8 +105,8 @@ Shared parameters (ADR 0008), Frankfurter over 3 runs before and 3 after:
 
 - **Missed:** `GET /coverage`. It is in the OpenAPI file but not on the docs page, so it cannot be found from the docs. It stays in the reference; see ADR 0005.
 - **Extras:** `/rates.csv`, a format of `/rates`. The v1 routes from the v1 docs page (`/latest`, `/{date}`, `/{start_date}..{end_date}`, `/{start_date}..`) are dropped as out of scope since ADR 0007.
-- **Parameters:** `/providers/{provider}/rates` gets its parameters copied from `/rates` since ADR 0008, because the docs only say it "supports the same parameters as `/v2/rates`". The remaining misses are `date` on the single-pair provider route and `providers` on `/currencies`.
-- **Cost:** the crawl fetched 20 pages (the default limit), but only the home page documents v2. Each call also carries about 10,000 tokens of fixed prompt and schema.
+- **Parameters:** `/providers/{provider}/rates` gets its parameters copied from `/rates` since ADR 0008, because the docs only say it "supports the same parameters as `/v2/rates`". The remaining misses are `providers` on `/currencies` and, in some runs, `date` on the single-pair provider route.
+- **Cost:** until the depth change, the ingest crawled 20 pages of the site (the default limit), though only the home page documents v2. It now reads just that page: one call, about 8,000 input tokens, most of which is the fixed prompt and schema.
 
 ### Notes on the PokéAPI results
 

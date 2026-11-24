@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
+    "code": "feat/ingest-depth-and-anchors (crawl depth, permalink cleanup)",
     "model": "claude-haiku-5-5",
-    "ingest": "docs2mcp ingest https://frankfurter.dev/ (default 20-page limit; 20 pages, 182 chunks); the same chunks as the previous run",
-    "calls": 6,
-    "input_tokens": 92933,
-    "output_tokens": 13154,
+    "ingest": "docs2mcp ingest <the pages in sources.toml> --depth 0 (1 page, 12 chunks, ~2,617 tokens)",
+    "calls": 1,
+    "input_tokens": 8132,
+    "output_tokens": 4970,
     "repeats": {
       "runs": 3,
       "recorded": "run 1 of 3",
@@ -21,14 +21,14 @@
         0.8889
       ],
       "parameter_recall": [
-        0.9,
         0.95,
+        0.9,
         0.9
       ],
       "parameter_precision": [
-        0.9,
         0.9048,
-        0.9
+        0.9474,
+        0.9474
       ]
     }
   },
@@ -41,11 +41,11 @@
     "precision": 0.8889
   },
   "parameters": {
-    "matched": 18,
+    "matched": 19,
     "expected": 20,
-    "found": 20,
-    "recall": 0.9,
-    "precision": 0.9
+    "found": 21,
+    "recall": 0.95,
+    "precision": 0.9048
   },
   "required_mismatches": 0,
   "missing_endpoints": [
@@ -73,14 +73,12 @@
       "parameters": {
         "matched": 2,
         "expected": 2,
-        "found": 3,
+        "found": 2,
         "recall": 1.0,
-        "precision": 0.6667
+        "precision": 1.0
       },
       "missing": [],
-      "extra": [
-        "query:expand"
-      ],
+      "extra": [],
       "required_mismatches": []
     },
     {
@@ -114,16 +112,16 @@
     {
       "route": "GET /providers/{}/rate/{}/{}",
       "parameters": {
-        "matched": 0,
+        "matched": 1,
         "expected": 1,
-        "found": 0,
-        "recall": 0.0,
-        "precision": 1.0
+        "found": 2,
+        "recall": 1.0,
+        "precision": 0.5
       },
-      "missing": [
-        "query:date"
+      "missing": [],
+      "extra": [
+        "query:providers"
       ],
-      "extra": [],
       "required_mismatches": []
     },
     {

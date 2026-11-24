@@ -1,12 +1,36 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
+    "code": "feat/ingest-depth-and-anchors (crawl depth, permalink cleanup)",
     "model": "claude-haiku-5-5",
-    "ingest": "docs2mcp ingest <the 22 pages in sources.toml> --max-pages 22 (22 pages, 88 chunks, ~27,798 tokens); the same chunks as the previous run",
-    "calls": 6,
-    "input_tokens": 72163,
-    "output_tokens": 11197
+    "ingest": "docs2mcp ingest <the pages in sources.toml> --depth 0 (22 pages, 73 chunks, ~25,418 tokens)",
+    "calls": 5,
+    "input_tokens": 63658,
+    "output_tokens": 9073,
+    "repeats": {
+      "runs": 3,
+      "recorded": "run 1 of 3",
+      "endpoint_precision": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "endpoint_recall": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "parameter_recall": [
+        0.8889,
+        0.8889,
+        0.8889
+      ],
+      "parameter_precision": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
   },
   "api": "postcodes_io",
   "endpoints": {
@@ -17,10 +41,10 @@
     "precision": 1.0
   },
   "parameters": {
-    "matched": 21,
+    "matched": 24,
     "expected": 27,
-    "found": 21,
-    "recall": 0.7778,
+    "found": 24,
+    "recall": 0.8889,
     "precision": 1.0
   },
   "required_mismatches": 4,
@@ -43,17 +67,16 @@
     {
       "route": "GET /postcodes",
       "parameters": {
-        "matched": 6,
+        "matched": 7,
         "expected": 10,
-        "found": 6,
-        "recall": 0.6,
+        "found": 7,
+        "recall": 0.7,
         "precision": 1.0
       },
       "missing": [
         "query:filter",
         "query:latitude",
-        "query:longitude",
-        "query:query"
+        "query:longitude"
       ],
       "extra": [],
       "required_mismatches": [
@@ -78,16 +101,13 @@
     {
       "route": "GET /postcodes/{}/nearest",
       "parameters": {
-        "matched": 0,
+        "matched": 2,
         "expected": 2,
-        "found": 0,
-        "recall": 0.0,
+        "found": 2,
+        "recall": 1.0,
         "precision": 1.0
       },
-      "missing": [
-        "query:limit",
-        "query:radius"
-      ],
+      "missing": [],
       "extra": [],
       "required_mismatches": []
     },
