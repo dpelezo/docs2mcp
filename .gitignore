@@ -26,4 +26,8 @@ coverage.xml
 .cache/
 
 # docs2mcp ingest output (regenerate with `docs2mcp ingest`)
-ingest/
+/ingest/
+
+# docs2mcp extract output and recorded model replies (commit recordings deliberately)
+/specs/
+/recordings/
