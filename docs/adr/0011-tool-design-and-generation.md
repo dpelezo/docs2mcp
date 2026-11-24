@@ -1,6 +1,6 @@
 # ADR 0011: Tool design and server generation
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-11-24
 
 ## Context
