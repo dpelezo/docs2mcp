@@ -75,11 +75,13 @@ Claude reads the chunks in batches and fills a flat schema; code validates each 
 ### Design the tools
 
 ```bash
-uv run docs2mcp design specs/frankfurter/spec.json --direct --out tools/frankfurter.json
-uv run docs2mcp check-tools tools/frankfurter.json --spec specs/frankfurter/spec.json
+uv run docs2mcp design specs/frankfurter/spec.json --out tools/frankfurter/tools.json
+uv run docs2mcp check-tools tools/frankfurter/tools.json --spec specs/frankfurter/spec.json
 ```
 
-`design` writes `tools.json`: each tool's arguments, the API request each call makes, and any endpoints left out, with the reason. Review it, set `"approved": true`, and `generate` (coming next) renders the server. `--direct` makes one tool per endpoint without an LLM; the task-shaped design that groups endpoints is in progress. `check-tools` reports every problem after a hand edit. Rules: [ADR 0011](docs/adr/0011-tool-design-and-generation.md); schema: [`docs/tools.schema.json`](docs/tools.schema.json).
+`design` asks Claude to group the endpoints into task-shaped tools, such as one `pokemon` tool that gets one Pokémon by name or lists them. Claude names and describes the tools and their arguments, and code copies types, enums and defaults from the spec. Validation problems go back to Claude for another try, and anything still broken after the last try gets a plain one-tool-per-endpoint fallback, listed in `design_report.json`. `--direct` makes that one-tool-per-endpoint design for the whole API, with no LLM.
+
+The output is `tools.json`: each tool's arguments, the API request each call makes, and any endpoints left out, with the reason. Review it, set `"approved": true`, and `generate` (coming next) renders the server. `check-tools` reports every problem after a hand edit. Rules: [ADR 0011](docs/adr/0011-tool-design-and-generation.md) and [ADR 0012](docs/adr/0012-task-shaped-design.md); schema: [`docs/tools.schema.json`](docs/tools.schema.json).
 
 ### Score an extraction
 
