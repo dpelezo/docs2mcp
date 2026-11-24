@@ -1,0 +1,387 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 8012,
+  "output_tokens": 5431,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "Frankfurter",
+    "base_urls": [
+      "https://api.frankfurter.dev"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_rates",
+        "method": "GET",
+        "path": "/v2/rates",
+        "summary": "Get the latest or historical exchange rates for a base currency.",
+        "description": "Add date for a historical rate, from and to for a time series, and group to downsample it. Add expand=providers to see the providers behind each blended rate.",
+        "parameters": [
+          {
+            "name": "base",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Base currency code.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "quotes",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Comma-separated target currency codes.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "date",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Date of a historical rate, YYYY-MM-DD.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "from",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Start date of a time series, YYYY-MM-DD.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "to",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "End date of a time series, YYYY-MM-DD.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "group",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Downsample a time series.",
+            "default_value": "",
+            "allowed_values": [
+              "week",
+              "month"
+            ],
+            "items_type": "none"
+          },
+          {
+            "name": "providers",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Restrict rates to a provider or dataset key, e.g. ecb.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "expand",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Add per-provider rates to each row.",
+            "default_value": "",
+            "allowed_values": [
+              "providers"
+            ],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c002",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_rates_csv",
+        "method": "GET",
+        "path": "/v2/rates.csv",
+        "summary": "Get exchange rates as CSV.",
+        "description": "The same output is available by setting the Accept header to text/csv on /v2/rates.",
+        "parameters": [],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c006",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_rate",
+        "method": "GET",
+        "path": "/v2/rate/{base}/{quote}",
+        "summary": "Get the rate for a single currency pair.",
+        "description": "Optionally add date or providers.",
+        "parameters": [
+          {
+            "name": "base",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Base currency code.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "quote",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Quote currency code.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "date",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Date of the rate, YYYY-MM-DD.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "providers",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Restrict the rate to a provider or dataset key.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c007",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "list_currencies",
+        "method": "GET",
+        "path": "/v2/currencies",
+        "summary": "List available currencies with provider coverage.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "scope",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Set to all to include legacy currencies.",
+            "default_value": "",
+            "allowed_values": [
+              "all"
+            ],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c007",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_currency",
+        "method": "GET",
+        "path": "/v2/currency/{currency}",
+        "summary": "Get details and provider coverage for a single currency.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "currency",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Currency code.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c008",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "list_providers",
+        "method": "GET",
+        "path": "/v2/providers",
+        "summary": "List the providers behind the API.",
+        "description": "",
+        "parameters": [],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c008",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_provider",
+        "method": "GET",
+        "path": "/v2/providers/{provider}",
+        "summary": "Get details for a single provider, including its datasets.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "provider",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Provider key, e.g. ecb.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c008",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_provider_rates",
+        "method": "GET",
+        "path": "/v2/providers/{provider}/rates",
+        "summary": "Get rates directly from a specific provider.",
+        "description": "Combine with date, date ranges (from and to), or grouping. Formats like csv and ndjson also work.",
+        "parameters": [
+          {
+            "name": "provider",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Provider key, e.g. ecb.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "date",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Date of the rate, YYYY-MM-DD.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "from",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Start date of a time series, YYYY-MM-DD.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "to",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "End date of a time series, YYYY-MM-DD.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "group",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Downsample a time series.",
+            "default_value": "",
+            "allowed_values": [
+              "week",
+              "month"
+            ],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c009",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [
+          "/v2/rates",
+          "/v2/rate"
+        ],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_provider_rate",
+        "method": "GET",
+        "path": "/v2/providers/{provider}/rate/{base}/{quote}",
+        "summary": "Get a single currency pair rate from a specific provider.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "provider",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Provider key, e.g. ecb.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "base",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Base currency code.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "quote",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Quote currency code.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c009",
+        "served_from": "https://api.frankfurter.dev",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

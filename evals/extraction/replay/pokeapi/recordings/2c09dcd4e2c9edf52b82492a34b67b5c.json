@@ -1,0 +1,196 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 9964,
+  "output_tokens": 2071,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "PokéAPI",
+    "base_urls": [
+      "https://pokeapi.co/api/v2"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_egg_group",
+        "method": "GET",
+        "path": "/egg-group/{id_or_name}/",
+        "summary": "Returns an egg group by id or name.",
+        "description": "Egg groups determine which Pokémon can interbreed.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The egg group's id or name.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "names",
+          "pokemon_species"
+        ],
+        "source_chunk_id": "p01-c107",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_gender",
+        "method": "GET",
+        "path": "/gender/{id_or_name}/",
+        "summary": "Returns a gender by id or name.",
+        "description": "Lists the species that can be this gender and the species that require this gender to evolve.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The gender's id or name.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "pokemon_species_details",
+          "required_for_evolution"
+        ],
+        "source_chunk_id": "p01-c109",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_growth_rate",
+        "method": "GET",
+        "path": "/growth-rate/{id_or_name}/",
+        "summary": "Returns a growth rate by id or name.",
+        "description": "Growth rates set the speed at which Pokémon gain levels through experience.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The growth rate's id or name.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "formula",
+          "descriptions",
+          "levels",
+          "pokemon_species"
+        ],
+        "source_chunk_id": "p01-c112",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_nature",
+        "method": "GET",
+        "path": "/nature/{id_or_name}/",
+        "summary": "Returns a nature by id or name.",
+        "description": "Natures influence how a Pokémon's stats grow.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The nature's id or name.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "decreased_stat",
+          "increased_stat",
+          "likes_flavor",
+          "hates_flavor",
+          "pokeathlon_stat_changes",
+          "move_battle_style_preferences",
+          "names"
+        ],
+        "source_chunk_id": "p01-c114",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pokeathlon_stat",
+        "method": "GET",
+        "path": "/pokeathlon-stat/{id_or_name}/",
+        "summary": "Returns a Pokéathlon stat by id or name.",
+        "description": "Pokéathlon stats are the performance attributes of a Pokémon in Pokéathlons.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The Pokéathlon stat's id or name.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "affecting_natures",
+          "names"
+        ],
+        "source_chunk_id": "p01-c117",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pokemon",
+        "method": "GET",
+        "path": "/pokemon/{id_or_name}/",
+        "summary": "Returns a Pokémon by id or name.",
+        "description": "Pokémon are the creatures of the games; each belongs to a species and may take a variant form.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The Pokémon's id or name.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c121",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

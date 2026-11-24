@@ -1,0 +1,187 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 14210,
+  "output_tokens": 2270,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "Postcodes.io",
+    "base_urls": [
+      "https://api.postcodes.io"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_random_postcode",
+        "method": "GET",
+        "path": "/random/postcodes",
+        "summary": "Returns a random postcode with all its available data.",
+        "description": "Optionally filter by outcode; an invalid outcode returns null.",
+        "parameters": [
+          {
+            "name": "outcode",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Filters random postcodes by outcode, e.g. CM8 or SW1.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "result.postcode",
+          "result.outcode",
+          "result.incode",
+          "result.codes"
+        ],
+        "source_chunk_id": "p09-c001",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "lookup_outcode",
+        "method": "GET",
+        "path": "/outcodes/{outcode}",
+        "summary": "Retrieves detailed information about a UK outward code.",
+        "description": "Matching is case-insensitive. Returns 404 if the outward code is not found.",
+        "parameters": [
+          {
+            "name": "outcode",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "UK outward code, the first half of a postcode, e.g. BR8.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "result.outcode",
+          "result.admin_district",
+          "result.parish",
+          "result.admin_county",
+          "result.admin_ward",
+          "result.country",
+          "result.parliamentary_constituency"
+        ],
+        "source_chunk_id": "p11-c002",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "reverse_geocode_outcodes",
+        "method": "GET",
+        "path": "/outcodes",
+        "summary": "Returns the nearest outcodes to a longitude and latitude pair, ordered by proximity.",
+        "description": "Each result has the same shape as an outcode lookup.",
+        "parameters": [
+          {
+            "name": "lon",
+            "location": "query",
+            "type": "number",
+            "required": true,
+            "description": "Longitude, a WGS84 value between -180 and 180.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "lat",
+            "location": "query",
+            "type": "number",
+            "required": true,
+            "description": "Latitude, a WGS84 value between -90 and 90.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limits the number of outcode matches returned. Maximum is 100.",
+            "default_value": "10",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "radius",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Search radius in metres. Maximum is 25000.",
+            "default_value": "5000",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "result.outcode",
+          "result.admin_district",
+          "result.parish"
+        ],
+        "source_chunk_id": "p12-c001",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "nearest_outcodes",
+        "method": "GET",
+        "path": "/outcodes/{outcode}/nearest",
+        "summary": "Returns a list of outcodes nearest to the given outcode, ordered by proximity.",
+        "description": "Returns 404 if the input outcode is not found.",
+        "parameters": [
+          {
+            "name": "outcode",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The outcode to find neighbours of, e.g. NW1.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limits the number of outcodes returned. Maximum is 100.",
+            "default_value": "10",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "radius",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Search radius in metres. Maximum is 25000.",
+            "default_value": "5000",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "result.outcode",
+          "result.admin_district",
+          "result.parish"
+        ],
+        "source_chunk_id": "p13-c001",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

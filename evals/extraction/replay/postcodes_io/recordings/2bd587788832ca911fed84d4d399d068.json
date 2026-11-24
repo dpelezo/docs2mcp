@@ -1,0 +1,149 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 13359,
+  "output_tokens": 1909,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "Postcodes.io",
+    "base_urls": [
+      "https://api.postcodes.io"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_place",
+        "method": "GET",
+        "path": "/places/{code}",
+        "summary": "Look up a GB place by its OSGB code.",
+        "description": "Returns 404 if the place is not found.",
+        "parameters": [
+          {
+            "name": "code",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "OSGB code of the place, e.g. osgb4000000074564391.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p15-c002",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "query_places",
+        "method": "GET",
+        "path": "/places",
+        "summary": "Search for places matching a query string.",
+        "description": "Full-text match on primary and secondary names, falling back to prefix matching. Returns an empty array or up to 100 places.",
+        "parameters": [
+          {
+            "name": "q",
+            "location": "query",
+            "type": "string",
+            "required": true,
+            "description": "The search query string.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "query",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Alias for q.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Maximum number of results to return, max 100.",
+            "default_value": "10",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p16-c002",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_random_place",
+        "method": "GET",
+        "path": "/random/places",
+        "summary": "Return a random place with all its data.",
+        "description": "",
+        "parameters": [],
+        "response_key_fields": [],
+        "source_chunk_id": "p17-c001",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_terminated_postcode",
+        "method": "GET",
+        "path": "/terminated_postcodes/{postcode}",
+        "summary": "Look up a terminated (no longer in use) UK postcode.",
+        "description": "Matches inputs with or without the space and in any letter case. Returns 404 if not found.",
+        "parameters": [
+          {
+            "name": "postcode",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The terminated UK postcode, e.g. E1W1UU.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p19-c002",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_scottish_postcode",
+        "method": "GET",
+        "path": "/scotland/postcodes/{postcode}",
+        "summary": "Look up the Scottish Postcode Directory record for a Scottish postcode.",
+        "description": "Returns 404 if the postcode is not in the SPD; a 404 with the message \"Postcode exists in ONSPD but not in SPD\" applies when it is only in ONSPD.",
+        "parameters": [
+          {
+            "name": "postcode",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The Scottish postcode, e.g. AB101XG.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p21-c002",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

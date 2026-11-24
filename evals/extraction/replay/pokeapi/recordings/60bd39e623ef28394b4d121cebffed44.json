@@ -1,0 +1,236 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 15530,
+  "output_tokens": 3094,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "PokéAPI",
+    "base_urls": [
+      "https://pokeapi.co/api/v2"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_move",
+        "method": "GET",
+        "path": "/move/{id_or_name}/",
+        "summary": "Returns a move by its id or name.",
+        "description": "Moves are the skills of Pokémon in battle.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the move.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c082",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_move_ailment",
+        "method": "GET",
+        "path": "/move-ailment/{id_or_name}/",
+        "summary": "Returns a move ailment (status condition) by its id or name.",
+        "description": "Move ailments are status conditions caused by moves used during battle.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the move ailment.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c089",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_move_battle_style",
+        "method": "GET",
+        "path": "/move-battle-style/{id_or_name}/",
+        "summary": "Returns a move battle style by its id or name.",
+        "description": "Styles of moves when used in the Battle Palace.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the move battle style.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c091",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_move_category",
+        "method": "GET",
+        "path": "/move-category/{id_or_name}/",
+        "summary": "Returns a move category by its id or name.",
+        "description": "Very general categories that loosely group move effects.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the move category.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c092",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_move_damage_class",
+        "method": "GET",
+        "path": "/move-damage-class/{id_or_name}/",
+        "summary": "Returns a move damage class by its id or name.",
+        "description": "Damage classes moves can have, e.g. physical, special, or non-damaging.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the move damage class.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c094",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_move_learn_method",
+        "method": "GET",
+        "path": "/move-learn-method/{id_or_name}/",
+        "summary": "Returns a move learn method by its id or name.",
+        "description": "Methods by which Pokémon can learn moves.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the move learn method.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c096",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_move_target",
+        "method": "GET",
+        "path": "/move-target/{id_or_name}/",
+        "summary": "Returns a move target by its id or name.",
+        "description": "Targets moves can be directed at during battle.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the move target.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c098",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_ability",
+        "method": "GET",
+        "path": "/ability/{id_or_name}/",
+        "summary": "Returns an ability by its id or name.",
+        "description": "Abilities provide passive effects for Pokémon in battle or in the overworld.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the ability.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c100",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_characteristic",
+        "method": "GET",
+        "path": "/characteristic/{id}/",
+        "summary": "Returns a characteristic by its id.",
+        "description": "Characteristics indicate which stat contains a Pokémon's highest IV.",
+        "parameters": [
+          {
+            "name": "id",
+            "location": "path",
+            "type": "integer",
+            "required": true,
+            "description": "Numeric id of the characteristic.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c105",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 14583,
+  "output_tokens": 2376,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "PokéAPI",
+    "base_urls": [
+      "https://pokeapi.co/api/v2"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_evolution_chain",
+        "method": "GET",
+        "path": "/evolution-chain/{id}/",
+        "summary": "Returns an evolution chain, the family tree of a Pokémon line with its evolution conditions.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "location": "path",
+            "type": "integer",
+            "required": true,
+            "description": "The identifier of the evolution chain.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "baby_trigger_item",
+          "chain.species.name",
+          "chain.evolves_to",
+          "chain.evolution_details"
+        ],
+        "source_chunk_id": "p01-c035",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_evolution_trigger",
+        "method": "GET",
+        "path": "/evolution-trigger/{id_or_name}/",
+        "summary": "Returns an evolution trigger, the event or condition that causes a Pokémon to evolve.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The identifier or name of the evolution trigger.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "names",
+          "pokemon_species"
+        ],
+        "source_chunk_id": "p01-c040",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_evolution_variable",
+        "method": "GET",
+        "path": "/evolution-variable/{id_or_name}/",
+        "summary": "Returns an evolution variable used in boolean expressions for form-branching evolutions.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The identifier or name of the evolution variable.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "symbol",
+          "data_type",
+          "source",
+          "version_group",
+          "descriptions"
+        ],
+        "source_chunk_id": "p01-c042",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_generation",
+        "method": "GET",
+        "path": "/generation/{id_or_name}/",
+        "summary": "Returns a generation, a grouping of Pokémon games with the Pokémon, moves, abilities and types introduced in it.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The identifier or name of the generation.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "main_region",
+          "moves",
+          "pokemon_species",
+          "types",
+          "version_groups"
+        ],
+        "source_chunk_id": "p01-c044",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pokedex",
+        "method": "GET",
+        "path": "/pokedex/{id_or_name}/",
+        "summary": "Returns a Pokédex, the encyclopedia of Pokémon catalogued for a region.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The identifier or name of the Pokédex.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "is_main_series",
+          "pokemon_entries",
+          "region",
+          "version_groups"
+        ],
+        "source_chunk_id": "p01-c046",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_version",
+        "method": "GET",
+        "path": "/version/{id_or_name}/",
+        "summary": "Returns a version of the games, such as Red, Blue or Yellow.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The identifier or name of the version.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "names",
+          "version_group"
+        ],
+        "source_chunk_id": "p01-c049",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_version_group",
+        "method": "GET",
+        "path": "/version-group/{id_or_name}/",
+        "summary": "Returns a version group, which categorizes highly similar versions of the games.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The identifier or name of the version group.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "order",
+          "generation",
+          "pokedexes",
+          "regions",
+          "versions"
+        ],
+        "source_chunk_id": "p01-c051",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

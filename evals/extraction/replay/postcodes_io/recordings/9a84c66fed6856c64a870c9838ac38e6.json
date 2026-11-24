@@ -1,0 +1,278 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 14125,
+  "output_tokens": 2942,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "Postcodes.io",
+    "base_urls": [
+      "https://api.postcodes.io"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "query_postcodes",
+        "method": "GET",
+        "path": "/postcodes",
+        "summary": "Returns postcodes matching a search query string.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "q",
+            "location": "query",
+            "type": "string",
+            "required": true,
+            "description": "The search query string.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "query",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Alias for q.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Maximum number of results to return, max 100.",
+            "default_value": "10",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "status",
+          "result"
+        ],
+        "source_chunk_id": "p04-c002",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "reverse_geocode_postcodes",
+        "method": "GET",
+        "path": "/postcodes",
+        "summary": "Returns the nearest postcodes to a longitude and latitude pair.",
+        "description": "Each result includes a distance field in meters from the given coordinates.",
+        "parameters": [
+          {
+            "name": "lon",
+            "location": "query",
+            "type": "number",
+            "required": true,
+            "description": "Longitude, a WGS84 value between -180 and 180.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "lat",
+            "location": "query",
+            "type": "number",
+            "required": true,
+            "description": "Latitude, a WGS84 value between -90 and 90.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limits number of postcode matches to return, max 100.",
+            "default_value": "10",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "radius",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Search radius in meters, max 2000.",
+            "default_value": "100",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "widesearch",
+            "location": "query",
+            "type": "boolean",
+            "required": false,
+            "description": "Enables a wide area search up to 20km, returning at most 10 results; ignores radius and limit when true.",
+            "default_value": "false",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "status",
+          "result",
+          "result.distance"
+        ],
+        "source_chunk_id": "p05-c001",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "bulk_reverse_geocode_postcodes",
+        "method": "POST",
+        "path": "/postcodes",
+        "summary": "Returns the nearest postcodes for up to 100 coordinate pairs in one request.",
+        "description": "Send a JSON body with a geolocations array. Results are sorted nearest first; invalid geolocations return a null result.",
+        "parameters": [
+          {
+            "name": "geolocations",
+            "location": "body",
+            "type": "array",
+            "required": true,
+            "description": "Array of geolocation objects with longitude and latitude, maximum 100.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "object"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Maximum number of postcodes to return for each location, must be less than 100.",
+            "default_value": "10",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "radius",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Search radius in metres, must be less than 2000.",
+            "default_value": "100",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "widesearch",
+            "location": "query",
+            "type": "boolean",
+            "required": false,
+            "description": "When true, extends search radius up to 20km, returning at most 10 results.",
+            "default_value": "false",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "status",
+          "result",
+          "result.result.distance"
+        ],
+        "source_chunk_id": "p06-c001",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "find_nearest_postcodes",
+        "method": "GET",
+        "path": "/postcodes/{postcode}/nearest",
+        "summary": "Returns a list of postcodes nearest to the specified postcode, ordered by distance.",
+        "description": "Returns a 404 if the input postcode is not found.",
+        "parameters": [
+          {
+            "name": "postcode",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The postcode to search from.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limits number of postcodes to return, max 100.",
+            "default_value": "10",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "radius",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Search radius in metres, max 2000.",
+            "default_value": "100",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "status",
+          "result",
+          "result.distance"
+        ],
+        "source_chunk_id": "p07-c002",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "autocomplete_postcode",
+        "method": "GET",
+        "path": "/postcodes/{postcode}/autocomplete",
+        "summary": "Returns a list of postcodes matching the given partial postcode.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "postcode",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The partial postcode to match.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Limits number of postcode matches to return, must be less than 100.",
+            "default_value": "10",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "status",
+          "result"
+        ],
+        "source_chunk_id": "p08-c001",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

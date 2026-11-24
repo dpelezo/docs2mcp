@@ -1,0 +1,368 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 15368,
+  "output_tokens": 3770,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 3185,
+  "output": {
+    "api_name": "PokéAPI",
+    "base_urls": [
+      "https://pokeapi.co/api/v2"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "list_resources",
+        "method": "GET",
+        "path": "/{endpoint}/",
+        "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given.",
+        "description": "Use limit and offset query parameters to page through results.",
+        "parameters": [
+          {
+            "name": "endpoint",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Name of the resource collection, such as ability.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "limit",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Number of resources per page.",
+            "default_value": "20",
+            "allowed_values": [],
+            "items_type": "none"
+          },
+          {
+            "name": "offset",
+            "location": "query",
+            "type": "integer",
+            "required": false,
+            "description": "Index of the first resource to return, used to move to the next page.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ],
+        "source_chunk_id": "p01-c007",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": true
+      },
+      {
+        "operation": "get_berry",
+        "method": "GET",
+        "path": "/berry/{id_or_name}/",
+        "summary": "Returns a berry by its ID or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID or name of the berry.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "growth_time",
+          "max_harvest",
+          "natural_gift_power",
+          "size",
+          "smoothness",
+          "soil_dryness",
+          "firmness.name",
+          "flavors",
+          "item.name",
+          "natural_gift_type.name"
+        ],
+        "source_chunk_id": "p01-c010",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_berry_firmness",
+        "method": "GET",
+        "path": "/berry-firmness/{id_or_name}/",
+        "summary": "Returns a berry firmness level by its ID or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID or name of the berry firmness.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "berries",
+          "names"
+        ],
+        "source_chunk_id": "p01-c013",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_berry_flavor",
+        "method": "GET",
+        "path": "/berry-flavor/{id_or_name}/",
+        "summary": "Returns a berry flavor by its ID or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID or name of the berry flavor.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "berries",
+          "contest_type.name",
+          "names"
+        ],
+        "source_chunk_id": "p01-c015",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_contest_type",
+        "method": "GET",
+        "path": "/contest-type/{id_or_name}/",
+        "summary": "Returns a contest type by its ID or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID or name of the contest type.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "berry_flavor.name",
+          "names"
+        ],
+        "source_chunk_id": "p01-c018",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_contest_effect",
+        "method": "GET",
+        "path": "/contest-effect/{id}/",
+        "summary": "Returns a contest effect by its ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "location": "path",
+            "type": "integer",
+            "required": true,
+            "description": "ID of the contest effect.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "appeal",
+          "jam",
+          "effect_entries",
+          "flavor_text_entries"
+        ],
+        "source_chunk_id": "p01-c021",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_super_contest_effect",
+        "method": "GET",
+        "path": "/super-contest-effect/{id}/",
+        "summary": "Returns a super contest effect by its ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "location": "path",
+            "type": "integer",
+            "required": true,
+            "description": "ID of the super contest effect.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "appeal",
+          "flavor_text_entries",
+          "moves"
+        ],
+        "source_chunk_id": "p01-c024",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_currency",
+        "method": "GET",
+        "path": "/currency/{id_or_name}/",
+        "summary": "Returns a currency by its ID or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID or name of the currency.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "names"
+        ],
+        "source_chunk_id": "p01-c027",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_encounter_method",
+        "method": "GET",
+        "path": "/encounter-method/{id_or_name}/",
+        "summary": "Returns an encounter method by its ID or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID or name of the encounter method.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "order",
+          "names"
+        ],
+        "source_chunk_id": "p01-c029",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_encounter_condition",
+        "method": "GET",
+        "path": "/encounter-condition/{id_or_name}/",
+        "summary": "Returns an encounter condition by its ID or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID or name of the encounter condition.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "names",
+          "values"
+        ],
+        "source_chunk_id": "p01-c031",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_encounter_condition_value",
+        "method": "GET",
+        "path": "/encounter-condition-value/{id_or_name}/",
+        "summary": "Returns an encounter condition value by its ID or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "ID or name of the encounter condition value.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "condition.name",
+          "names"
+        ],
+        "source_chunk_id": "p01-c033",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}
