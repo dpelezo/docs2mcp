@@ -2,10 +2,14 @@
 
 A reference lists an API's real endpoints and their parameters, nothing else.
 It is built from the API's own OpenAPI file where one exists (see
-`scripts/reference_from_openapi.py`), or written by hand from the docs.
+`scripts/reference_from_openapi.py`), or written by hand from the docs. Where
+an official file leaves out routes or parameters that the docs document and
+the server serves, `evals/extraction/additions/<id>.json` adds them, each with
+its evidence, and the reference marks them with a `note`.
 """
 
-from collections.abc import Mapping
+import re
+from collections.abc import Iterable, Mapping
 from datetime import date
 from typing import Any, Literal
 from urllib.parse import urlparse
@@ -14,6 +18,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from docs2mcp.spec import HttpMethod, ParamLocation
 
+_PLACEHOLDER = re.compile(r"\{[^}]*\}")
 _METHODS = {m.value.lower(): m for m in HttpMethod}
 _LOCATIONS = {
     "path": ParamLocation.PATH,
@@ -26,16 +31,27 @@ class _Model(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
 
+def route_key(method: str, path: str) -> str:
+    """`GET /providers/{}/rates` for `GET /providers/{key}/rates/`."""
+    return f"{method} {_PLACEHOLDER.sub('{}', path.rstrip('/') or '/')}"
+
+
 class ReferenceParameter(_Model):
     name: str = Field(min_length=1)
     location: ParamLocation
     required: bool
+    note: str | None = Field(
+        default=None, description="Only on parameters added by hand: why, and the evidence."
+    )
 
 
 class ReferenceEndpoint(_Model):
     method: HttpMethod
     path: str = Field(pattern=r"^/", description="Relative to the reference's base_url.")
     parameters: list[ReferenceParameter] = Field(default_factory=list[ReferenceParameter])
+    note: str | None = Field(
+        default=None, description="Only on endpoints added by hand: why, and the evidence."
+    )
 
 
 class ReferenceSource(_Model):
@@ -54,8 +70,70 @@ class Reference(_Model):
     endpoints: list[ReferenceEndpoint] = Field(min_length=1)
 
 
+class ParameterAddition(_Model):
+    method: HttpMethod
+    path: str = Field(pattern=r"^/")
+    parameter: ReferenceParameter
+
+
+class ReferenceAdditions(_Model):
+    """Routes and parameters an official OpenAPI file leaves out.
+
+    Every entry needs a `note` with its evidence (the docs section and the
+    server code). An addition that the official file already covers is an
+    error, so a fixed upstream file makes the addition visible for removal.
+    """
+
+    api: str
+    reason: str = Field(min_length=1)
+    routes: list[ReferenceEndpoint] = Field(default_factory=list[ReferenceEndpoint])
+    parameters: list[ParameterAddition] = Field(default_factory=list[ParameterAddition])
+
+
 class OpenApiError(ValueError):
     """The OpenAPI document uses something this converter does not handle."""
+
+
+class AdditionError(ValueError):
+    """A hand addition is missing its evidence or duplicates the official file."""
+
+
+def apply_additions(
+    endpoints: Iterable[ReferenceEndpoint], additions: ReferenceAdditions
+) -> list[ReferenceEndpoint]:
+    """Return the official endpoints with the hand additions applied."""
+    result = list(endpoints)
+    index = {route_key(e.method, e.path): i for i, e in enumerate(result)}
+
+    for route in additions.routes:
+        key = route_key(route.method, route.path)
+        if not route.note:
+            msg = f"added route {key} needs a note with its evidence"
+            raise AdditionError(msg)
+        if key in index:
+            msg = f"{key} is already in the official file; remove the addition"
+            raise AdditionError(msg)
+        index[key] = len(result)
+        result.append(route)
+
+    for addition in additions.parameters:
+        key = route_key(addition.method, addition.path)
+        param = addition.parameter
+        where = f"{key} {param.location}:{param.name}"
+        if not param.note:
+            msg = f"added parameter {where} needs a note with its evidence"
+            raise AdditionError(msg)
+        if key not in index:
+            msg = f"cannot add {where}: the route is not in the reference"
+            raise AdditionError(msg)
+        endpoint = result[index[key]]
+        if any((p.location, p.name) == (param.location, param.name) for p in endpoint.parameters):
+            msg = f"{where} is already in the official file; remove the addition"
+            raise AdditionError(msg)
+        result[index[key]] = endpoint.model_copy(
+            update={"parameters": [*endpoint.parameters, param]}
+        )
+    return result
 
 
 def endpoints_from_openapi(doc: Mapping[str, Any], base_url: str) -> list[ReferenceEndpoint]:

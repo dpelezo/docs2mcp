@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 
-from scripts.snapshot_docs import page_filename, trim_html
+from scripts.snapshot_docs import kept_entries, main, page_filename, sort_manifest, trim_html
 
 FIXTURES = Path(__file__).parents[1] / "fixtures" / "docs"
 EVAL_APIS = {"open_meteo", "pokeapi", "rest_countries", "open_library", "frankfurter"}
@@ -22,7 +22,7 @@ def load_manifest() -> list[dict[str, Any]]:
     return json.loads((FIXTURES / "manifest.json").read_text())
 
 
-def test_sources_cover_the_five_eval_apis_once() -> None:
+def test_sources_cover_the_eval_apis_once() -> None:
     ids = [api["id"] for api in load_sources()]
     assert sorted(ids) == sorted(EVAL_APIS)
 
@@ -88,3 +88,45 @@ def test_trim_html_keeps_text_and_structure_and_drops_noise() -> None:
 )
 def test_page_filename(url: str, name: str) -> None:
     assert page_filename(url) == name
+
+
+SOURCES = [
+    {"id": "a", "redistribute": True, "pages": ["https://a.dev/1", "https://a.dev/2"]},
+    {"id": "b", "redistribute": True, "pages": ["https://b.dev/"]},
+    {"id": "c", "redistribute": False, "pages": ["https://c.dev/"]},
+]
+
+
+def entry(api: str, url: str) -> dict[str, Any]:
+    return {"api": api, "url": url}
+
+
+def test_refreshing_one_api_keeps_the_others_and_drops_stale_pages() -> None:
+    manifest = [
+        entry("a", "https://a.dev/2"),
+        entry("a", "https://a.dev/gone"),  # no longer listed in sources
+        entry("b", "https://b.dev/"),
+        entry("old", "https://old.dev/"),  # API removed from sources
+    ]
+
+    kept = kept_entries(manifest, SOURCES, {"b"})
+
+    assert kept == [entry("a", "https://a.dev/2")]
+
+
+def test_manifest_is_sorted_in_sources_order() -> None:
+    manifest = [
+        entry("b", "https://b.dev/"),
+        entry("a", "https://a.dev/2"),
+        entry("a", "https://a.dev/1"),
+    ]
+    assert sort_manifest(manifest, SOURCES) == [
+        entry("a", "https://a.dev/1"),
+        entry("a", "https://a.dev/2"),
+        entry("b", "https://b.dev/"),
+    ]
+
+
+def test_snapshot_main_rejects_an_unknown_api(capsys: pytest.CaptureFixture[str]) -> None:
+    assert main(["no_such_api"]) == 1  # fails before any network call
+    assert "not in sources.toml: no_such_api" in capsys.readouterr().err
