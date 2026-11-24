@@ -1,0 +1,1600 @@
+{
+  "api": "pokeapi",
+  "base_url": "https://pokeapi.co/api/v2",
+  "source": {
+    "kind": "openapi",
+    "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+    "version": "2.10.0",
+    "sha256": "497e8c4aec10e259a93c5c61f79daf418cee65c1f5e1c748ce1e4cc7c4a7805c",
+    "retrieved": "2026-11-24",
+    "note": "openapi.yml in github.com/PokeAPI/pokeapi"
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/meta",
+      "parameters": []
+    },
+    {
+      "method": "GET",
+      "path": "/ability",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/ability/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/berry",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/berry/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/berry-firmness",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/berry-firmness/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/berry-flavor",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/berry-flavor/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/characteristic",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/characteristic/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/contest-type",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/contest-type/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/contest-effect",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/contest-effect/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/egg-group",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/egg-group/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-method",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-method/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition-value",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition-value/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-chain",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-chain/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-trigger",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-trigger/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-variable",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/evolution-variable/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/generation",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/generation/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/gender",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/gender/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/growth-rate",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/growth-rate/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item-category",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item-category/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item-attribute",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item-attribute/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item-fling-effect",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item-fling-effect/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item-pocket",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/item-pocket/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/currency",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/currency/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/language",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/language/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/location",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/location/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/location-area",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/location-area/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/machine",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/machine/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-ailment",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-ailment/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-battle-style",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-battle-style/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-category",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-category/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-damage-class",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-damage-class/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-learn-method",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-learn-method/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-target",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/move-target/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/nature",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/nature/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pal-park-area",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pal-park-area/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokedex",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokedex/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-color",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-color/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-form",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-form/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-habitat",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-habitat/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-shape",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-shape/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-species",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-species/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokeathlon-stat",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokeathlon-stat/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/region",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/region/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/stat",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/stat/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/super-contest-effect",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/super-contest-effect/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/type",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/type/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/version",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/version/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/version-group",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/version-group/{id}",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon/{pokemon_id}/encounters",
+      "parameters": [
+        {
+          "name": "pokemon_id",
+          "location": "path",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

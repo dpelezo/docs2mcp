@@ -33,5 +33,9 @@ integration:
 schema:
     uv run docs2mcp schema > docs/spec.schema.json
 
+# Rebuild evals/extraction/reference/ from the APIs' OpenAPI files (needs network)
+references *ids:
+    uv run python scripts/reference_from_openapi.py {{ids}}
+
 # Everything CI runs; must pass before every commit
 check: lint typecheck test

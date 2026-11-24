@@ -1,0 +1,222 @@
+{
+  "api": "frankfurter",
+  "base_url": "https://api.frankfurter.dev/v2",
+  "source": {
+    "kind": "openapi",
+    "url": "https://raw.githubusercontent.com/lineofflight/frankfurter/main/lib/public/v2/openapi.json",
+    "version": "2.1.1",
+    "sha256": "928fe61a3b457dbd248dfb9fffa4f816f6bdee2d0207df26215d858d54d6ffb6",
+    "retrieved": "2026-11-24",
+    "note": "The docs page documents v2. lib/public/v2/openapi.json in github.com/lineofflight/frankfurter, served at /v2/openapi.json (v1 also exists)"
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/coverage",
+      "parameters": [
+        {
+          "name": "base",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "quotes",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "providers",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/rates",
+      "parameters": [
+        {
+          "name": "date",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "base",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "quotes",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "providers",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "group",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "expand",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/rate/{base}/{quote}",
+      "parameters": [
+        {
+          "name": "base",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "quote",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "date",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "providers",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/providers/{provider}",
+      "parameters": [
+        {
+          "name": "provider",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/providers/{provider}/rates",
+      "parameters": [
+        {
+          "name": "provider",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "date",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "base",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "quotes",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "group",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "expand",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/providers/{provider}/rate/{base}/{quote}",
+      "parameters": [
+        {
+          "name": "provider",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "base",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "quote",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "date",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/currency/{code}",
+      "parameters": [
+        {
+          "name": "code",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/currencies",
+      "parameters": [
+        {
+          "name": "scope",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "providers",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/providers",
+      "parameters": []
+    }
+  ]
+}
