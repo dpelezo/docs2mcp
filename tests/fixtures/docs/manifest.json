@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "api": "pokeapi",
+    "url": "https://pokeapi.co/docs/v2",
+    "path": "pokeapi/docs_v2.html",
+    "retrieved": "2026-11-24",
+    "bytes": 288791,
+    "sha256": "e4dd0b3ad383a5a88b4ce9bdaa32b7d2f3cc4265618c525f67306bb815c725db"
+  },
+  {
+    "api": "frankfurter",
+    "url": "https://frankfurter.dev/",
+    "path": "frankfurter/index.html",
+    "retrieved": "2026-11-24",
+    "bytes": 15852,
+    "sha256": "903732ca7bc30602e4a716d75ec8cfb0abde68d6609d7a09e13fde79035510c5"
+  }
+]
