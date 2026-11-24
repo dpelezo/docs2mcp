@@ -28,12 +28,18 @@ def test_schema_command_prints_the_spec_json_schema(capsys: pytest.CaptureFixtur
 def test_ingest_command_prints_a_summary(
     monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
-    calls: list[tuple[list[str], Path, int | None, bool]] = []
+    calls: list[tuple[list[str], Path, int | None, int | None, bool]] = []
 
     def fake_ingest(
-        urls: list[str], out: Path, _settings: object, *, max_pages: int | None, refresh: bool
+        urls: list[str],
+        out: Path,
+        _settings: object,
+        *,
+        max_pages: int | None,
+        max_depth: int | None,
+        refresh: bool,
     ) -> IngestResult:
-        calls.append((urls, out, max_pages, refresh))
+        calls.append((urls, out, max_pages, max_depth, refresh))
         page = Page(
             url=urls[0], final_url=urls[0], title="Docs", fetched_at=datetime.now(UTC), sha256="x"
         )
@@ -43,12 +49,22 @@ def test_ingest_command_prints_a_summary(
 
     monkeypatch.setattr("docs2mcp.cli.ingest", fake_ingest)
     code = main(
-        ["ingest", "https://x.dev/docs", "--out", str(tmp_path), "--max-pages", "5", "--refresh"]
+        [
+            "ingest",
+            "https://x.dev/docs",
+            "--out",
+            str(tmp_path),
+            "--max-pages",
+            "5",
+            "--depth",
+            "0",
+            "--refresh",
+        ]
     )
 
     out = capsys.readouterr().out
     assert code == 0
-    assert calls == [(["https://x.dev/docs"], tmp_path, 5, True)]
+    assert calls == [(["https://x.dev/docs"], tmp_path, 5, 0, True)]
     assert "1 pages -> 1 chunks (~1,200 tokens)" in out
     assert "https://x.dev/old  (HTTP 404)" in out
 

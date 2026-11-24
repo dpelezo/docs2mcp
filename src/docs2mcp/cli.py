@@ -50,6 +50,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--max-pages", type=int, default=None, help="pages to crawl (default 20)"
     )
     ingest_cmd.add_argument(
+        "--depth",
+        type=int,
+        default=None,
+        help="links to follow from a start URL (0: only the URLs given; default: no limit)",
+    )
+    ingest_cmd.add_argument(
         "--refresh", action="store_true", help="refetch pages instead of using the cache"
     )
 
@@ -94,6 +100,7 @@ def _run_ingest(args: argparse.Namespace) -> int:
         args.out,
         get_settings(),
         max_pages=args.max_pages,
+        max_depth=args.depth,
         refresh=args.refresh,
     )
     tokens = sum(chunk.tokens for chunk in result.chunks)

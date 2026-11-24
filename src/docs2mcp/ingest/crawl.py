@@ -7,6 +7,8 @@ Rules:
   and authors pages).
 - Skip assets, non-HTTP links, URL fragments and query strings; respect robots.txt.
 - Drop pages whose HTML is identical to one already fetched.
+- Follow links at most `max_depth` hops from a seed (`None`: no limit; `0`: only the
+  seeds themselves).
 - Stop after `max_pages` pages.
 """
 
@@ -139,12 +141,16 @@ class Crawler:
     client: httpx.Client
     cache: PageCache
     max_pages: int = 20
+    max_depth: int | None = None
     refresh: bool = False
     delay_seconds: float = 0.5
     now: Callable[[], datetime] = lambda: datetime.now(UTC)
     sleep: Callable[[float], None] = time.sleep
 
     def __post_init__(self) -> None:
+        if self.max_depth is not None and self.max_depth < 0:
+            msg = f"max_depth must be 0 or more, got {self.max_depth}"
+            raise ValueError(msg)
         self._robots: dict[str, RobotFileParser | None] = {}
         self._fetched_live = False
 
@@ -157,14 +163,15 @@ class Crawler:
                 raise ValueError(msg)
             seeds.append(normalized)
 
-        queue = deque(dict.fromkeys(seeds))
-        queued = set(queue)
+        queue: deque[tuple[str, int]] = deque((seed, 0) for seed in dict.fromkeys(seeds))
+        queued = {url for url, _ in queue}
+        beyond_depth: list[str] = []
         pages: list[FetchedPage] = []
         skipped: list[SkippedUrl] = []
         seen_hashes: set[str] = set()
 
         while queue and len(pages) < self.max_pages:
-            url = queue.popleft()
+            url, depth = queue.popleft()
             if not self._allowed(url):
                 skipped.append(SkippedUrl(url=url, reason="disallowed by robots.txt"))
                 continue
@@ -193,9 +200,13 @@ class Crawler:
                 link = normalize_url(href, base=cached.final_url)
                 if link and link not in queued and in_scope(link, seeds):
                     queued.add(link)
-                    queue.append(link)
+                    if self.max_depth is not None and depth >= self.max_depth:
+                        beyond_depth.append(link)
+                    else:
+                        queue.append((link, depth + 1))
 
-        skipped.extend(SkippedUrl(url=url, reason="page limit reached") for url in queue)
+        skipped.extend(SkippedUrl(url=url, reason="page limit reached") for url, _ in queue)
+        skipped.extend(SkippedUrl(url=url, reason="beyond the depth limit") for url in beyond_depth)
         return CrawlResult(pages=pages, skipped=skipped)
 
     def _load(self, url: str) -> tuple[CachedPage | None, str]:
