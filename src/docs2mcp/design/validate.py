@@ -37,6 +37,11 @@ def validate_toolset(toolset: ToolSet, spec: ApiSpec) -> list[str]:
     return errors
 
 
+def tool_errors(tool: Tool, spec: ApiSpec) -> list[str]:
+    """The problems inside one tool: its routes, types and arguments, not coverage."""
+    return _check_tool(tool, {e.id: e for e in spec.endpoints})
+
+
 def _check_tool(tool: Tool, endpoints: dict[str, Endpoint]) -> list[str]:
     errors: list[str] = []
     params = {p.name: p for p in tool.parameters}

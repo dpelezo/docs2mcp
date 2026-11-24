@@ -33,7 +33,7 @@ def safe_name(raw: str, max_length: int = 64) -> str:
     return name
 
 
-def _shorten(text: str, limit: int) -> str:
+def shorten(text: str, limit: int) -> str:
     text = " ".join(text.split())
     return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
 
@@ -44,14 +44,14 @@ def _parameter(param: Parameter, name: str) -> ToolParameter:
         name=name,
         type=param.type,
         required=param.required,
-        description=_shorten(description, MAX_PARAMETER_DESCRIPTION),
+        description=shorten(description, MAX_PARAMETER_DESCRIPTION),
         default=param.default,
         enum=param.enum,
         items_type=param.items_type,
     )
 
 
-def _tool(endpoint: Endpoint) -> Tool:
+def direct_tool(endpoint: Endpoint) -> Tool:
     names: dict[str, str] = {}
     taken: set[str] = set()
     parameters: list[ToolParameter] = []
@@ -75,7 +75,7 @@ def _tool(endpoint: Endpoint) -> Tool:
     )
     return Tool(
         name=safe_name(endpoint.id),
-        description=_shorten(text, MAX_TOOL_DESCRIPTION),
+        description=shorten(text, MAX_TOOL_DESCRIPTION),
         parameters=parameters,
         routes=[Route(endpoint=endpoint.id, arguments=names)],
     )
@@ -87,5 +87,5 @@ def direct_design(spec: ApiSpec) -> ToolSet:
         base_url=spec.base_url,
         auth=spec.auth,
         design="direct",
-        tools=[_tool(endpoint) for endpoint in spec.endpoints],
+        tools=[direct_tool(endpoint) for endpoint in spec.endpoints],
     )
