@@ -6,7 +6,7 @@ Turn messy API documentation into a curated, task-shaped [MCP](https://modelcont
 ![Python 3.14](https://img.shields.io/badge/python-3.14-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-> **Status: in progress (week 1 of 4).** The spec models and `docs2mcp ingest` work; extraction, design, generation and the eval do not exist yet, so there are no results to report. The README will open with the eval numbers once they exist.
+> **Status: in progress (week 1 of 4).** The spec models, `docs2mcp ingest` and `docs2mcp extract` work, but extraction has not yet been measured on real docs; design, generation and the eval do not exist yet, so there are no results to report. The README will open with the eval numbers once they exist.
 
 ## Why
 
@@ -57,7 +57,18 @@ uv run docs2mcp ingest https://openlibrary.org/dev/docs/api/search \
   https://openlibrary.org/dev/docs/api/books --out ingest/open_library
 ```
 
-This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. `just integration` runs the live tests against real sites. How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
+This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. `just integration` runs the live tests against real sites.
+
+### Extract an API spec
+
+Needs `ANTHROPIC_API_KEY` in `.env`.
+
+```bash
+uv run docs2mcp extract ingest/pokeapi --out specs/pokeapi/spec.json --record recordings/pokeapi
+uv run docs2mcp extract ingest/pokeapi --out specs/pokeapi/spec.json --replay recordings/pokeapi  # no API calls
+```
+
+Claude reads the chunks in batches and fills a flat schema; code validates each endpoint, repairs what is mechanical, sends the rest back to Claude with the errors, and merges everything into `spec.json`. `extraction_report.json` lists calls, tokens, repairs and rejected endpoints. How it works: [ADR 0004](docs/adr/0004-extraction.md). How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
 
 ## How this repo is built
 
