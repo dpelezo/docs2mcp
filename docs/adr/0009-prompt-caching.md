@@ -21,6 +21,14 @@ From Anthropic's prompt-caching docs (read 2026-11-24):
 - **Recordings store the cache counts.** Older recordings replay with zero cache tokens.
 - **On by default,** and switchable with `DOCS2MCP_EXTRACT_PROMPT_CACHE=false`.
 
+## Measured (2026-11-24)
+
+On one run of the six eval APIs (19 calls):
+
+- **Every call cached a 3,185-token prefix,** about five times the system prompt, so part of the structured-output overhead is inside the cached prefix.
+- **The first call wrote it, and all 18 later calls read it, across all six APIs,** because they share the prompt and schema.
+- **Input cost fell 22%** at Haiku 5.5 prices ($0.0230 to $0.0179 for the run), and quality was unchanged.
+
 ## Consequences
 
 - From the second call in a run (within 5 minutes), the cached prefix costs a tenth of the price. A run with one call pays the 1.25× write premium on the prefix and gains nothing.
