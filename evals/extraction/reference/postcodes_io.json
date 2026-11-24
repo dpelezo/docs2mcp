@@ -1,0 +1,262 @@
+{
+  "api": "postcodes_io",
+  "base_url": "https://api.postcodes.io",
+  "source": {
+    "kind": "openapi",
+    "url": "https://raw.githubusercontent.com/ideal-postcodes/postcodes.io/main/static/openapi.json",
+    "version": "20.0.0",
+    "sha256": "67a4dcce985675ae1629ae7af868546581aa846d5cd978caff258073f72da0f3",
+    "retrieved": "2026-11-24",
+    "note": "static/openapi.json in github.com/ideal-postcodes/postcodes.io, served at api.postcodes.io/openapi.json. It leaves out 3 documented routes and 8 documented parameters, which evals/extraction/additions/postcodes_io.json adds. Replaces REST Countries, whose v3.1 URLs now redirect and whose v5 API needs a key (checked 2026-11-24). Plus 3 routes and 8 parameters added by hand (marked with a note): the official OpenAPI file leaves out routes and parameters that the postcodes.io docs pages document and the server serves (approved 2026-11-24). Served but undocumented routes (/postcodes/{postcode}/validate, /postcodes/lon/{lon}/lat/{lat}) are not added."
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/postcodes/{postcode}",
+      "parameters": [
+        {
+          "name": "postcode",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/postcodes",
+      "parameters": [
+        {
+          "name": "query",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "longitude",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "latitude",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "radius",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "widesearch",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "filter",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "location": "query",
+          "required": false,
+          "note": "Documented at https://postcodes.io/docs/postcode/query (q, with query as its alias); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/postcodes_controller.ts reads q or query."
+        },
+        {
+          "name": "lon",
+          "location": "query",
+          "required": false,
+          "note": "Documented at https://postcodes.io/docs/postcode/reverse-geocode (?lon=&lat=); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/postcodes_controller.ts accepts lon and lat as well as longitude and latitude."
+        },
+        {
+          "name": "lat",
+          "location": "query",
+          "required": false,
+          "note": "Documented at https://postcodes.io/docs/postcode/reverse-geocode (?lon=&lat=); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/postcodes_controller.ts accepts lon and lat as well as longitude and latitude."
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/postcodes",
+      "parameters": []
+    },
+    {
+      "method": "GET",
+      "path": "/postcodes/{postcode}/nearest",
+      "parameters": [
+        {
+          "name": "postcode",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false,
+          "note": "Documented at https://postcodes.io/docs/postcode/nearest (limit, radius); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/postcodes_controller.ts nearest reads limit and radius."
+        },
+        {
+          "name": "radius",
+          "location": "query",
+          "required": false,
+          "note": "Documented at https://postcodes.io/docs/postcode/nearest (limit, radius); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/postcodes_controller.ts nearest reads limit and radius."
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/random/postcodes",
+      "parameters": [
+        {
+          "name": "outcode",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/terminated_postcodes/{postcode}",
+      "parameters": [
+        {
+          "name": "postcode",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/scotland/postcodes/{postcode}",
+      "parameters": [
+        {
+          "name": "postcode",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/outcodes/{outcode}",
+      "parameters": [
+        {
+          "name": "outcode",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/places",
+      "parameters": [
+        {
+          "name": "q",
+          "location": "query",
+          "required": false,
+          "note": "Documented at https://postcodes.io/docs/place/query (q, with query as its alias); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/places_controller.ts reads query or q."
+        },
+        {
+          "name": "query",
+          "location": "query",
+          "required": false,
+          "note": "Documented at https://postcodes.io/docs/place/query (q, with query as its alias); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/places_controller.ts reads query or q."
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false,
+          "note": "Documented at https://postcodes.io/docs/place/query (limit); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/places_controller.ts reads limit."
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/places/{code}",
+      "parameters": [
+        {
+          "name": "code",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/random/places",
+      "parameters": []
+    },
+    {
+      "method": "GET",
+      "path": "/postcodes/{postcode}/autocomplete",
+      "parameters": [
+        {
+          "name": "postcode",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "note": "Documented at https://postcodes.io/docs/postcode/autocomplete (limit); served by github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/config/routes.ts line 23 (postcodes.autocomplete), which reads limit."
+    },
+    {
+      "method": "GET",
+      "path": "/outcodes",
+      "parameters": [
+        {
+          "name": "lon",
+          "location": "query",
+          "required": true
+        },
+        {
+          "name": "lat",
+          "location": "query",
+          "required": true
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "radius",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "note": "Documented at https://postcodes.io/docs/outcode/reverse-geocode (lon and lat required; limit, radius); served by github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/config/routes.ts line 27 (outcodes.query); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/outcodes_controller.ts reads them."
+    },
+    {
+      "method": "GET",
+      "path": "/outcodes/{outcode}/nearest",
+      "parameters": [
+        {
+          "name": "outcode",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "radius",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "note": "Documented at https://postcodes.io/docs/outcode/nearest (limit, radius); served by github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/config/routes.ts line 29 (outcodes.nearest), which reads limit and radius."
+    }
+  ]
+}

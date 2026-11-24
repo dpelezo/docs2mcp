@@ -35,6 +35,18 @@ These were approved before the scorer was written, as `AGENTS.md` requires.
 - The scorer, the references and the baseline land in one pull request. Changes to extraction land in later ones, each with before and after scores.
 - Scorer rules and references change only in pull requests that change nothing else, following the same rule.
 
+### Amendment (2026-11-24): hand additions to an official file
+
+Postcodes.io's OpenAPI file leaves out 3 routes and 8 parameters that its docs pages document and its server serves. Scoring against the file as published would mark correct extractions as wrong. So `evals/extraction/additions/<id>.json` can add routes and parameters, under these rules:
+
+- Every addition needs a `note` with its evidence: the docs section and the server code at a named commit.
+- Additions are applied by `scripts/reference_from_openapi.py`, and the reference keeps the `note` on each one, so a reviewer can tell official entries from added ones.
+- An addition the official file already covers is an error. When upstream fixes its file, the build fails and the addition is removed.
+- An addition must be both documented and served. Routes the server serves but the docs never mention (Postcodes.io's `/validate`) are not added, because the extractor has no way to find them.
+- Additions only add. Nothing in an official file is removed or changed, so routes in the official file that the docs never mention (Frankfurter's `/coverage`) still count.
+
+Postcodes.io replaced REST Countries as an eval API. REST Countries' open v3.1 URLs now redirect, and its v5 API needs a key for every request.
+
 ## Consequences
 
 - Every extraction change can be judged by numbers rather than impressions.
