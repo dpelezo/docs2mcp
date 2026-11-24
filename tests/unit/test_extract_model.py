@@ -1,4 +1,5 @@
 import json
+from collections.abc import Sequence
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -6,9 +7,17 @@ from typing import Any
 import anthropic
 import pytest
 
-from docs2mcp.extract import AnthropicModel, ModelOutputError, RecordingModel, ReplayModel, Turn
+from docs2mcp.extract import (
+    AnthropicModel,
+    Extractor,
+    ModelOutputError,
+    ModelReply,
+    RecordingModel,
+    ReplayModel,
+    Turn,
+)
 from docs2mcp.extract.wire import WireBatch
-from tests.unit.fakes import ScriptedModel, batch, endpoint
+from tests.unit.fakes import ScriptedModel, batch, chunk, endpoint
 
 TURNS = [Turn("user", "Record every endpoint.")]
 
@@ -23,11 +32,22 @@ class FakeMessages:
         return self.response
 
 
-def fake_client(stop_reason: str = "end_turn", parsed: object = None) -> Any:
+def fake_client(
+    stop_reason: str = "end_turn",
+    parsed: object = None,
+    cache_read: int | None = None,
+    cache_write: int | None = None,
+) -> Any:
+    usage = SimpleNamespace(
+        input_tokens=1234,
+        output_tokens=56,
+        cache_read_input_tokens=cache_read,
+        cache_creation_input_tokens=cache_write,
+    )
     response = SimpleNamespace(
         stop_reason=stop_reason,
         parsed_output=batch(endpoint("get_a", "/a")) if parsed is None else parsed,
-        usage=SimpleNamespace(input_tokens=1234, output_tokens=56),
+        usage=usage,
     )
     return SimpleNamespace(messages=FakeMessages(response))
 
@@ -51,8 +71,26 @@ def test_anthropic_model_sends_the_schema_and_returns_usage() -> None:
     assert sent["output_format"] is WireBatch
     assert sent["messages"] == [{"role": "user", "content": "Record every endpoint."}]
     assert "temperature" not in sent
+    assert sent["system"] == [
+        {"type": "text", "text": "sys", "cache_control": {"type": "ephemeral"}}
+    ]
+    assert "cache_control" not in sent  # no automatic breakpoint on the changing docs
     assert (reply.input_tokens, reply.output_tokens) == (1234, 56)
+    assert (reply.cache_read_tokens, reply.cache_write_tokens) == (0, 0)
     assert reply.batch.endpoints[0].operation == "get_a"
+
+
+def test_input_tokens_include_cached_tokens_and_report_them_apart() -> None:
+    client = fake_client(cache_read=5000, cache_write=600)
+    reply = AnthropicModel(client, "m", max_tokens=100).extract("sys", TURNS)
+    assert reply.input_tokens == 1234 + 5000 + 600
+    assert (reply.cache_read_tokens, reply.cache_write_tokens) == (5000, 600)
+
+
+def test_prompt_caching_can_be_turned_off() -> None:
+    client = fake_client()
+    AnthropicModel(client, "m", max_tokens=100, cache_prompt=False).extract("sys", TURNS)
+    assert client.messages.kwargs["system"] == [{"type": "text", "text": "sys"}]
 
 
 @pytest.mark.parametrize(
@@ -86,3 +124,47 @@ def test_replay_fails_clearly_when_the_request_changed(tmp_path: Path) -> None:
         ReplayModel(tmp_path, "m").extract("a different prompt", TURNS)
     with pytest.raises(FileNotFoundError):
         ReplayModel(tmp_path, "another-model").extract("sys", TURNS)
+
+
+class CachedModel:
+    """Replies like a live model whose system prompt was read from the cache."""
+
+    name = "claude-haiku-5-5"
+
+    def extract(self, system: str, turns: Sequence[Turn]) -> ModelReply:
+        assert system
+        assert turns
+        return ModelReply(
+            batch(endpoint("get_a", "/a")),
+            input_tokens=7000,
+            output_tokens=100,
+            cache_read_tokens=5000,
+            cache_write_tokens=0,
+        )
+
+
+def test_cache_tokens_are_recorded_replayed_and_reported(tmp_path: Path) -> None:
+    recorded = RecordingModel(CachedModel(), tmp_path).extract("sys", TURNS)
+    replayed = ReplayModel(tmp_path, "claude-haiku-5-5").extract("sys", TURNS)
+    assert replayed == recorded
+    assert replayed.cache_read_tokens == 5000
+
+    _, report = Extractor(CachedModel()).run([chunk("p01-c001")])
+    assert (report.input_tokens, report.cache_read_tokens, report.cache_write_tokens) == (
+        7000,
+        5000,
+        0,
+    )
+
+
+def test_recordings_made_before_caching_replay_with_zero_cache_tokens(tmp_path: Path) -> None:
+    RecordingModel(ScriptedModel([batch(endpoint("get_a", "/a"))], name="m"), tmp_path).extract(
+        "sys", TURNS
+    )
+    path = next(tmp_path.glob("*.json"))
+    record = json.loads(path.read_text())
+    del record["cache_read_tokens"], record["cache_write_tokens"]
+    path.write_text(json.dumps(record))
+
+    replayed = ReplayModel(tmp_path, "m").extract("sys", TURNS)
+    assert (replayed.cache_read_tokens, replayed.cache_write_tokens) == (0, 0)

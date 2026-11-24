@@ -121,7 +121,10 @@ def build_model(args: argparse.Namespace, settings: Settings) -> ExtractionModel
 
     client = anthropic.Anthropic(api_key=settings.require_anthropic_key())
     model: ExtractionModel = AnthropicModel(
-        client, model_name, max_tokens=settings.extract_max_output_tokens
+        client,
+        model_name,
+        max_tokens=settings.extract_max_output_tokens,
+        cache_prompt=settings.extract_prompt_cache,
     )
     return RecordingModel(model, args.record) if args.record else model
 
@@ -132,6 +135,8 @@ def report_json(report: ExtractionReport) -> str:
         "calls": report.calls,
         "input_tokens": report.input_tokens,
         "output_tokens": report.output_tokens,
+        "cache_read_tokens": report.cache_read_tokens,
+        "cache_write_tokens": report.cache_write_tokens,
         "rejected": report.rejected,
         "repairs": report.repairs,
         "merged": report.merged,
@@ -168,6 +173,11 @@ def _run_extract(args: argparse.Namespace) -> int:
         f"{report.calls} model calls, {report.input_tokens:,} input and "
         f"{report.output_tokens:,} output tokens ({report.model})"
     )
+    if report.cache_read_tokens or report.cache_write_tokens:
+        print(
+            f"  prompt cache: {report.cache_read_tokens:,} input tokens read, "
+            f"{report.cache_write_tokens:,} written"
+        )
     print(
         f"{len(report.merged)} duplicates merged, {len(report.repairs)} automatic repairs, "
         f"{len(report.rejected)} endpoints rejected"
