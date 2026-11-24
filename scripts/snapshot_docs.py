@@ -2,7 +2,8 @@
 
 Usage (needs network access):
 
-    uv run python scripts/snapshot_docs.py
+    uv run python scripts/snapshot_docs.py               # every eval API
+    uv run python scripts/snapshot_docs.py postcodes_io  # just one; other snapshots are kept
 
 Reads tests/fixtures/docs/sources.toml. Redistributable pages go to
 tests/fixtures/docs/<id>/ and are recorded in manifest.json; the rest go to the
@@ -14,6 +15,7 @@ import html
 import json
 import sys
 import tomllib
+from collections.abc import Sequence
 from datetime import UTC, datetime
 from html.parser import HTMLParser
 from pathlib import Path
@@ -109,10 +111,41 @@ def check_openapi(client: httpx.Client, url: str) -> str:
     return f"HTTP {response.status_code}"
 
 
-def main() -> int:
-    sources: list[dict[str, Any]] = tomllib.loads(SOURCES.read_text())["api"]
+def kept_entries(
+    manifest: list[dict[str, Any]], sources: list[dict[str, Any]], refreshing: set[str]
+) -> list[dict[str, Any]]:
+    """Manifest entries to keep when only `refreshing` is re-fetched.
+
+    Entries for a refreshed API, or for a page no longer in sources.toml, are dropped.
+    """
+    current = {(str(a["id"]), url) for a in sources if a["redistribute"] for url in a["pages"]}
+    return [e for e in manifest if e["api"] not in refreshing and (e["api"], e["url"]) in current]
+
+
+def sort_manifest(
+    manifest: list[dict[str, Any]], sources: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """In sources.toml order: by API, then by page."""
+    order = {
+        (str(a["id"]), url): (i, j)
+        for i, a in enumerate(sources)
+        for j, url in enumerate(a["pages"])
+    }
+    return sorted(manifest, key=lambda e: order[e["api"], e["url"]])
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    wanted = set(sys.argv[1:] if argv is None else argv)
+    all_sources: list[dict[str, Any]] = tomllib.loads(SOURCES.read_text())["api"]
+    unknown = wanted - {str(api["id"]) for api in all_sources}
+    if unknown:
+        print(f"not in sources.toml: {', '.join(sorted(unknown))}", file=sys.stderr)
+        return 1
+    sources = [api for api in all_sources if not wanted or api["id"] in wanted]
     retrieved = datetime.now(UTC).date().isoformat()
-    manifest: list[dict[str, Any]] = []
+    manifest: list[dict[str, Any]] = (
+        kept_entries(json.loads(MANIFEST.read_text()), all_sources, wanted) if wanted else []
+    )
     failures = 0
 
     with httpx.Client(
@@ -150,6 +183,7 @@ def main() -> int:
                     )
             print(f"  OpenAPI: {check_openapi(client, api['openapi'])}  ({api['openapi_note']})")
 
+    manifest = sort_manifest(manifest, all_sources)
     MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n")
     print(f"\nWrote {MANIFEST.relative_to(ROOT)} with {len(manifest)} committed snapshots.")
     if failures:

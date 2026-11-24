@@ -16,19 +16,12 @@ The rules (approved before the scorer was written; see ADR 0005):
   was missed, and no extracted ones means nothing was wrong.
 """
 
-import re
 from dataclasses import dataclass, field
 
-from docs2mcp.evals.reference import Reference
+from docs2mcp.evals.reference import Reference, route_key
 from docs2mcp.spec import ApiSpec, ParamLocation
 
-_PLACEHOLDER = re.compile(r"\{[^}]*\}")
 _SCORED = (ParamLocation.QUERY, ParamLocation.HEADER)
-
-
-def route_key(method: str, path: str) -> str:
-    """`GET /providers/{}/rates` for `GET /providers/{key}/rates/`."""
-    return f"{method} {_PLACEHOLDER.sub('{}', path.rstrip('/') or '/')}"
 
 
 @dataclass(frozen=True)
