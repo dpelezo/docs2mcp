@@ -1,0 +1,59 @@
+{
+  "api": "open_meteo_geocoding",
+  "base_url": "https://geocoding-api.open-meteo.com/v1",
+  "source": {
+    "kind": "manual",
+    "url": "https://open-meteo.com/en/docs/geocoding-api",
+    "retrieved": "2026-11-24",
+    "note": "Written by hand from https://open-meteo.com/en/docs/geocoding-api, the page in sources.toml (cached 2026-11-24). GET /search with every parameter in the page's parameter table. GET /get is documented only by its note that all IDs can be resolved via /v1/get?id=…, so it has the one parameter that note shows."
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/search",
+      "parameters": [
+        {
+          "name": "name",
+          "location": "query",
+          "required": true
+        },
+        {
+          "name": "count",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "format",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "language",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "apikey",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "countryCode",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/get",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "query",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
