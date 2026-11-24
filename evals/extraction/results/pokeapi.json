@@ -1,0 +1,749 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "extraction as merged in #11 (ef5c57a)",
+    "model": "claude-haiku-5-5",
+    "ingest": "docs2mcp ingest https://pokeapi.co/docs/v2 (1 page, 172 chunks)",
+    "calls": 8,
+    "input_tokens": 105325,
+    "output_tokens": 16666
+  },
+  "api": "pokeapi",
+  "endpoints": {
+    "matched": 51,
+    "expected": 102,
+    "found": 53,
+    "recall": 0.5,
+    "precision": 0.9623
+  },
+  "parameters": {
+    "matched": 0,
+    "expected": 0,
+    "found": 0,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "required_mismatches": 0,
+  "missing_endpoints": [
+    "GET /ability",
+    "GET /berry",
+    "GET /berry-firmness",
+    "GET /berry-flavor",
+    "GET /characteristic",
+    "GET /contest-effect",
+    "GET /contest-type",
+    "GET /currency",
+    "GET /egg-group",
+    "GET /encounter-condition",
+    "GET /encounter-condition-value",
+    "GET /encounter-method",
+    "GET /evolution-chain",
+    "GET /evolution-trigger",
+    "GET /evolution-variable",
+    "GET /gender",
+    "GET /generation",
+    "GET /growth-rate",
+    "GET /item",
+    "GET /item-attribute",
+    "GET /item-category",
+    "GET /item-fling-effect",
+    "GET /item-pocket",
+    "GET /language",
+    "GET /location",
+    "GET /location-area",
+    "GET /machine",
+    "GET /meta",
+    "GET /move",
+    "GET /move-ailment",
+    "GET /move-battle-style",
+    "GET /move-category",
+    "GET /move-damage-class",
+    "GET /move-learn-method",
+    "GET /move-target",
+    "GET /nature",
+    "GET /pal-park-area",
+    "GET /pokeathlon-stat",
+    "GET /pokedex",
+    "GET /pokemon",
+    "GET /pokemon-color",
+    "GET /pokemon-form",
+    "GET /pokemon-habitat",
+    "GET /pokemon-shape",
+    "GET /pokemon-species",
+    "GET /region",
+    "GET /stat",
+    "GET /super-contest-effect",
+    "GET /type",
+    "GET /version",
+    "GET /version-group"
+  ],
+  "extra_endpoints": [
+    "GET /item-price/{}",
+    "GET /{}"
+  ],
+  "matched": [
+    {
+      "route": "GET /ability/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /berry/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /berry-firmness/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /berry-flavor/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /characteristic/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /contest-type/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /contest-effect/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /egg-group/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /encounter-method/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /encounter-condition/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /encounter-condition-value/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /evolution-chain/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /evolution-trigger/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /evolution-variable/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /generation/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /gender/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /growth-rate/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /item/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /item-category/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /item-attribute/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /item-fling-effect/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /item-pocket/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /currency/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /language/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /location/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /location-area/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /machine/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /move/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /move-ailment/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /move-battle-style/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /move-category/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /move-damage-class/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /move-learn-method/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /move-target/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /nature/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pal-park-area/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokedex/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokemon/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokemon-color/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokemon-form/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokemon-habitat/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokemon-shape/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokemon-species/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokeathlon-stat/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /region/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /stat/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /super-contest-effect/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /type/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /version/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /version-group/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /pokemon/{}/encounters",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    }
+  ]
+}
