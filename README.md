@@ -72,6 +72,15 @@ uv run docs2mcp extract ingest/pokeapi --out specs/pokeapi/spec.json --replay re
 
 Claude reads the chunks in batches and fills a flat schema; code validates each endpoint, repairs what is mechanical, sends the rest back to Claude with the errors, and merges everything into `spec.json`. `extraction_report.json` lists calls, tokens, merged duplicates, repairs and rejected endpoints. How it works: [ADR 0004](docs/adr/0004-extraction.md).
 
+### Design the tools
+
+```bash
+uv run docs2mcp design specs/frankfurter/spec.json --direct --out tools/frankfurter.json
+uv run docs2mcp check-tools tools/frankfurter.json --spec specs/frankfurter/spec.json
+```
+
+`design` writes `tools.json`: each tool's arguments, the API request each call makes, and any endpoints left out, with the reason. Review it, set `"approved": true`, and `generate` (coming next) renders the server. `--direct` makes one tool per endpoint without an LLM; the task-shaped design that groups endpoints is in progress. `check-tools` reports every problem after a hand edit. Rules: [ADR 0011](docs/adr/0011-tool-design-and-generation.md); schema: [`docs/tools.schema.json`](docs/tools.schema.json).
+
 ### Score an extraction
 
 ```bash

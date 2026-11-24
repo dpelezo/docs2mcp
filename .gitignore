@@ -31,3 +31,4 @@ coverage.xml
 # docs2mcp extract output and recorded model replies (commit recordings deliberately)
 /specs/
 /recordings/
+/tools/
