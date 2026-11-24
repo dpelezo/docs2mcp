@@ -1,6 +1,7 @@
 """Typed settings, read from environment variables or a local .env file."""
 
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -27,6 +28,13 @@ class Settings(BaseSettings):
     )
     http_timeout_seconds: float = Field(default=30.0, gt=0)
     user_agent: str = "docs2mcp (+https://github.com/dpelezo/docs2mcp)"
+
+    # Ingest
+    cache_dir: Path = Field(default=Path(".cache/docs2mcp"), description="Fetched pages.")
+    ingest_max_pages: int = Field(default=20, ge=1, description="Pages to crawl per run.")
+    crawl_delay_seconds: float = Field(default=0.5, ge=0, description="Pause between fetches.")
+    chunk_max_tokens: int = Field(default=1500, ge=200)
+    chunk_min_tokens: int = Field(default=80, ge=0)
 
     def require_anthropic_key(self) -> str:
         """Return the API key, or fail with a clear message if it is missing."""
