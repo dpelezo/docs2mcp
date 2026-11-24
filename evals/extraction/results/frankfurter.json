@@ -1,38 +1,58 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/expand-resource-templates (resource templates, ADR 0006)",
+    "code": "feat/drop-other-base-endpoints (served_from, ADR 0007)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest https://frankfurter.dev/ (default 20-page limit; 20 pages, 182 chunks); the same chunks as the previous run",
     "calls": 6,
-    "input_tokens": 89303,
-    "output_tokens": 12317
+    "input_tokens": 90635,
+    "output_tokens": 12865,
+    "repeats": {
+      "runs": 3,
+      "endpoint_precision": [
+        0.8889,
+        0.8889,
+        0.8889
+      ],
+      "endpoint_recall": [
+        0.8889,
+        0.8889,
+        0.8889
+      ],
+      "parameter_recall": [
+        0.55,
+        0.9,
+        0.75
+      ],
+      "parameter_precision": [
+        0.9167,
+        0.9474,
+        0.9375
+      ],
+      "recorded": "run 1 of 3"
+    }
   },
   "api": "frankfurter",
   "endpoints": {
     "matched": 8,
     "expected": 9,
-    "found": 13,
+    "found": 9,
     "recall": 0.8889,
-    "precision": 0.6154
+    "precision": 0.8889
   },
   "parameters": {
-    "matched": 15,
+    "matched": 11,
     "expected": 20,
-    "found": 16,
-    "recall": 0.75,
-    "precision": 0.9375
+    "found": 12,
+    "recall": 0.55,
+    "precision": 0.9167
   },
   "required_mismatches": 0,
   "missing_endpoints": [
     "GET /coverage"
   ],
   "extra_endpoints": [
-    "GET /latest",
-    "GET /rates.csv",
-    "GET /{}",
-    "GET /{}..",
-    "GET /{}..{}"
+    "GET /rates.csv"
   ],
   "matched": [
     {
@@ -79,16 +99,20 @@
     {
       "route": "GET /providers/{}/rates",
       "parameters": {
-        "matched": 4,
+        "matched": 0,
         "expected": 7,
-        "found": 4,
-        "recall": 0.5714,
+        "found": 0,
+        "recall": 0.0,
         "precision": 1.0
       },
       "missing": [
         "query:base",
+        "query:date",
         "query:expand",
-        "query:quotes"
+        "query:from",
+        "query:group",
+        "query:quotes",
+        "query:to"
       ],
       "extra": [],
       "required_mismatches": []

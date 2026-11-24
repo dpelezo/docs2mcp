@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/expand-resource-templates (resource templates, ADR 0006)",
+    "code": "feat/drop-other-base-endpoints (served_from, ADR 0007)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest https://open-meteo.com/en/docs/geocoding-api --max-pages 1 (1 page, 5 chunks, ~1,666 tokens); the same chunks as the previous run",
     "calls": 1,
-    "input_tokens": 5433,
-    "output_tokens": 1680
+    "input_tokens": 5655,
+    "output_tokens": 1926
   },
   "api": "open_meteo_geocoding",
   "endpoints": {
