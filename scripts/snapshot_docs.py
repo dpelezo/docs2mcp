@@ -20,9 +20,10 @@ from datetime import UTC, datetime
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
 
 import httpx
+
+from docs2mcp.evals.snapshots import page_filename
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "tests" / "fixtures" / "docs"
@@ -85,11 +86,6 @@ def trim_html(raw: str) -> str:
     trimmer.close()
     lines = (line.rstrip() for line in "".join(trimmer.out).splitlines())
     return "\n".join(line for line in lines if line.strip()) + "\n"
-
-
-def page_filename(url: str) -> str:
-    path = urlparse(url).path.strip("/").replace("/", "_") or "index"
-    return f"{path}.html"
 
 
 def fetch(client: httpx.Client, url: str) -> str:
