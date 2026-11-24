@@ -1,0 +1,208 @@
+{
+  "api": "open_library",
+  "base_url": "https://openlibrary.org",
+  "source": {
+    "kind": "manual",
+    "url": "https://openlibrary.org/dev/docs/api/search",
+    "retrieved": "2026-11-24",
+    "note": "Written by hand from the three pages in sources.toml: /dev/docs/api/search (last edited 2025-05-07), /dev/docs/api/books (2025-05-06) and /dev/docs/api/authors (2024-09-03). Every operation these pages document, with the query parameters they name. Left out: the .rdf and .yml variants of the .json routes (formats of the same resource, as with Frankfurter's .csv), and covers.openlibrary.org, which is another host."
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/search.json",
+      "parameters": [
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "title",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "author",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "fields",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "sort",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "lang",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "page",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "editions.sort",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/search/authors.json",
+      "parameters": [
+        {
+          "name": "q",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/authors/{olid}.json",
+      "parameters": [
+        {
+          "name": "olid",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/authors/{olid}/works.json",
+      "parameters": [
+        {
+          "name": "olid",
+          "location": "path",
+          "required": true
+        },
+        {
+          "name": "limit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "required": false
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/works/{olid}.json",
+      "parameters": [
+        {
+          "name": "olid",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/works/{olid}/editions.json",
+      "parameters": [
+        {
+          "name": "olid",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/works/{olid}/bookshelves.json",
+      "parameters": [
+        {
+          "name": "olid",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/works/{olid}/ratings.json",
+      "parameters": [
+        {
+          "name": "olid",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/books/{olid}.json",
+      "parameters": [
+        {
+          "name": "olid",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/isbn/{isbn}.json",
+      "parameters": [
+        {
+          "name": "isbn",
+          "location": "path",
+          "required": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/books",
+      "parameters": [
+        {
+          "name": "bibkeys",
+          "location": "query",
+          "required": true
+        },
+        {
+          "name": "format",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "callback",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "jscmd",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "details",
+          "location": "query",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
