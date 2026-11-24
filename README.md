@@ -89,6 +89,14 @@ uv run docs2mcp score specs/frankfurter/spec.json --reference evals/extraction/r
 
 This compares the extracted endpoints and parameters with a reference built from the API's own OpenAPI file. Results and the baseline: [evals/extraction](evals/extraction/README.md). Rules: [ADR 0005](docs/adr/0005-extraction-scoring.md).
 
+### Measure a design
+
+```bash
+uv run docs2mcp measure tools/frankfurter.json --spec specs/frankfurter/spec.json
+```
+
+This counts tools, routes, covered and excluded endpoints, and the estimated tokens an agent loads to see the tools. A person also reviews each design against a pass/fail [checklist](evals/design/checklist.md). Baseline and rules: [evals/design](evals/design/README.md).
+
 ## How this repo is built
 
 I build with AI coding agents and review everything they produce. The working rules every agent follows are in [`AGENTS.md`](AGENTS.md): run the baseline before changing code, keep unit tests off the network, never change an eval task in the same pull request as the code it measures, and report what was and was not verified. Changes to anything the eval measures follow the [eval-driven change](.claude/skills/eval-driven-change/SKILL.md) procedure, which agents load as a skill: name the failing case, re-run every API on the same inputs, and show before/after numbers.

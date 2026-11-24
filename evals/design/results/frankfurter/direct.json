@@ -1,0 +1,76 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-eval",
+    "design": "docs2mcp design --direct (no model)",
+    "input": "tests/fixtures/specs/frankfurter.json (committed; replay of evals/extraction/replay/frankfurter)"
+  },
+  "api": "Frankfurter",
+  "design": "direct",
+  "valid": true,
+  "endpoints": 9,
+  "covered": 9,
+  "excluded": 0,
+  "tools": 9,
+  "routes": 9,
+  "tool_list_tokens": 968,
+  "description_tokens": 425,
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "get_rates",
+      "routes": 1,
+      "arguments": 8,
+      "tokens": 246
+    },
+    {
+      "name": "get_rates_csv",
+      "routes": 1,
+      "arguments": 0,
+      "tokens": 50
+    },
+    {
+      "name": "get_rate",
+      "routes": 1,
+      "arguments": 4,
+      "tokens": 119
+    },
+    {
+      "name": "list_currencies",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 60
+    },
+    {
+      "name": "get_currency",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 57
+    },
+    {
+      "name": "list_providers",
+      "routes": 1,
+      "arguments": 0,
+      "tokens": 31
+    },
+    {
+      "name": "get_provider",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 60
+    },
+    {
+      "name": "get_provider_rates",
+      "routes": 1,
+      "arguments": 9,
+      "tokens": 249
+    },
+    {
+      "name": "get_provider_rate",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 96
+    }
+  ],
+  "max_routes_per_tool": 1
+}
