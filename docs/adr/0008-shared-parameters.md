@@ -19,6 +19,10 @@ The referenced endpoint is often in another batch, so Claude cannot reliably cop
   - The query and header parameters of the matched endpoint are copied. Path parameters are never copied, and parameters the endpoint already has are kept as they are.
 - **Every copy is reported** under `shared_parameters`, including references that matched nothing.
 
+### Refinement after the first live run
+
+In one of the first three runs, Claude also attached the shared parameters to the single-pair route, giving it 7 parameters it does not take. The prompt now says that when one sentence covers a group of routes, each route lists only the endpoint it mirrors. It uses a generic example rather than Frankfurter's, so as not to tune to the eval. In the next three runs, Frankfurter's parameter precision was 90% every time.
+
 ## Alternatives considered
 
 - **A prompt rule alone ("copy the shared parameters").** Rejected: it fails whenever the referenced endpoint is in another batch, and the #22 runs show it is unstable even when both are in the same batch.

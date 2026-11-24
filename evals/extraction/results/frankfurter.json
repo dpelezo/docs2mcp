@@ -1,14 +1,15 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/drop-other-base-endpoints (served_from, ADR 0007)",
+    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest https://frankfurter.dev/ (default 20-page limit; 20 pages, 182 chunks); the same chunks as the previous run",
     "calls": 6,
-    "input_tokens": 90635,
-    "output_tokens": 12865,
+    "input_tokens": 92933,
+    "output_tokens": 13154,
     "repeats": {
       "runs": 3,
+      "recorded": "run 1 of 3",
       "endpoint_precision": [
         0.8889,
         0.8889,
@@ -20,16 +21,15 @@
         0.8889
       ],
       "parameter_recall": [
-        0.55,
         0.9,
-        0.75
+        0.95,
+        0.9
       ],
       "parameter_precision": [
-        0.9167,
-        0.9474,
-        0.9375
-      ],
-      "recorded": "run 1 of 3"
+        0.9,
+        0.9048,
+        0.9
+      ]
     }
   },
   "api": "frankfurter",
@@ -41,11 +41,11 @@
     "precision": 0.8889
   },
   "parameters": {
-    "matched": 11,
+    "matched": 18,
     "expected": 20,
-    "found": 12,
-    "recall": 0.55,
-    "precision": 0.9167
+    "found": 20,
+    "recall": 0.9,
+    "precision": 0.9
   },
   "required_mismatches": 0,
   "missing_endpoints": [
@@ -99,22 +99,16 @@
     {
       "route": "GET /providers/{}/rates",
       "parameters": {
-        "matched": 0,
+        "matched": 7,
         "expected": 7,
-        "found": 0,
-        "recall": 0.0,
-        "precision": 1.0
+        "found": 8,
+        "recall": 1.0,
+        "precision": 0.875
       },
-      "missing": [
-        "query:base",
-        "query:date",
-        "query:expand",
-        "query:from",
-        "query:group",
-        "query:quotes",
-        "query:to"
+      "missing": [],
+      "extra": [
+        "query:providers"
       ],
-      "extra": [],
       "required_mismatches": []
     },
     {
