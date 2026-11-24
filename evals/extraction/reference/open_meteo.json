@@ -1,0 +1,153 @@
+{
+  "api": "open_meteo",
+  "base_url": "https://api.open-meteo.com/v1",
+  "source": {
+    "kind": "manual",
+    "url": "https://open-meteo.com/en/docs",
+    "retrieved": "2026-11-24",
+    "note": "Written by hand from https://open-meteo.com/en/docs, the forecast page in sources.toml (cached 2026-11-24). One operation, GET /forecast, with every parameter in the page's parameter table plus minutely_15, which the page documents in its 15-Minutely section. Weather variable names (temperature_2m, …) are values of hourly, daily, current and minutely_15, not parameters. latitude and longitude are the only required parameters; the page says no required parameters will be added."
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/forecast",
+      "parameters": [
+        {
+          "name": "latitude",
+          "location": "query",
+          "required": true
+        },
+        {
+          "name": "longitude",
+          "location": "query",
+          "required": true
+        },
+        {
+          "name": "elevation",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "hourly",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "daily",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "current",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "minutely_15",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "temperature_unit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "wind_speed_unit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "precipitation_unit",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "timeformat",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "timezone",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "past_days",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "forecast_days",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "forecast_hours",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "forecast_minutely_15",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "past_hours",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "past_minutely_15",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "start_date",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "end_date",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "start_hour",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "end_hour",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "start_minutely_15",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "end_minutely_15",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "models",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "cell_selection",
+          "location": "query",
+          "required": false
+        },
+        {
+          "name": "apikey",
+          "location": "query",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

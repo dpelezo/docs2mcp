@@ -2,7 +2,7 @@
 
 How well `docs2mcp extract` recovers an API's real endpoints and parameters from its docs. The rules are in [ADR 0005](../../docs/adr/0005-extraction-scoring.md).
 
-- `reference/<id>.json` is the ground truth. PokéAPI, Frankfurter and Postcodes.io are generated from their own OpenAPI files with `just references`. Open Library's is written by hand from its docs pages (`source.kind: "manual"`); Open-Meteo's two (forecast and geocoding) come next.
+- `reference/<id>.json` is the ground truth. PokéAPI, Frankfurter and Postcodes.io are generated from their own OpenAPI files with `just references`. Open Library's and Open-Meteo forecast's are written by hand from their docs pages (`source.kind: "manual"`); Open-Meteo geocoding's comes next.
 - `additions/<id>.json` adds the routes and parameters an official file leaves out but the docs document and the server serves, each with its evidence. Today that is only Postcodes.io: 3 routes and 8 parameters. The reference marks every addition with a `note`, and `just references` fails if the official file already covers one, so stale additions get noticed.
 - `results/<id>.json` is the score of one recorded run, with the run's code version, model, ingest command and token use.
 
@@ -24,7 +24,7 @@ Baseline: extraction as merged in #11, `claude-haiku-5-5`, one run per API.
 | PokéAPI | 51 / 102 (50%) | 96% (53 extracted) | n/a: matched endpoints have only path parameters | n/a | 8 | 105,325 / 16,666 |
 | Postcodes.io | not run yet | | | | | |
 | Open Library | not run yet (reference written by hand) | | | | | |
-| Open-Meteo forecast | needs a hand-written reference | | | | | |
+| Open-Meteo forecast | not run yet (reference written by hand) | | | | | |
 | Open-Meteo geocoding | needs a hand-written reference | | | | | |
 
 Notes on the Frankfurter baseline:
