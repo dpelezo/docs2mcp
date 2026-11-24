@@ -42,6 +42,9 @@ class Settings(BaseSettings):
         default=16000, ge=1000, description="Output cap per call; a cut-off reply splits the batch."
     )
     extract_max_retries: int = Field(default=2, ge=0, description="Feedback rounds per batch.")
+    extract_prompt_cache: bool = Field(
+        default=True, description="Cache the system prompt across extraction calls."
+    )
 
     def require_anthropic_key(self) -> str:
         """Return the API key, or fail with a clear message if it is missing."""

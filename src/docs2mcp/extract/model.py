@@ -25,9 +25,18 @@ class Turn:
 
 @dataclass(frozen=True)
 class ModelReply:
+    """A parsed reply and its token use.
+
+    `input_tokens` is the total input, cached or not, so totals stay comparable
+    whether or not caching is on. `cache_read_tokens` and `cache_write_tokens` say
+    how much of it was read from or written to the prompt cache.
+    """
+
     batch: WireBatch
     input_tokens: int
     output_tokens: int
+    cache_read_tokens: int = 0
+    cache_write_tokens: int = 0
 
 
 class ModelOutputError(RuntimeError):
@@ -55,16 +64,24 @@ def request_key(model: str, system: str, turns: Sequence[Turn]) -> str:
 class AnthropicModel:
     """Claude via the official SDK, with the reply constrained to WireBatch."""
 
-    def __init__(self, client: Any, model: str, max_tokens: int) -> None:
+    def __init__(
+        self, client: Any, model: str, max_tokens: int, *, cache_prompt: bool = True
+    ) -> None:
         self._client = client
         self.name = model
         self._max_tokens = max_tokens
+        self._cache_prompt = cache_prompt
 
     def extract(self, system: str, turns: Sequence[Turn]) -> ModelReply:
+        # The system prompt is the same on every call, so it is the cache breakpoint
+        # (ADR 0009). Each batch's docs differ, so caching them would only cost more.
+        block: dict[str, Any] = {"type": "text", "text": system}
+        if self._cache_prompt:
+            block["cache_control"] = {"type": "ephemeral"}
         response = self._client.messages.parse(
             model=self.name,
             max_tokens=self._max_tokens,
-            system=system,
+            system=[block],
             messages=[{"role": t.role, "content": t.content} for t in turns],
             output_format=WireBatch,
         )
@@ -73,10 +90,15 @@ class AnthropicModel:
         parsed = response.parsed_output
         if not isinstance(parsed, WireBatch):
             raise ModelOutputError("invalid", "reply did not match the schema")
+        usage = response.usage
+        read = usage.cache_read_input_tokens or 0
+        written = usage.cache_creation_input_tokens or 0
         return ModelReply(
             batch=parsed,
-            input_tokens=response.usage.input_tokens,
-            output_tokens=response.usage.output_tokens,
+            input_tokens=usage.input_tokens + read + written,
+            output_tokens=usage.output_tokens,
+            cache_read_tokens=read,
+            cache_write_tokens=written,
         )
 
 
@@ -95,6 +117,8 @@ class RecordingModel:
             "model": self.name,
             "input_tokens": reply.input_tokens,
             "output_tokens": reply.output_tokens,
+            "cache_read_tokens": reply.cache_read_tokens,
+            "cache_write_tokens": reply.cache_write_tokens,
             "output": reply.batch.model_dump(mode="json"),
         }
         path = self._directory / f"{request_key(self.name, system, turns)}.json"
@@ -123,4 +147,6 @@ class ReplayModel:
             batch=WireBatch.model_validate(record["output"]),
             input_tokens=record["input_tokens"],
             output_tokens=record["output_tokens"],
+            cache_read_tokens=record.get("cache_read_tokens", 0),
+            cache_write_tokens=record.get("cache_write_tokens", 0),
         )

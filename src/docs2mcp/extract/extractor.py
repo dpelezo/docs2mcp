@@ -30,6 +30,8 @@ class BatchLog:
     calls: int = 0
     input_tokens: int = 0
     output_tokens: int = 0
+    cache_read_tokens: int = 0
+    cache_write_tokens: int = 0
     endpoints: int = 0
     rejected: list[str] = field(default_factory=list[str])
     error: str | None = None
@@ -56,6 +58,14 @@ class ExtractionReport:
     @property
     def output_tokens(self) -> int:
         return sum(b.output_tokens for b in self.batches)
+
+    @property
+    def cache_read_tokens(self) -> int:
+        return sum(b.cache_read_tokens for b in self.batches)
+
+    @property
+    def cache_write_tokens(self) -> int:
+        return sum(b.cache_write_tokens for b in self.batches)
 
     @property
     def rejected(self) -> list[str]:
@@ -180,6 +190,8 @@ class Extractor:
             log.calls += 1
             log.input_tokens += reply.input_tokens
             log.output_tokens += reply.output_tokens
+            log.cache_read_tokens += reply.cache_read_tokens
+            log.cache_write_tokens += reply.cache_write_tokens
 
             valid: list[WireEndpoint] = []
             errors: list[str] = []
