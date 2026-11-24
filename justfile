@@ -21,9 +21,13 @@ fmt:
 typecheck:
     uv run pyright
 
-# Unit tests with coverage (no network)
+# Unit tests with coverage (no network); fails under 80% coverage
 test:
-    uv run pytest -m unit
+    uv run pytest -m unit --cov-fail-under=80
+
+# Live tests against real documentation sites (needs network)
+integration:
+    uv run pytest -m integration --no-cov
 
 # Regenerate docs/spec.schema.json after changing the spec models
 schema:

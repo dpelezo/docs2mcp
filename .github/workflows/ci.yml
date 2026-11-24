@@ -33,6 +33,6 @@ jobs:
       - name: Types (Pyright strict)
         run: uv run pyright
       - name: Unit tests (coverage floor 80%)
-        run: uv run pytest -m unit
+        run: uv run pytest -m unit --cov-fail-under=80
       - name: Audit workflow files (zizmor)
         run: uvx zizmor@1.33.1 --offline --format plain .github/workflows

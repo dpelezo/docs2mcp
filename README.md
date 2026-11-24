@@ -57,7 +57,7 @@ uv run docs2mcp ingest https://openlibrary.org/dev/docs/api/search \
   https://openlibrary.org/dev/docs/api/books --out ingest/open_library
 ```
 
-This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
+This writes `pages.jsonl` and `chunks.jsonl`: Markdown sections labelled with their heading path and a link back to the source. Pages are cached in `.cache/`, so re-runs are offline; pass `--refresh` to refetch. `just integration` runs the live tests against real sites. How it works: [ADR 0003](docs/adr/0003-ingest-pipeline.md).
 
 ## How this repo is built
 
