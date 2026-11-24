@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "extraction as merged in #11 (ef5c57a); unchanged since",
+    "code": "feat/expand-resource-templates (resource templates, ADR 0006)",
     "model": "claude-haiku-5-5",
-    "ingest": "docs2mcp ingest https://open-meteo.com/en/docs/geocoding-api --max-pages 1 (1 page, 5 chunks, ~1,666 tokens)",
+    "ingest": "docs2mcp ingest https://open-meteo.com/en/docs/geocoding-api --max-pages 1 (1 page, 5 chunks, ~1,666 tokens); the same chunks as the previous run",
     "calls": 1,
-    "input_tokens": 5175,
-    "output_tokens": 1578
+    "input_tokens": 5433,
+    "output_tokens": 1680
   },
   "api": "open_meteo_geocoding",
   "endpoints": {

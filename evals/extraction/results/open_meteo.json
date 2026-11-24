@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "extraction as merged in #11 (ef5c57a); unchanged since",
+    "code": "feat/expand-resource-templates (resource templates, ADR 0006)",
     "model": "claude-haiku-5-5",
-    "ingest": "docs2mcp ingest https://open-meteo.com/en/docs --max-pages 1 (1 page, 12 chunks, ~7,022 tokens)",
+    "ingest": "docs2mcp ingest https://open-meteo.com/en/docs --max-pages 1 (1 page, 12 chunks, ~7,022 tokens); the same chunks as the previous run",
     "calls": 2,
-    "input_tokens": 17452,
-    "output_tokens": 3962
+    "input_tokens": 17968,
+    "output_tokens": 3694
   },
   "api": "open_meteo",
   "endpoints": {
