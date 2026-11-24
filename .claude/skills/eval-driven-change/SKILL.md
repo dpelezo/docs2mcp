@@ -77,4 +77,5 @@ How to change an LLM pipeline or agent so that every change has measured evidenc
   uv run docs2mcp score specs/<api>/after/spec.json --reference evals/extraction/reference/<api>.json --out specs/<api>/after/score.json
   ```
   The `base_url` for each API is in `tests/fixtures/docs/sources.toml`. `specs/`, `ingest/` and `recordings/` are git-ignored, so live runs never touch tracked files.
+- **CI replay:** `tests/unit/test_extraction_replay.py` replays recorded extraction for PokéAPI, Frankfurter and Postcodes.io from the committed snapshots. If the change moves their scores, or changes the prompt, schema or chunking, run `just record-replay` and commit the new recordings and `score.json` files in the same pull request.
 - **Record:** copy each score into `evals/extraction/results/<api>.json` with its `run` details, then add a row to the History table in `evals/extraction/README.md`. Resource templates (#20) is the worked example.

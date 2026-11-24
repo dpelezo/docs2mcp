@@ -33,6 +33,10 @@ integration:
 schema:
     uv run docs2mcp schema > docs/spec.schema.json
 
+# Record live extraction on the committed snapshots, for the CI replay test (needs ANTHROPIC_API_KEY)
+record-replay *ids:
+    uv run python scripts/record_replay.py {{ids}}
+
 # Rebuild evals/extraction/reference/ from the APIs' OpenAPI files (needs network)
 references *ids:
     uv run python scripts/reference_from_openapi.py {{ids}}
