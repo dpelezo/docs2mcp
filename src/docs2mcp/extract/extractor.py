@@ -10,6 +10,7 @@ from docs2mcp.extract.merge import (
     choose_auth,
     choose_base_url,
     describe_error,
+    expand_resource_templates,
     merge_endpoints,
     to_endpoint,
 )
@@ -37,6 +38,7 @@ class ExtractionReport:
     batches: list[BatchLog] = field(default_factory=list[BatchLog])
     repairs: list[str] = field(default_factory=list[str])
     merged: list[str] = field(default_factory=list[str])
+    expanded: list[str] = field(default_factory=list[str])
 
     @property
     def calls(self) -> int:
@@ -111,11 +113,18 @@ class Extractor:
         chosen_base = choose_base_url(accepted.base_urls, base_url)
         notes: list[str] = []
         endpoints: list[Endpoint] = []
+        templates: dict[tuple[str, str], Endpoint] = {}
         for wire in accepted.endpoints:
             try:
-                endpoints.append(to_endpoint(wire, chosen_base, lookup, notes))
+                endpoint = to_endpoint(wire, chosen_base, lookup, notes)
             except ValidationError as error:  # cannot happen for endpoints validated per batch
                 report.batches[-1].rejected.append(describe_error(wire, error))
+                continue
+            if wire.for_every_resource:
+                templates.setdefault((endpoint.method, endpoint.path), endpoint)
+            else:
+                endpoints.append(endpoint)
+        endpoints = expand_resource_templates(endpoints, list(templates.values()), report.expanded)
         merged = merge_endpoints(endpoints, notes, report.merged)
         report.repairs = notes
         if not merged:

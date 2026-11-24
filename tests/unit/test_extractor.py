@@ -123,3 +123,29 @@ def test_fails_clearly_without_chunks_or_endpoints() -> None:
         Extractor(ScriptedModel([])).run([])
     with pytest.raises(ValueError, match="no valid endpoints"):
         Extractor(ScriptedModel([batch()])).run(CHUNKS[:1])
+
+
+def test_flagged_resource_templates_are_expanded_once_and_reported() -> None:
+    template = endpoint(
+        "list_resources",
+        "/{endpoint}",
+        param("endpoint", "path"),
+        param("limit"),
+        for_every_resource=True,
+    )
+    model = ScriptedModel(
+        [
+            batch(template, endpoint("get_pokemon", "/pokemon/{id}", param("id", "path"))),
+            batch(template, endpoint("get_berry", "/berry/{id}", param("id", "path"))),
+        ]
+    )
+
+    spec, report = Extractor(model, batch_tokens=6000).run(CHUNKS)
+
+    assert sorted(e.path for e in spec.endpoints) == [
+        "/berry",
+        "/berry/{id}",
+        "/pokemon",
+        "/pokemon/{id}",
+    ]
+    assert report.expanded == ["GET /{endpoint}: expanded into 2 routes, one per resource"]

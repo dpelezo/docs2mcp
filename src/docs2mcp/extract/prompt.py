@@ -21,6 +21,11 @@ a single descriptive placeholder.
 default. allowed_values: only values the docs list explicitly.
 - Keep summary and description to one short sentence each. Do not copy response examples.
 - source_chunk_id: the id of the chunk where the endpoint is documented.
+- for_every_resource: true only when the docs describe one generic route that works for every \
+resource of the API (for example "calling any endpoint without an id returns a list: \
+GET /{endpoint}/"). Record such a route once, with the resource as its first placeholder; it is \
+expanded in code. A placeholder that holds a value (a date, an id, a code) is not a resource: \
+use false.
 - If the chunks document no endpoints (an introduction, a FAQ, a changelog), return an empty \
 endpoints list.
 """

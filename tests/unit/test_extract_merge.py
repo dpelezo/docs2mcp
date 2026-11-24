@@ -6,6 +6,7 @@ from pydantic import ValidationError
 from docs2mcp.extract.merge import (
     choose_auth,
     choose_base_url,
+    expand_resource_templates,
     identifier,
     merge_endpoints,
     normalize_path,
@@ -13,7 +14,7 @@ from docs2mcp.extract.merge import (
     to_parameter,
 )
 from docs2mcp.extract.wire import WireAuth, WireEndpoint, WireParameter
-from docs2mcp.spec import AuthType, Parameter, ParamLocation
+from docs2mcp.spec import AuthType, Endpoint, Parameter, ParamLocation
 from tests.unit.fakes import NO_AUTH, chunk, endpoint, param
 
 BASE = "https://pokeapi.co/api/v2"
@@ -208,3 +209,67 @@ def test_choose_auth() -> None:
     broken = choose_auth([WireAuth(type="api_key", location="none", name="")], notes)
     assert broken.type is AuthType.NONE
     assert notes == ["auth: api_key without a header or query name; recorded as none"]
+
+
+def _ep(operation: str, path: str, *params: WireParameter) -> Endpoint:
+    return to_endpoint(endpoint(operation, path, *params), BASE, CHUNKS, [])
+
+
+LIST_TEMPLATE = _ep(
+    "list_resources", "/{endpoint}", param("endpoint", "path"), param("limit"), param("offset")
+)
+
+
+def test_a_resource_template_becomes_one_list_route_per_resource() -> None:
+    endpoints = [
+        _ep("get_pokemon", "/pokemon/{id}", param("id", "path")),
+        _ep("get_ability", "/ability/{id}", param("id", "path")),
+        _ep("list_ability", "/ability"),  # already documented on its own: not added again
+        _ep("get_rates", "/rates"),  # one segment: not a resource
+    ]
+    expanded: list[str] = []
+
+    result = expand_resource_templates(endpoints, [LIST_TEMPLATE], expanded)
+
+    added = result[len(endpoints) :]
+    assert [(e.id, e.path) for e in added] == [("list_resources_pokemon", "/pokemon")]
+    assert [(p.name, p.location) for p in added[0].parameters] == [
+        ("limit", ParamLocation.QUERY),
+        ("offset", ParamLocation.QUERY),
+    ]
+    assert added[0].summary == "List resources (pokemon)."
+    assert expanded == ["GET /{endpoint}: expanded into 1 routes, one per resource"]
+
+
+def test_a_template_keeps_the_rest_of_its_path() -> None:
+    template = _ep(
+        "get_names", "/{endpoint}/{id}/names", param("endpoint", "path"), param("id", "path")
+    )
+    result = expand_resource_templates(
+        [_ep("get_berry", "/berry/{id}", param("id", "path"))], [template], []
+    )
+    assert [(e.path, [p.name for p in e.parameters]) for e in result[1:]] == [
+        ("/berry/{id}/names", ["id"])
+    ]
+
+
+@pytest.mark.parametrize(
+    ("template", "others", "reason"),
+    [
+        (_ep("get_rates", "/rates/{date}", param("date", "path")), "resources", "does not start"),
+        (LIST_TEMPLATE, "none", "no other endpoint names a resource"),
+    ],
+)
+def test_a_template_that_cannot_be_expanded_is_kept_as_documented(
+    template: Endpoint, others: str, reason: str
+) -> None:
+    endpoints = (
+        [_ep("get_berry", "/berry/{id}", param("id", "path"))] if others == "resources" else []
+    )
+    expanded: list[str] = []
+
+    result = expand_resource_templates(endpoints, [template, template], expanded)
+
+    assert result == [*endpoints, template]  # kept once
+    assert len(expanded) == 2
+    assert reason in expanded[0]

@@ -128,6 +128,7 @@ def report_json(report: ExtractionReport) -> str:
         "rejected": report.rejected,
         "repairs": report.repairs,
         "merged": report.merged,
+        "expanded": report.expanded,
         "batches": [asdict(b) for b in report.batches],
     }
     return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
@@ -162,6 +163,8 @@ def _run_extract(args: argparse.Namespace) -> int:
         f"{len(report.merged)} duplicates merged, {len(report.repairs)} automatic repairs, "
         f"{len(report.rejected)} endpoints rejected"
     )
+    for note in report.expanded:
+        print(f"  resource template {note}")
     for batch in report.failed_batches:
         print(f"  batch {batch.chunk_ids[0]}..{batch.chunk_ids[-1]} failed: {batch.error}")
     print(f"Wrote {args.out} and {report_path}")

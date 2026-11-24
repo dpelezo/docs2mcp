@@ -46,6 +46,14 @@ class WireEndpoint(_Wire):
         description="Dotted paths of the most useful response fields; empty if not documented."
     )
     source_chunk_id: str = Field(description="Id of the chunk that documents this endpoint.")
+    for_every_resource: bool = Field(
+        description=(
+            "true only if the docs say this one route works for every resource of the API, with "
+            "the resource name as its first path segment, e.g. GET /{endpoint}/ returning a list "
+            "for any endpoint. false for every ordinary endpoint, including one whose first "
+            "segment is a value such as a date or an id."
+        )
+    )
 
 
 class WireAuth(_Wire):
