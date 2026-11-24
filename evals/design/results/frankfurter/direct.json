@@ -15,6 +15,9 @@
   "routes": 9,
   "tool_list_tokens": 968,
   "description_tokens": 425,
+  "parameters_exposed": 27,
+  "parameters_total": 27,
+  "unexposed": [],
   "problems": [],
   "per_tool": [
     {

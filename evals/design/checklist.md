@@ -16,7 +16,7 @@ Copy this file to `reviews/<id>.md` and answer every question for one `tools.jso
 ## The whole design
 
 5. **No overlap.** No request would fit two tools equally well.
-6. **Exclusions.** Every exclusion has a reason that holds (not JSON, not useful to an agent, duplicate of another route), and nothing an agent needs for the API's main tasks is excluded.
+6. **Exclusions.** Every exclusion has a reason that holds (not JSON, not useful to an agent, duplicate of another route), and nothing an agent needs for the API's main tasks is excluded. The same goes for parameters: every one in `unexposed` (from `docs2mcp measure`) is an alias of an exposed one or of no use to an agent, such as an API key on a keyless API.
 7. **Faithful.** Descriptions claim nothing the spec does not support: no invented limits, values, behaviour or examples.
 
 ## Verdict

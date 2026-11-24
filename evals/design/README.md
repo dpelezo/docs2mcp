@@ -13,6 +13,7 @@ The rules were approved on 2026-11-24, before any design prompt was written (#29
 | `valid` | `validate_toolset` finds no problems (ADR 0011). The problems are listed. |
 | `covered` / `excluded` / `endpoints` | Spec endpoints reached by a route, excluded with a reason, and in the spec. A valid design always has covered + excluded = endpoints. |
 | `tools`, `routes`, `max_routes_per_tool` | What the design contains. |
+| `parameters_exposed` / `parameters_total`, `unexposed` | Every parameter of every routed endpoint, counted once per route, and how many a route fills from an argument or a constant. `unexposed` lists the rest as `endpoint.parameter`: the agent cannot use them. Added on 2026-11-24, after live runs showed designs dropping optional parameters that validation does not require. |
 | `tool_list_tokens` | Estimated tokens an agent loads before its first call: every tool's name, description and argument schema, as JSON in the shape of an MCP `tools/list` reply. |
 | `description_tokens` | The prose part of that: tool and argument descriptions. |
 | `per_tool` | Routes, arguments and estimated tokens for each tool, to find the heavy ones. |
@@ -42,23 +43,23 @@ Designs are measured on frozen specs, so only the design step differs between ru
 
 `results/<id>/direct.json` is the baseline: the one-tool-per-endpoint design, made by code with no model. Each file has a `run` block naming its input. `tests/unit/test_evals_design.py` recomputes the three committed baselines and fails if they drift.
 
-| API | Endpoints | Tools | Routes | Tool list (est. tokens) | Descriptions (est. tokens) |
-|---|---|---|---|---|---|
-| PokéAPI | 103 | 103 | 103 | 9,601 | 4,986 |
-| Postcodes.io | 14 | 14 | 14 | 1,701 | 876 |
-| Frankfurter | 9 | 9 | 9 | 968 | 425 |
-| Open-Meteo forecast | 1 | 1 | 1 | 883 | 444 |
-| Open-Meteo geocoding | 2 | 2 | 2 | 328 | 179 |
-| **Tuned total** | **129** | **129** | **129** | **13,481** | **6,910** |
-| Open Library (held out) | 11 | 11 | 11 | 1,091 | 536 |
+| API | Endpoints | Tools | Routes | Parameters exposed | Tool list (est. tokens) | Descriptions (est. tokens) |
+|---|---|---|---|---|---|---|
+| PokéAPI | 103 | 103 | 103 | 154 / 154 | 9,601 | 4,986 |
+| Postcodes.io | 14 | 14 | 14 | 34 / 34 | 1,701 | 876 |
+| Frankfurter | 9 | 9 | 9 | 27 / 27 | 968 | 425 |
+| Open-Meteo forecast | 1 | 1 | 1 | 26 / 26 | 883 | 444 |
+| Open-Meteo geocoding | 2 | 2 | 2 | 7 / 7 | 328 | 179 |
+| **Tuned total** | **129** | **129** | **129** | **248 / 248** | **13,481** | **6,910** |
+| Open Library (held out) | 11 | 11 | 11 | 22 / 22 | 1,091 | 536 |
 
-Every baseline design is valid, covers every endpoint and excludes none.
+Every baseline design is valid, covers every endpoint, excludes none and exposes every parameter.
 
 ### History
 
-| Date | Change | Design | Tuned: tools / tokens | Open Library: tools / tokens | Review |
+| Date | Change | Design | Tuned: tools / parameters / tokens | Open Library: tools / parameters / tokens | Review |
 |---|---|---|---|---|---|
-| 2026-11-24 | Baseline (#29) | direct, no model | 129 / 13,481 | 11 / 1,091 | not reviewed (no grouping to judge) |
+| 2026-11-24 | Baseline (#29) | direct, no model | 129 / 248 of 248 / 13,481 | 11 / 22 of 22 / 1,091 | not reviewed (no grouping to judge) |
 
 ## Measure a design
 
