@@ -80,7 +80,7 @@ This compares the extracted endpoints and parameters with a reference built from
 
 ## How this repo is built
 
-I build with AI coding agents and review everything they produce. The working rules every agent follows are in [`AGENTS.md`](AGENTS.md): run the baseline before changing code, keep unit tests off the network, never change an eval task in the same pull request as the code it measures, and report what was and was not verified.
+I build with AI coding agents and review everything they produce. The working rules every agent follows are in [`AGENTS.md`](AGENTS.md): run the baseline before changing code, keep unit tests off the network, never change an eval task in the same pull request as the code it measures, and report what was and was not verified. Changes to anything the eval measures follow the [eval-driven change](.claude/skills/eval-driven-change/SKILL.md) procedure, which agents load as a skill: name the failing case, re-run every API on the same inputs, and show before/after numbers.
 
 ## License
 
