@@ -1,0 +1,118 @@
+"""Check a tool set against the API spec it was designed from (ADR 0011).
+
+`validate_toolset` returns every problem it finds, not just the first, so a
+person (or Claude, on a retry) sees them all at once. An empty list means the
+tool set is safe to generate from.
+"""
+
+from docs2mcp.design.toolset import Route, Tool, ToolParameter, ToolSet
+from docs2mcp.spec import ApiSpec, Endpoint, Parameter, ParamType
+
+
+def validate_toolset(toolset: ToolSet, spec: ApiSpec) -> list[str]:
+    errors: list[str] = []
+    endpoints = {e.id: e for e in spec.endpoints}
+
+    routed: dict[str, list[str]] = {}
+    for tool in toolset.tools:
+        for route in tool.routes:
+            routed.setdefault(route.endpoint, []).append(tool.name)
+    excluded = [x.endpoint for x in toolset.excluded]
+
+    for endpoint_id in sorted(set(routed) | set(excluded)):
+        if endpoint_id not in endpoints:
+            errors.append(f"endpoint '{endpoint_id}' is not in the spec")
+    for endpoint_id in endpoints:
+        uses = len(routed.get(endpoint_id, [])) + excluded.count(endpoint_id)
+        if uses == 0:
+            errors.append(f"endpoint '{endpoint_id}' is neither in a route nor excluded")
+        elif uses > 1:
+            where = ", ".join(
+                routed.get(endpoint_id, []) + ["excluded"] * excluded.count(endpoint_id)
+            )
+            errors.append(f"endpoint '{endpoint_id}' is used more than once ({where})")
+
+    for tool in toolset.tools:
+        errors.extend(_check_tool(tool, endpoints))
+    return errors
+
+
+def _check_tool(tool: Tool, endpoints: dict[str, Endpoint]) -> list[str]:
+    errors: list[str] = []
+    params = {p.name: p for p in tool.parameters}
+    used: set[str] = set()
+
+    for index, route in enumerate(tool.routes):
+        used.update(route.arguments)
+        endpoint = endpoints.get(route.endpoint)
+        if endpoint is not None:
+            errors.extend(_check_route(tool, route, endpoint, params))
+        for earlier in tool.routes[:index]:
+            if set(earlier.requires) <= set(route.requires):
+                errors.append(
+                    f"tool '{tool.name}': the route to '{route.endpoint}' can never be chosen, "
+                    f"because the route to '{earlier.endpoint}' before it matches whenever it does"
+                )
+                break
+
+    unused = sorted(set(params) - used)
+    if unused:
+        errors.append(f"tool '{tool.name}': arguments {unused} are not passed by any route")
+    return errors
+
+
+def _check_route(
+    tool: Tool, route: Route, endpoint: Endpoint, params: dict[str, ToolParameter]
+) -> list[str]:
+    errors: list[str] = []
+    where = f"tool '{tool.name}', route to '{endpoint.id}'"
+    by_name = {p.name: p for p in endpoint.parameters}
+
+    targets = list(route.arguments.values()) + list(route.constants)
+    for target in sorted({t for t in targets if targets.count(t) > 1}):
+        errors.append(f"{where}: endpoint parameter '{target}' is filled more than once")
+    for target in sorted(set(targets) - set(by_name)):
+        errors.append(f"{where}: '{endpoint.id}' has no parameter '{target}'")
+
+    guaranteed = set(route.constants)
+    for argument, target in route.arguments.items():
+        if argument in route.requires or params[argument].required:
+            guaranteed.add(target)
+        if target in by_name:
+            errors.extend(_check_types(where, params[argument], by_name[target]))
+    for name, value in route.constants.items():
+        enum = by_name[name].enum if name in by_name else None
+        if enum is not None and value not in enum:
+            errors.append(f"{where}: constant {name}={value!r} is not in the endpoint's enum")
+
+    missing = sorted(p.name for p in endpoint.parameters if p.required and p.name not in guaranteed)
+    if missing:
+        errors.append(
+            f"{where}: required endpoint parameters {missing} are not always filled; "
+            "map them from arguments the route requires, from required arguments, or set constants"
+        )
+    return errors
+
+
+def _check_types(where: str, argument: ToolParameter, target: Parameter) -> list[str]:
+    errors: list[str] = []
+    compatible = argument.type is target.type or (
+        argument.type is ParamType.INTEGER and target.type is ParamType.NUMBER
+    )
+    if not compatible:
+        errors.append(
+            f"{where}: argument '{argument.name}' is {argument.type}, "
+            f"but endpoint parameter '{target.name}' is {target.type}"
+        )
+    if target.enum is not None:
+        if argument.enum is None:
+            errors.append(
+                f"{where}: endpoint parameter '{target.name}' only accepts {target.enum}; "
+                f"give argument '{argument.name}' that enum"
+            )
+        elif extra := [v for v in argument.enum if v not in target.enum]:
+            errors.append(
+                f"{where}: argument '{argument.name}' allows {extra}, "
+                f"which endpoint parameter '{target.name}' does not accept"
+            )
+    return errors

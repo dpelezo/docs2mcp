@@ -1,0 +1,304 @@
+{
+  "$defs": {
+    "AuthScheme": {
+      "additionalProperties": false,
+      "description": "How requests authenticate. The eval APIs all use `none`.",
+      "properties": {
+        "location": {
+          "anyOf": [
+            {
+              "enum": [
+                "header",
+                "query"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where an API key is sent. Required for `api_key`.",
+          "title": "Location"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Header or query parameter name. Required for `api_key`.",
+          "title": "Name"
+        },
+        "type": {
+          "$ref": "#/$defs/AuthType",
+          "default": "none"
+        }
+      },
+      "title": "AuthScheme",
+      "type": "object"
+    },
+    "AuthType": {
+      "enum": [
+        "none",
+        "api_key",
+        "bearer",
+        "basic"
+      ],
+      "title": "AuthType",
+      "type": "string"
+    },
+    "ExcludedEndpoint": {
+      "additionalProperties": false,
+      "properties": {
+        "endpoint": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Endpoint",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "endpoint",
+        "reason"
+      ],
+      "title": "ExcludedEndpoint",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "ParamType": {
+      "enum": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "array",
+        "object"
+      ],
+      "title": "ParamType",
+      "type": "string"
+    },
+    "Route": {
+      "additionalProperties": false,
+      "description": "One API request a tool can make.\n\n`requires` lists the tool arguments that select this route: a call takes the\nfirst route whose `requires` are all present. `arguments` maps tool argument\nnames to the endpoint's parameter names. `constants` sets endpoint parameters\nto fixed values (for example `format: \"json\"`).",
+      "properties": {
+        "arguments": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Arguments",
+          "type": "object"
+        },
+        "constants": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Constants",
+          "type": "object"
+        },
+        "endpoint": {
+          "description": "An endpoint id from the API spec.",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Endpoint",
+          "type": "string"
+        },
+        "requires": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requires",
+          "type": "array"
+        }
+      },
+      "required": [
+        "endpoint"
+      ],
+      "title": "Route",
+      "type": "object"
+    },
+    "Tool": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Name",
+          "type": "string"
+        },
+        "parameters": {
+          "items": {
+            "$ref": "#/$defs/ToolParameter"
+          },
+          "title": "Parameters",
+          "type": "array"
+        },
+        "routes": {
+          "items": {
+            "$ref": "#/$defs/Route"
+          },
+          "minItems": 1,
+          "title": "Routes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "routes"
+      ],
+      "title": "Tool",
+      "type": "object"
+    },
+    "ToolParameter": {
+      "additionalProperties": false,
+      "description": "One argument of a tool, as the agent sees it.",
+      "properties": {
+        "default": {
+          "$ref": "#/$defs/JsonValue",
+          "default": null
+        },
+        "description": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "enum": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Enum"
+        },
+        "items_type": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ParamType"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "name": {
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Name",
+          "type": "string"
+        },
+        "required": {
+          "default": false,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "type": {
+          "$ref": "#/$defs/ParamType"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "description"
+      ],
+      "title": "ToolParameter",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Everything `generate` needs to render one MCP server.",
+  "properties": {
+    "api": {
+      "minLength": 1,
+      "title": "Api",
+      "type": "string"
+    },
+    "approved": {
+      "default": false,
+      "description": "Set to true by a person after review; generate refuses false.",
+      "title": "Approved",
+      "type": "boolean"
+    },
+    "auth": {
+      "$ref": "#/$defs/AuthScheme"
+    },
+    "base_url": {
+      "format": "uri",
+      "maxLength": 2083,
+      "minLength": 1,
+      "title": "Base Url",
+      "type": "string"
+    },
+    "design": {
+      "description": "direct: one tool per endpoint, no LLM. task: grouped by Claude.",
+      "enum": [
+        "direct",
+        "task"
+      ],
+      "title": "Design",
+      "type": "string"
+    },
+    "excluded": {
+      "items": {
+        "$ref": "#/$defs/ExcludedEndpoint"
+      },
+      "title": "Excluded",
+      "type": "array"
+    },
+    "tools": {
+      "items": {
+        "$ref": "#/$defs/Tool"
+      },
+      "minItems": 1,
+      "title": "Tools",
+      "type": "array"
+    },
+    "toolset_version": {
+      "const": "1",
+      "default": "1",
+      "title": "Toolset Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "api",
+    "base_url",
+    "design",
+    "tools"
+  ],
+  "title": "ToolSet",
+  "type": "object"
+}
