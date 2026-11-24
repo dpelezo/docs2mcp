@@ -1,0 +1,3047 @@
+{
+  "spec_version": "1",
+  "name": "PokéAPI",
+  "base_url": "https://pokeapi.co/api/v2",
+  "description": "",
+  "auth": {
+    "type": "none"
+  },
+  "endpoints": [
+    {
+      "id": "get_berry",
+      "method": "GET",
+      "path": "/berry/{id_or_name}",
+      "summary": "Returns a berry by its ID or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the berry."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "growth_time",
+          "max_harvest",
+          "natural_gift_power",
+          "size",
+          "smoothness",
+          "soil_dryness",
+          "firmness.name",
+          "flavors",
+          "item.name",
+          "natural_gift_type.name"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#berries-section"
+    },
+    {
+      "id": "get_berry_firmness",
+      "method": "GET",
+      "path": "/berry-firmness/{id_or_name}",
+      "summary": "Returns a berry firmness level by its ID or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the berry firmness."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "berries",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#berry-firmnesses"
+    },
+    {
+      "id": "get_berry_flavor",
+      "method": "GET",
+      "path": "/berry-flavor/{id_or_name}",
+      "summary": "Returns a berry flavor by its ID or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the berry flavor."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "berries",
+          "contest_type.name",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#berry-flavors"
+    },
+    {
+      "id": "get_contest_type",
+      "method": "GET",
+      "path": "/contest-type/{id_or_name}",
+      "summary": "Returns a contest type by its ID or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the contest type."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "berry_flavor.name",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#contests-section"
+    },
+    {
+      "id": "get_contest_effect",
+      "method": "GET",
+      "path": "/contest-effect/{id}",
+      "summary": "Returns a contest effect by its ID.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "integer",
+          "required": true,
+          "description": "ID of the contest effect."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "appeal",
+          "jam",
+          "effect_entries",
+          "flavor_text_entries"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#contest-effects"
+    },
+    {
+      "id": "get_super_contest_effect",
+      "method": "GET",
+      "path": "/super-contest-effect/{id}",
+      "summary": "Returns a super contest effect by its ID.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "integer",
+          "required": true,
+          "description": "ID of the super contest effect."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "appeal",
+          "flavor_text_entries",
+          "moves"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#super-contest-effects"
+    },
+    {
+      "id": "get_currency",
+      "method": "GET",
+      "path": "/currency/{id_or_name}",
+      "summary": "Returns a currency by its ID or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the currency."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#currencies-section"
+    },
+    {
+      "id": "get_encounter_method",
+      "method": "GET",
+      "path": "/encounter-method/{id_or_name}",
+      "summary": "Returns an encounter method by its ID or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the encounter method."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "order",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#encounter-methods"
+    },
+    {
+      "id": "get_encounter_condition",
+      "method": "GET",
+      "path": "/encounter-condition/{id_or_name}",
+      "summary": "Returns an encounter condition by its ID or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the encounter condition."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "names",
+          "values"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#encounter-conditions"
+    },
+    {
+      "id": "get_encounter_condition_value",
+      "method": "GET",
+      "path": "/encounter-condition-value/{id_or_name}",
+      "summary": "Returns an encounter condition value by its ID or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the encounter condition value."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "condition.name",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#encounter-condition-values"
+    },
+    {
+      "id": "get_evolution_chain",
+      "method": "GET",
+      "path": "/evolution-chain/{id}",
+      "summary": "Returns an evolution chain, the family tree of a Pokémon line with its evolution conditions.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "integer",
+          "required": true,
+          "description": "The identifier of the evolution chain."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "baby_trigger_item",
+          "chain.species.name",
+          "chain.evolves_to",
+          "chain.evolution_details"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#evolution-section"
+    },
+    {
+      "id": "get_evolution_trigger",
+      "method": "GET",
+      "path": "/evolution-trigger/{id_or_name}",
+      "summary": "Returns an evolution trigger, the event or condition that causes a Pokémon to evolve.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The identifier or name of the evolution trigger."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "names",
+          "pokemon_species"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#evolution-triggers"
+    },
+    {
+      "id": "get_evolution_variable",
+      "method": "GET",
+      "path": "/evolution-variable/{id_or_name}",
+      "summary": "Returns an evolution variable used in boolean expressions for form-branching evolutions.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The identifier or name of the evolution variable."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "symbol",
+          "data_type",
+          "source",
+          "version_group",
+          "descriptions"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#evolution-variables"
+    },
+    {
+      "id": "get_generation",
+      "method": "GET",
+      "path": "/generation/{id_or_name}",
+      "summary": "Returns a generation, a grouping of Pokémon games with the Pokémon, moves, abilities and types introduced in it.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The identifier or name of the generation."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "main_region",
+          "moves",
+          "pokemon_species",
+          "types",
+          "version_groups"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#games-section"
+    },
+    {
+      "id": "get_pokedex",
+      "method": "GET",
+      "path": "/pokedex/{id_or_name}",
+      "summary": "Returns a Pokédex, the encyclopedia of Pokémon catalogued for a region.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The identifier or name of the Pokédex."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "is_main_series",
+          "pokemon_entries",
+          "region",
+          "version_groups"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokedexes"
+    },
+    {
+      "id": "get_version",
+      "method": "GET",
+      "path": "/version/{id_or_name}",
+      "summary": "Returns a version of the games, such as Red, Blue or Yellow.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The identifier or name of the version."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "names",
+          "version_group"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#version"
+    },
+    {
+      "id": "get_version_group",
+      "method": "GET",
+      "path": "/version-group/{id_or_name}",
+      "summary": "Returns a version group, which categorizes highly similar versions of the games.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The identifier or name of the version group."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "order",
+          "generation",
+          "pokedexes",
+          "regions",
+          "versions"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#version-groups"
+    },
+    {
+      "id": "get_item",
+      "method": "GET",
+      "path": "/item/{id_or_name}",
+      "summary": "Returns an item by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the item."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#items-section"
+    },
+    {
+      "id": "get_item_attribute",
+      "method": "GET",
+      "path": "/item-attribute/{id_or_name}",
+      "summary": "Returns an item attribute by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the item attribute."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#item-attributes"
+    },
+    {
+      "id": "get_item_category",
+      "method": "GET",
+      "path": "/item-category/{id_or_name}",
+      "summary": "Returns an item category by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the item category."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#item-categories"
+    },
+    {
+      "id": "get_item_fling_effect",
+      "method": "GET",
+      "path": "/item-fling-effect/{id_or_name}",
+      "summary": "Returns an item fling effect by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the fling effect."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#item-fling-effects"
+    },
+    {
+      "id": "get_item_price",
+      "method": "GET",
+      "path": "/item-price/{id_or_name}",
+      "summary": "Returns the purchase and sell prices of an item by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the item price."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#item-prices"
+    },
+    {
+      "id": "get_item_pocket",
+      "method": "GET",
+      "path": "/item-pocket/{id_or_name}",
+      "summary": "Returns an item pocket by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the item pocket."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#item-pockets"
+    },
+    {
+      "id": "get_location",
+      "method": "GET",
+      "path": "/location/{id_or_name}",
+      "summary": "Returns a location by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the location."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#locations-section"
+    },
+    {
+      "id": "get_location_area",
+      "method": "GET",
+      "path": "/location-area/{id_or_name}",
+      "summary": "Returns a location area by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the location area."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#location-areas"
+    },
+    {
+      "id": "get_pal_park_area",
+      "method": "GET",
+      "path": "/pal-park-area/{id_or_name}",
+      "summary": "Returns a Pal Park area by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the Pal Park area."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#pal-park-areas"
+    },
+    {
+      "id": "get_region",
+      "method": "GET",
+      "path": "/region/{id_or_name}",
+      "summary": "Returns a region by its id or name.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the region."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#regions"
+    },
+    {
+      "id": "get_machine",
+      "method": "GET",
+      "path": "/machine/{id}",
+      "summary": "Returns a machine by its id.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "integer",
+          "required": true,
+          "description": "Numeric id of the machine."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#machines-section"
+    },
+    {
+      "id": "get_move",
+      "method": "GET",
+      "path": "/move/{id_or_name}",
+      "summary": "Returns a move by its id or name.",
+      "description": "Moves are the skills of Pokémon in battle.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the move."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#moves-section"
+    },
+    {
+      "id": "get_move_ailment",
+      "method": "GET",
+      "path": "/move-ailment/{id_or_name}",
+      "summary": "Returns a move ailment (status condition) by its id or name.",
+      "description": "Move ailments are status conditions caused by moves used during battle.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the move ailment."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#move-ailments"
+    },
+    {
+      "id": "get_move_battle_style",
+      "method": "GET",
+      "path": "/move-battle-style/{id_or_name}",
+      "summary": "Returns a move battle style by its id or name.",
+      "description": "Styles of moves when used in the Battle Palace.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the move battle style."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#move-battle-styles"
+    },
+    {
+      "id": "get_move_category",
+      "method": "GET",
+      "path": "/move-category/{id_or_name}",
+      "summary": "Returns a move category by its id or name.",
+      "description": "Very general categories that loosely group move effects.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the move category."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#movebattlestyle"
+    },
+    {
+      "id": "get_move_damage_class",
+      "method": "GET",
+      "path": "/move-damage-class/{id_or_name}",
+      "summary": "Returns a move damage class by its id or name.",
+      "description": "Damage classes moves can have, e.g. physical, special, or non-damaging.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the move damage class."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#move-damage-classes"
+    },
+    {
+      "id": "get_move_learn_method",
+      "method": "GET",
+      "path": "/move-learn-method/{id_or_name}",
+      "summary": "Returns a move learn method by its id or name.",
+      "description": "Methods by which Pokémon can learn moves.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the move learn method."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#move-learn-methods"
+    },
+    {
+      "id": "get_move_target",
+      "method": "GET",
+      "path": "/move-target/{id_or_name}",
+      "summary": "Returns a move target by its id or name.",
+      "description": "Targets moves can be directed at during battle.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the move target."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#move-targets"
+    },
+    {
+      "id": "get_ability",
+      "method": "GET",
+      "path": "/ability/{id_or_name}",
+      "summary": "Returns an ability by its id or name.",
+      "description": "Abilities provide passive effects for Pokémon in battle or in the overworld.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the ability."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#pokemon-section"
+    },
+    {
+      "id": "get_characteristic",
+      "method": "GET",
+      "path": "/characteristic/{id}",
+      "summary": "Returns a characteristic by its id.",
+      "description": "Characteristics indicate which stat contains a Pokémon's highest IV.",
+      "parameters": [
+        {
+          "name": "id",
+          "location": "path",
+          "type": "integer",
+          "required": true,
+          "description": "Numeric id of the characteristic."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#characteristics"
+    },
+    {
+      "id": "get_egg_group",
+      "method": "GET",
+      "path": "/egg-group/{id_or_name}",
+      "summary": "Returns an egg group by id or name.",
+      "description": "Egg groups determine which Pokémon can interbreed.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The egg group's id or name."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "names",
+          "pokemon_species"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#egg-groups"
+    },
+    {
+      "id": "get_gender",
+      "method": "GET",
+      "path": "/gender/{id_or_name}",
+      "summary": "Returns a gender by id or name.",
+      "description": "Lists the species that can be this gender and the species that require this gender to evolve.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The gender's id or name."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "pokemon_species_details",
+          "required_for_evolution"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#genders"
+    },
+    {
+      "id": "get_growth_rate",
+      "method": "GET",
+      "path": "/growth-rate/{id_or_name}",
+      "summary": "Returns a growth rate by id or name.",
+      "description": "Growth rates set the speed at which Pokémon gain levels through experience.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The growth rate's id or name."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "formula",
+          "descriptions",
+          "levels",
+          "pokemon_species"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#growth-rates"
+    },
+    {
+      "id": "get_nature",
+      "method": "GET",
+      "path": "/nature/{id_or_name}",
+      "summary": "Returns a nature by id or name.",
+      "description": "Natures influence how a Pokémon's stats grow.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The nature's id or name."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "decreased_stat",
+          "increased_stat",
+          "likes_flavor",
+          "hates_flavor",
+          "pokeathlon_stat_changes",
+          "move_battle_style_preferences",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#growthrateexperiencelevel"
+    },
+    {
+      "id": "get_pokeathlon_stat",
+      "method": "GET",
+      "path": "/pokeathlon-stat/{id_or_name}",
+      "summary": "Returns a Pokéathlon stat by id or name.",
+      "description": "Pokéathlon stats are the performance attributes of a Pokémon in Pokéathlons.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The Pokéathlon stat's id or name."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "affecting_natures",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokeathlon-stats"
+    },
+    {
+      "id": "get_pokemon",
+      "method": "GET",
+      "path": "/pokemon/{id_or_name}",
+      "summary": "Returns a Pokémon by id or name.",
+      "description": "Pokémon are the creatures of the games; each belongs to a species and may take a variant form.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The Pokémon's id or name."
+        }
+      ],
+      "source_url": "https://pokeapi.co/docs/v2#pokemon"
+    },
+    {
+      "id": "get_pokemon_location_areas",
+      "method": "GET",
+      "path": "/pokemon/{id_or_name}/encounters",
+      "summary": "Lists the location areas where a Pokémon can be encountered.",
+      "description": "Pokémon Location Areas are areas where Pokémon can be found.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the Pokémon."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "location_area.name",
+          "location_area.url",
+          "version_details.max_chance",
+          "version_details.encounter_details.min_level",
+          "version_details.encounter_details.max_level",
+          "version_details.encounter_details.chance",
+          "version_details.encounter_details.method.name",
+          "version_details.version.name"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokemoncries"
+    },
+    {
+      "id": "get_pokemon_color",
+      "method": "GET",
+      "path": "/pokemon-color/{id_or_name}",
+      "summary": "Returns a Pokémon color used for sorting in a Pokédex.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the Pokémon color."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "names",
+          "pokemon_species"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokemon-colors"
+    },
+    {
+      "id": "get_pokemon_form",
+      "method": "GET",
+      "path": "/pokemon-form/{id_or_name}",
+      "summary": "Returns a Pokémon form, including its sprites, types and trigger conditions.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the Pokémon form."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "form_name",
+          "pokemon.name",
+          "sprites.front_default",
+          "types",
+          "version_group.name",
+          "trigger_conditions"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokemon-forms"
+    },
+    {
+      "id": "get_pokemon_habitat",
+      "method": "GET",
+      "path": "/pokemon-habitat/{id_or_name}",
+      "summary": "Returns a Pokémon habitat and the species found in it.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the Pokémon habitat."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "names",
+          "pokemon_species"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokemon-habitats"
+    },
+    {
+      "id": "get_pokemon_shape",
+      "method": "GET",
+      "path": "/pokemon-shape/{id_or_name}",
+      "summary": "Returns a Pokémon shape used for sorting in a Pokédex.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the Pokémon shape."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "awesome_names",
+          "names",
+          "pokemon_species"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokemon-shapes"
+    },
+    {
+      "id": "get_pokemon_species",
+      "method": "GET",
+      "path": "/pokemon-species/{id_or_name}",
+      "summary": "Returns a Pokémon species, which forms the basis for its varieties.",
+      "description": "Attributes of a species are shared across all of its varieties of Pokémon.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the Pokémon species."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "growth_rate.name",
+          "color.name",
+          "shape.name",
+          "habitat",
+          "generation.name",
+          "varieties"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokemon-species"
+    },
+    {
+      "id": "get_stat",
+      "method": "GET",
+      "path": "/stat/{id_or_name}",
+      "summary": "Returns a battle stat and the moves, natures and items that affect it.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Numeric id or name of the stat."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "game_index",
+          "affecting_moves",
+          "affecting_natures",
+          "affecting_items",
+          "move_damage_class.name"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#pokemonspeciesvariety"
+    },
+    {
+      "id": "get_type",
+      "method": "GET",
+      "path": "/type/{id_or_name}",
+      "summary": "Returns a type with its damage relations, generations, Pokémon and moves.",
+      "description": "Each type has damage relations listing which types it is super effective against, not very effective against, or ineffective against.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The numeric id or the name of the type."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "damage_relations.double_damage_to",
+          "damage_relations.half_damage_to",
+          "damage_relations.no_damage_to",
+          "damage_relations.double_damage_from",
+          "damage_relations.half_damage_from",
+          "damage_relations.no_damage_from",
+          "past_damage_relations",
+          "game_indices",
+          "generation",
+          "move_damage_class",
+          "names",
+          "pokemon",
+          "moves"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#types"
+    },
+    {
+      "id": "get_language",
+      "method": "GET",
+      "path": "/language/{id_or_name}",
+      "summary": "Returns a language used for translations of API resource information.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "The numeric id or the name of the language."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "id",
+          "name",
+          "official",
+          "iso639",
+          "iso3166",
+          "names"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#utility-section"
+    },
+    {
+      "id": "list_resources_berry",
+      "method": "GET",
+      "path": "/berry",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (berry).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_berry_firmness",
+      "method": "GET",
+      "path": "/berry-firmness",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (berry-firmness).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_berry_flavor",
+      "method": "GET",
+      "path": "/berry-flavor",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (berry-flavor).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_contest_type",
+      "method": "GET",
+      "path": "/contest-type",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (contest-type).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_contest_effect",
+      "method": "GET",
+      "path": "/contest-effect",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (contest-effect).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_super_contest_effect",
+      "method": "GET",
+      "path": "/super-contest-effect",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (super-contest-effect).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_currency",
+      "method": "GET",
+      "path": "/currency",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (currency).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_encounter_method",
+      "method": "GET",
+      "path": "/encounter-method",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (encounter-method).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_encounter_condition",
+      "method": "GET",
+      "path": "/encounter-condition",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (encounter-condition).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_encounter_condition_value",
+      "method": "GET",
+      "path": "/encounter-condition-value",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (encounter-condition-value).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_evolution_chain",
+      "method": "GET",
+      "path": "/evolution-chain",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (evolution-chain).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_evolution_trigger",
+      "method": "GET",
+      "path": "/evolution-trigger",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (evolution-trigger).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_evolution_variable",
+      "method": "GET",
+      "path": "/evolution-variable",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (evolution-variable).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_generation",
+      "method": "GET",
+      "path": "/generation",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (generation).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pokedex",
+      "method": "GET",
+      "path": "/pokedex",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pokedex).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_version",
+      "method": "GET",
+      "path": "/version",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (version).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_version_group",
+      "method": "GET",
+      "path": "/version-group",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (version-group).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_item",
+      "method": "GET",
+      "path": "/item",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (item).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_item_attribute",
+      "method": "GET",
+      "path": "/item-attribute",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (item-attribute).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_item_category",
+      "method": "GET",
+      "path": "/item-category",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (item-category).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_item_fling_effect",
+      "method": "GET",
+      "path": "/item-fling-effect",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (item-fling-effect).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_item_price",
+      "method": "GET",
+      "path": "/item-price",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (item-price).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_item_pocket",
+      "method": "GET",
+      "path": "/item-pocket",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (item-pocket).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_location",
+      "method": "GET",
+      "path": "/location",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (location).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_location_area",
+      "method": "GET",
+      "path": "/location-area",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (location-area).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pal_park_area",
+      "method": "GET",
+      "path": "/pal-park-area",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pal-park-area).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_region",
+      "method": "GET",
+      "path": "/region",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (region).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_machine",
+      "method": "GET",
+      "path": "/machine",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (machine).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_move",
+      "method": "GET",
+      "path": "/move",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (move).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_move_ailment",
+      "method": "GET",
+      "path": "/move-ailment",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (move-ailment).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_move_battle_style",
+      "method": "GET",
+      "path": "/move-battle-style",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (move-battle-style).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_move_category",
+      "method": "GET",
+      "path": "/move-category",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (move-category).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_move_damage_class",
+      "method": "GET",
+      "path": "/move-damage-class",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (move-damage-class).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_move_learn_method",
+      "method": "GET",
+      "path": "/move-learn-method",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (move-learn-method).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_move_target",
+      "method": "GET",
+      "path": "/move-target",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (move-target).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_ability",
+      "method": "GET",
+      "path": "/ability",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (ability).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_characteristic",
+      "method": "GET",
+      "path": "/characteristic",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (characteristic).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_egg_group",
+      "method": "GET",
+      "path": "/egg-group",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (egg-group).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_gender",
+      "method": "GET",
+      "path": "/gender",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (gender).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_growth_rate",
+      "method": "GET",
+      "path": "/growth-rate",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (growth-rate).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_nature",
+      "method": "GET",
+      "path": "/nature",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (nature).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pokeathlon_stat",
+      "method": "GET",
+      "path": "/pokeathlon-stat",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pokeathlon-stat).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pokemon",
+      "method": "GET",
+      "path": "/pokemon",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pokemon).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pokemon_color",
+      "method": "GET",
+      "path": "/pokemon-color",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pokemon-color).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pokemon_form",
+      "method": "GET",
+      "path": "/pokemon-form",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pokemon-form).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pokemon_habitat",
+      "method": "GET",
+      "path": "/pokemon-habitat",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pokemon-habitat).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pokemon_shape",
+      "method": "GET",
+      "path": "/pokemon-shape",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pokemon-shape).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_pokemon_species",
+      "method": "GET",
+      "path": "/pokemon-species",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (pokemon-species).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_stat",
+      "method": "GET",
+      "path": "/stat",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (stat).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_type",
+      "method": "GET",
+      "path": "/type",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (type).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    },
+    {
+      "id": "list_resources_language",
+      "method": "GET",
+      "path": "/language",
+      "summary": "Returns a paginated list of resources for any endpoint when no resource ID or name is given (language).",
+      "description": "Use limit and offset query parameters to page through results.",
+      "parameters": [
+        {
+          "name": "limit",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "location": "query",
+          "type": "integer",
+          "required": false,
+          "description": "Index of the first resource to return, used to move to the next page."
+        }
+      ],
+      "response": {
+        "content_type": "application/json",
+        "description": "",
+        "key_fields": [
+          "count",
+          "next",
+          "previous",
+          "results"
+        ]
+      },
+      "source_url": "https://pokeapi.co/docs/v2#named"
+    }
+  ]
+}

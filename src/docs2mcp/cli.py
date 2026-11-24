@@ -7,8 +7,12 @@ from collections.abc import Sequence
 from dataclasses import asdict
 from pathlib import Path
 
+from pydantic import ValidationError
+
 from docs2mcp import __version__
 from docs2mcp.config import Settings, get_settings
+from docs2mcp.design import ToolSet, direct_design, validate_toolset
+from docs2mcp.design import json_schema as tools_json_schema
 from docs2mcp.evals import Reference, format_score, score, score_json
 from docs2mcp.extract import (
     AnthropicModel,
@@ -30,7 +34,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     commands = parser.add_subparsers(dest="command", metavar="COMMAND")
 
-    commands.add_parser("schema", help="print the JSON Schema of the API spec")
+    schema_cmd = commands.add_parser("schema", help="print the JSON Schema of the API spec")
+    schema_cmd.add_argument(
+        "--tools", action="store_true", help="print the schema of tools.json instead"
+    )
 
     ingest_cmd = commands.add_parser(
         "ingest",
@@ -90,7 +97,32 @@ def build_parser() -> argparse.ArgumentParser:
         help="reference JSON, e.g. evals/extraction/reference/pokeapi.json",
     )
     score_cmd.add_argument("--out", type=Path, help="also write the full score as JSON here")
-    # design, generate and the tool-use eval arrive with their milestones.
+    design_cmd = commands.add_parser(
+        "design",
+        help="design the MCP tools for an API spec",
+        description=(
+            "Write tools.json from spec.json for a person to review. generate only accepts it "
+            "once its approved field is true. Rules: docs/adr/0011-tool-design-and-generation.md."
+        ),
+    )
+    design_cmd.add_argument("spec", type=Path, help="spec.json written by docs2mcp extract")
+    design_cmd.add_argument("--out", type=Path, required=True, help="where to write tools.json")
+    design_cmd.add_argument(
+        "--direct",
+        action="store_true",
+        help="one tool per endpoint, with no LLM (the task-shaped design is not available yet)",
+    )
+
+    check_cmd = commands.add_parser(
+        "check-tools",
+        help="check tools.json against its spec",
+        description="Report every problem with a tools.json, for example after editing it by hand.",
+    )
+    check_cmd.add_argument("tools", type=Path, help="tools.json to check")
+    check_cmd.add_argument(
+        "--spec", type=Path, required=True, help="the spec.json it was designed from"
+    )
+    # generate and the tool-use eval arrive with their milestones.
     return parser
 
 
@@ -209,12 +241,61 @@ def _run_score(args: argparse.Namespace) -> int:
     return 0
 
 
+def _summary(toolset: ToolSet, spec: ApiSpec) -> str:
+    return (
+        f"{toolset.api}: {len(toolset.tools)} tools for {len(spec.endpoints)} endpoints "
+        f"({toolset.design} design, {len(toolset.excluded)} excluded)"
+    )
+
+
+def _run_design(args: argparse.Namespace) -> int:
+    spec = ApiSpec.model_validate_json(args.spec.read_text(encoding="utf-8"))
+    if not args.direct:
+        print(
+            "Only --direct is available so far: the task-shaped design arrives with issue #29.",
+            file=sys.stderr,
+        )
+        return 2
+    toolset = direct_design(spec)
+    errors = validate_toolset(toolset, spec)
+    if errors:  # a bug in the direct design, never expected
+        print("\n".join(["The design is invalid:", *errors]), file=sys.stderr)
+        return 1
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(
+        toolset.model_dump_json(indent=2, exclude_none=True) + "\n", encoding="utf-8"
+    )
+    print(_summary(toolset, spec))
+    print(f'Wrote {args.out}. Review it, set "approved": true, then run docs2mcp generate.')
+    return 0
+
+
+def _run_check_tools(args: argparse.Namespace) -> int:
+    spec = ApiSpec.model_validate_json(args.spec.read_text(encoding="utf-8"))
+    try:
+        toolset = ToolSet.model_validate_json(args.tools.read_text(encoding="utf-8"))
+    except ValidationError as error:
+        print(f"{args.tools} is not a valid tools.json:\n{error}", file=sys.stderr)
+        return 1
+    errors = validate_toolset(toolset, spec)
+    if errors:
+        print("\n".join([f"{len(errors)} problems in {args.tools}:", *(f"- {e}" for e in errors)]))
+        return 1
+    status = "approved" if toolset.approved else "not approved yet"
+    print(f"{_summary(toolset, spec)}: valid, {status}")
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     match args.command:
         case "schema":
-            sys.stdout.write(json_schema())
+            sys.stdout.write(tools_json_schema() if args.tools else json_schema())
+        case "design":
+            return _run_design(args)
+        case "check-tools":
+            return _run_check_tools(args)
         case "ingest":
             return _run_ingest(args)
         case "extract":
