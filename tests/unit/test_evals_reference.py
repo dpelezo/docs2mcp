@@ -157,13 +157,14 @@ def test_committed_references_are_valid(path: Path) -> None:
     assert len(routes) == len(set(routes))
 
 
-def test_the_committed_references_cover_the_eval_apis_so_far() -> None:
-    assert {p.stem for p in REFERENCES.glob("*.json")} >= {
+def test_every_eval_api_has_a_reference() -> None:
+    assert {p.stem for p in REFERENCES.glob("*.json")} == {
         "frankfurter",
         "pokeapi",
         "postcodes_io",
         "open_library",
         "open_meteo",
+        "open_meteo_geocoding",
     }
 
 
