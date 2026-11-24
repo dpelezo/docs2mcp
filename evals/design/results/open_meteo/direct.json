@@ -1,0 +1,28 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-eval",
+    "design": "docs2mcp design --direct (no model)",
+    "input": "specs/open_meteo/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_meteo.json)"
+  },
+  "api": "Open-Meteo Weather Forecast API",
+  "design": "direct",
+  "valid": true,
+  "endpoints": 1,
+  "covered": 1,
+  "excluded": 0,
+  "tools": 1,
+  "routes": 1,
+  "tool_list_tokens": 883,
+  "description_tokens": 444,
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "get_forecast",
+      "routes": 1,
+      "arguments": 26,
+      "tokens": 883
+    }
+  ],
+  "max_routes_per_tool": 1
+}

@@ -1,0 +1,34 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-eval",
+    "design": "docs2mcp design --direct (no model)",
+    "input": "specs/open_meteo_geocoding/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_meteo_geocoding.json)"
+  },
+  "api": "Open-Meteo Geocoding API",
+  "design": "direct",
+  "valid": true,
+  "endpoints": 2,
+  "covered": 2,
+  "excluded": 0,
+  "tools": 2,
+  "routes": 2,
+  "tool_list_tokens": 328,
+  "description_tokens": 179,
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "search_locations",
+      "routes": 1,
+      "arguments": 6,
+      "tokens": 246
+    },
+    {
+      "name": "get_location_by_id",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 82
+    }
+  ],
+  "max_routes_per_tool": 1
+}

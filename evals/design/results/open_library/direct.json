@@ -1,0 +1,88 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-eval",
+    "design": "docs2mcp design --direct (no model)",
+    "input": "specs/open_library/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_library.json)"
+  },
+  "api": "Open Library",
+  "design": "direct",
+  "valid": true,
+  "endpoints": 11,
+  "covered": 11,
+  "excluded": 0,
+  "tools": 11,
+  "routes": 11,
+  "tool_list_tokens": 1091,
+  "description_tokens": 536,
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "search_works",
+      "routes": 1,
+      "arguments": 7,
+      "tokens": 243
+    },
+    {
+      "name": "search_authors",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 46
+    },
+    {
+      "name": "get_work",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 72
+    },
+    {
+      "name": "get_work_editions",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 57
+    },
+    {
+      "name": "get_work_bookshelves",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 60
+    },
+    {
+      "name": "get_work_ratings",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 59
+    },
+    {
+      "name": "get_edition",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 78
+    },
+    {
+      "name": "get_edition_by_isbn",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 72
+    },
+    {
+      "name": "get_books_legacy",
+      "routes": 1,
+      "arguments": 4,
+      "tokens": 198
+    },
+    {
+      "name": "get_author",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 88
+    },
+    {
+      "name": "get_author_works",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 118
+    }
+  ],
+  "max_routes_per_tool": 1
+}

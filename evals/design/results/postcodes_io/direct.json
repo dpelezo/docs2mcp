@@ -1,0 +1,106 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-eval",
+    "design": "docs2mcp design --direct (no model)",
+    "input": "tests/fixtures/specs/postcodes_io.json (committed; replay of evals/extraction/replay/postcodes_io)"
+  },
+  "api": "Postcodes.io",
+  "design": "direct",
+  "valid": true,
+  "endpoints": 14,
+  "covered": 14,
+  "excluded": 0,
+  "tools": 14,
+  "routes": 14,
+  "tool_list_tokens": 1701,
+  "description_tokens": 876,
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "lookup_postcode",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 100
+    },
+    {
+      "name": "bulk_lookup_postcodes",
+      "routes": 1,
+      "arguments": 6,
+      "tokens": 268
+    },
+    {
+      "name": "query_postcodes",
+      "routes": 1,
+      "arguments": 7,
+      "tokens": 225
+    },
+    {
+      "name": "find_nearest_postcodes",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 131
+    },
+    {
+      "name": "autocomplete_postcode",
+      "routes": 1,
+      "arguments": 2,
+      "tokens": 96
+    },
+    {
+      "name": "get_random_postcode",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 78
+    },
+    {
+      "name": "lookup_outcode",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 86
+    },
+    {
+      "name": "reverse_geocode_outcodes",
+      "routes": 1,
+      "arguments": 4,
+      "tokens": 164
+    },
+    {
+      "name": "nearest_outcodes",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 136
+    },
+    {
+      "name": "get_place",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 68
+    },
+    {
+      "name": "query_places",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 123
+    },
+    {
+      "name": "get_random_place",
+      "routes": 1,
+      "arguments": 0,
+      "tokens": 33
+    },
+    {
+      "name": "get_terminated_postcode",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 88
+    },
+    {
+      "name": "get_scottish_postcode",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 106
+    }
+  ],
+  "max_routes_per_tool": 1
+}
