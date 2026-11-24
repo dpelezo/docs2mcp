@@ -14,5 +14,181 @@
     "retrieved": "2026-11-24",
     "bytes": 15852,
     "sha256": "903732ca7bc30602e4a716d75ec8cfb0abde68d6609d7a09e13fde79035510c5"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/overview",
+    "path": "postcodes_io/docs_overview.html",
+    "retrieved": "2026-11-24",
+    "bytes": 41741,
+    "sha256": "0d4f7c53904305bbcd8e96c203328386df7a73abf9e7fad4a477c269b71a40fa"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/lookup",
+    "path": "postcodes_io/docs_postcode_lookup.html",
+    "retrieved": "2026-11-24",
+    "bytes": 41485,
+    "sha256": "97b7c757fc91dc134154a6be767b674317352b0950f80c3f48ca98d9c412e9c5"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/bulk",
+    "path": "postcodes_io/docs_postcode_bulk.html",
+    "retrieved": "2026-11-24",
+    "bytes": 100038,
+    "sha256": "25e691bb9cbe44777218ec87ff51201d5148556bdcc1184bf3785d1b1661d612"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/query",
+    "path": "postcodes_io/docs_postcode_query.html",
+    "retrieved": "2026-11-24",
+    "bytes": 41083,
+    "sha256": "106ef7f7025970653dc5d28cd7e3929d1fb15ce6600f51fce3ce8b6fee84a4ed"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/reverse-geocode",
+    "path": "postcodes_io/docs_postcode_reverse-geocode.html",
+    "retrieved": "2026-11-24",
+    "bytes": 41671,
+    "sha256": "7d2589587f196856dc30bf77547fde05e34e5a1ed3d974bdaf11c8a8616c339f"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/bulk-reverse-geocode",
+    "path": "postcodes_io/docs_postcode_bulk-reverse-geocode.html",
+    "retrieved": "2026-11-24",
+    "bytes": 57754,
+    "sha256": "624880975c36f534654f7570b9585356fda4acb1151c7af475b4e8d47e4c49b2"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/nearest",
+    "path": "postcodes_io/docs_postcode_nearest.html",
+    "retrieved": "2026-11-24",
+    "bytes": 62908,
+    "sha256": "bb77499779ec588cbd8295f03a3d16d08e247f12312da0d9500aa0322afee68a"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/autocomplete",
+    "path": "postcodes_io/docs_postcode_autocomplete.html",
+    "retrieved": "2026-11-24",
+    "bytes": 15834,
+    "sha256": "fe2918cbe0593f498ed363498477001fa4dc6f849e1e71ba5a2783066e54a1c1"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/random",
+    "path": "postcodes_io/docs_postcode_random.html",
+    "retrieved": "2026-11-24",
+    "bytes": 38194,
+    "sha256": "b842c8810670e1bb5a02b505cbe8aca8131324ff9e04c5fcc5b1bebe2c6ccdc3"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/postcode/schema",
+    "path": "postcodes_io/docs_postcode_schema.html",
+    "retrieved": "2026-11-24",
+    "bytes": 48659,
+    "sha256": "1c28d78703cd3fa60e2d8e7d236c8e107058d6f7b6d4de514786290c076f70e3"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/outcode/lookup",
+    "path": "postcodes_io/docs_outcode_lookup.html",
+    "retrieved": "2026-11-24",
+    "bytes": 20847,
+    "sha256": "c868b05c7960bd60f7b0d997e8fb1942b5e12637b06cf7a596bb5bc5ec440d66"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/outcode/reverse-geocode",
+    "path": "postcodes_io/docs_outcode_reverse-geocode.html",
+    "retrieved": "2026-11-24",
+    "bytes": 21259,
+    "sha256": "c37384e2cc31a9026173a3f145917128f698c93e759da564a01ea84ff3e3dcf6"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/outcode/nearest",
+    "path": "postcodes_io/docs_outcode_nearest.html",
+    "retrieved": "2026-11-24",
+    "bytes": 33616,
+    "sha256": "99733cfe2d01f50af28f9e8268a93c37c04adfb5023fc40d04dc5125f7eebaac"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/outcode/schema",
+    "path": "postcodes_io/docs_outcode_schema.html",
+    "retrieved": "2026-11-24",
+    "bytes": 19362,
+    "sha256": "e59941a9b5f1271ad1be3c9cf50d89cfff069ce2fa79c03915847c9a4779a01f"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/place/lookup",
+    "path": "postcodes_io/docs_place_lookup.html",
+    "retrieved": "2026-11-24",
+    "bytes": 18514,
+    "sha256": "e84118069a340f729de7b16a8f3e0dca18d213cfe0e210d87a2579ea5abb644e"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/place/query",
+    "path": "postcodes_io/docs_place_query.html",
+    "retrieved": "2026-11-24",
+    "bytes": 34482,
+    "sha256": "703bfab4f963fd68556bbc3b41132371f1d4e08dc7195de800dd7dbae5c16b56"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/place/random",
+    "path": "postcodes_io/docs_place_random.html",
+    "retrieved": "2026-11-24",
+    "bytes": 18815,
+    "sha256": "69bc8a635916b7409d1cfb18c1142eed494de8511fbd350d2ebb25aafc40c91f"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/place/schema",
+    "path": "postcodes_io/docs_place_schema.html",
+    "retrieved": "2026-11-24",
+    "bytes": 20567,
+    "sha256": "c054cab567dee5b57ec004638e3d98f75a16b398e10f9d7e41f64ee6bd2ca248"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/terminated-postcode/lookup",
+    "path": "postcodes_io/docs_terminated-postcode_lookup.html",
+    "retrieved": "2026-11-24",
+    "bytes": 14091,
+    "sha256": "fba32efbb722b5b0a8d4b30eb3f759150f5d3bcd59591e8ebec893f0cef3e03b"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/terminated-postcode/schema",
+    "path": "postcodes_io/docs_terminated-postcode_schema.html",
+    "retrieved": "2026-11-24",
+    "bytes": 13560,
+    "sha256": "b79af7664a26ada98faff3c63d8cc13f4e523a7adb42a31e2277db3ab1e2ae65"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/scottish-postcode/lookup",
+    "path": "postcodes_io/docs_scottish-postcode_lookup.html",
+    "retrieved": "2026-11-24",
+    "bytes": 44784,
+    "sha256": "1a0c9b27c741672c415f6eccd1fb49235beeda60035e2d6121d950eb226f00da"
+  },
+  {
+    "api": "postcodes_io",
+    "url": "https://postcodes.io/docs/scottish-postcode/schema",
+    "path": "postcodes_io/docs_scottish-postcode_schema.html",
+    "retrieved": "2026-11-24",
+    "bytes": 39359,
+    "sha256": "c2e3e64920d651be2e7648348316f4a0d9e0654f3986801e1da936f158245c42"
   }
 ]

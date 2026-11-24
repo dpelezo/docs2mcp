@@ -11,7 +11,7 @@ import pytest
 from scripts.snapshot_docs import kept_entries, main, page_filename, sort_manifest, trim_html
 
 FIXTURES = Path(__file__).parents[1] / "fixtures" / "docs"
-EVAL_APIS = {"open_meteo", "pokeapi", "rest_countries", "open_library", "frankfurter"}
+EVAL_APIS = {"open_meteo", "pokeapi", "postcodes_io", "open_library", "frankfurter"}
 
 
 def load_sources() -> list[dict[str, Any]]:

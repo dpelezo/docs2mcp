@@ -56,11 +56,37 @@ pages = [
 ]
 
 [[api]]
-id = "rest_countries"
-name = "REST Countries"
-base_url = "https://restcountries.com/v3.1"
-redistribute = false
-licence = "Terms not confirmed. Not committed; cached locally."
-openapi = ""
-openapi_note = "No official OpenAPI spec known; not yet checked. Report docs2mcp's score alone unless one is found."
-pages = ["https://restcountries.com/"]
+id = "postcodes_io"
+name = "Postcodes.io"
+base_url = "https://api.postcodes.io"
+redistribute = true
+licence = "MIT. Source: github.com/ideal-postcodes/postcodes.io (LICENSE)."
+openapi = "https://raw.githubusercontent.com/ideal-postcodes/postcodes.io/main/static/openapi.json"
+openapi_note = "static/openapi.json in github.com/ideal-postcodes/postcodes.io, served at api.postcodes.io/openapi.json. It leaves out 3 documented routes and 8 documented parameters, which evals/extraction/additions/postcodes_io.json adds. Replaces REST Countries, whose v3.1 URLs now redirect and whose v5 API needs a key (checked 2026-11-24)."
+# The hand-written guide pages. The generated /docs/api pages are left out: they are rendered
+# from the same OpenAPI file the reference is built from, so they would test copying, not reading.
+# The docs have no index page, so each page is listed.
+pages = [
+  "https://postcodes.io/docs/overview",
+  "https://postcodes.io/docs/postcode/lookup",
+  "https://postcodes.io/docs/postcode/bulk",
+  "https://postcodes.io/docs/postcode/query",
+  "https://postcodes.io/docs/postcode/reverse-geocode",
+  "https://postcodes.io/docs/postcode/bulk-reverse-geocode",
+  "https://postcodes.io/docs/postcode/nearest",
+  "https://postcodes.io/docs/postcode/autocomplete",
+  "https://postcodes.io/docs/postcode/random",
+  "https://postcodes.io/docs/postcode/schema",
+  "https://postcodes.io/docs/outcode/lookup",
+  "https://postcodes.io/docs/outcode/reverse-geocode",
+  "https://postcodes.io/docs/outcode/nearest",
+  "https://postcodes.io/docs/outcode/schema",
+  "https://postcodes.io/docs/place/lookup",
+  "https://postcodes.io/docs/place/query",
+  "https://postcodes.io/docs/place/random",
+  "https://postcodes.io/docs/place/schema",
+  "https://postcodes.io/docs/terminated-postcode/lookup",
+  "https://postcodes.io/docs/terminated-postcode/schema",
+  "https://postcodes.io/docs/scottish-postcode/lookup",
+  "https://postcodes.io/docs/scottish-postcode/schema",
+]

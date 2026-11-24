@@ -158,7 +158,7 @@ def test_committed_references_are_valid(path: Path) -> None:
 
 
 def test_the_committed_references_cover_the_apis_with_openapi_files() -> None:
-    assert {p.stem for p in REFERENCES.glob("*.json")} >= {"frankfurter", "pokeapi"}
+    assert {p.stem for p in REFERENCES.glob("*.json")} >= {"frankfurter", "pokeapi", "postcodes_io"}
 
 
 GET = HttpMethod.GET
