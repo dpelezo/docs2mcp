@@ -37,6 +37,13 @@ class WireConstant(_Wire):
     value_json: str = Field(description='The fixed value as a JSON literal, e.g. "\\"json\\"".')
 
 
+class WireOmission(_Wire):
+    parameter: str = Field(description="An optional endpoint parameter, exactly as in the spec.")
+    reason: str = Field(
+        description="Why the agent does not need it, e.g. 'alias of q' or 'API key; keyless API'."
+    )
+
+
 class WireRoute(_Wire):
     endpoint: str = Field(description="The spec endpoint id this route calls.")
     requires: list[str] = Field(
@@ -51,6 +58,12 @@ class WireRoute(_Wire):
     )
     constants: list[WireConstant] = Field(
         description="Endpoint parameters this route always sends with a fixed value; usually empty."
+    )
+    omitted: list[WireOmission] = Field(
+        description=(
+            "Optional endpoint parameters this route does not send, each with a reason; usually "
+            "empty. Every endpoint parameter is in arguments, constants or omitted."
+        )
     )
 
 

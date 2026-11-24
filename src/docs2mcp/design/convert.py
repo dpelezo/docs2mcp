@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 
 from pydantic import JsonValue, ValidationError
 
-from docs2mcp.design.direct import direct_tool, safe_name, shorten
+from docs2mcp.design.direct import direct_parameter, direct_tool, safe_name, shorten
 from docs2mcp.design.toolset import (
     MAX_PARAMETER_DESCRIPTION,
     MAX_TOOL_DESCRIPTION,
@@ -38,6 +38,7 @@ class Conversion:
 
 @dataclass
 class Repairs:
+    added_arguments: list[str] = field(default_factory=list[str])
     dropped_tools: list[str] = field(default_factory=list[str])
     dropped_exclusions: list[str] = field(default_factory=list[str])
     added_direct: list[str] = field(default_factory=list[str])
@@ -90,7 +91,9 @@ def repair(conversion: Conversion, spec: ApiSpec) -> tuple[ToolSet, Repairs]:
     known = {e.id for e in spec.endpoints}
     kept: list[Tool] = []
     routed: set[str] = set()
-    for tool in conversion.tools:
+    endpoints = {e.id: e for e in spec.endpoints}
+    for original in conversion.tools:
+        tool = _add_unhandled(original, endpoints, repairs)
         targets = [r.endpoint for r in tool.routes]
         problems = tool_errors(tool, spec)
         unknown = sorted(set(targets) - known)
@@ -136,6 +139,32 @@ def repair(conversion: Conversion, spec: ApiSpec) -> tuple[ToolSet, Repairs]:
         msg = "repaired design is still invalid: " + "; ".join(errors)
         raise RuntimeError(msg)
     return toolset, repairs
+
+
+def _add_unhandled(tool: Tool, endpoints: dict[str, Endpoint], repairs: Repairs) -> Tool:
+    """Give a tool an argument for each optional endpoint parameter its routes leave unhandled."""
+    parameters = list(tool.parameters)
+    taken = {p.name for p in parameters}
+    routes: list[Route] = []
+    for route in tool.routes:
+        endpoint = endpoints.get(route.endpoint)
+        handled = set(route.arguments.values()) | set(route.constants) | set(route.omitted)
+        arguments = dict(route.arguments)
+        for param in endpoint.parameters if endpoint is not None else []:
+            if param.required or param.name in handled:
+                continue
+            name, suffix = safe_name(param.name), 2
+            while name in taken:
+                name = f"{safe_name(param.name)[:60]}_{suffix}"
+                suffix += 1
+            taken.add(name)
+            parameters.append(direct_parameter(param, name).model_copy(update={"required": False}))
+            arguments[name] = param.name
+            repairs.added_arguments.append(f"{tool.name}.{name} -> {route.endpoint}.{param.name}")
+        routes.append(route.model_copy(update={"arguments": arguments}))
+    if parameters == tool.parameters:
+        return tool
+    return tool.model_copy(update={"parameters": parameters, "routes": routes})
 
 
 def _tool(wire: WireTool, endpoints: dict[str, Endpoint], result: Conversion) -> Tool | None:
@@ -204,6 +233,7 @@ def _route(
             requires=requires,
             arguments=arguments,
             constants=constants,
+            omitted={o.parameter.strip(): o.reason for o in wire.omitted},
         )
     except ValidationError as error:
         result.errors.extend(_messages(error, where))
@@ -280,6 +310,8 @@ def _messages(error: ValidationError, prefix: str) -> list[str]:
     messages: list[str] = []
     for detail in error.errors():
         message = str(detail["msg"]).removeprefix("Value error, ")
+        if message.startswith(prefix):  # the model's own message already names the tool
+            message = message.removeprefix(prefix).lstrip(": ")
         location = ".".join(str(part) for part in detail["loc"])
         messages.append(f"{prefix}: {location}: {message}" if location else f"{prefix}: {message}")
     return messages

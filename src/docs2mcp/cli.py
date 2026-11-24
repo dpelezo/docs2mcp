@@ -343,11 +343,11 @@ def _run_design(args: argparse.Namespace) -> int:
             f"{report.output_tokens:,} output tokens ({report.model})"
         )
         repairs = report.repairs
-        if repairs.dropped_tools or repairs.added_direct:
+        if repairs.added_arguments or repairs.dropped_tools or repairs.added_direct:
             print(
-                f"Problems remained after {report.calls} calls: dropped "
-                f"{len(repairs.dropped_tools)} tools and added {len(repairs.added_direct)} "
-                f"direct tools. See {report_path}."
+                f"Problems remained after {report.calls} calls: added "
+                f"{len(repairs.added_arguments)} arguments, dropped {len(repairs.dropped_tools)} "
+                f"tools and added {len(repairs.added_direct)} direct tools. See {report_path}."
             )
     print(f'Wrote {args.out}. Review it, set "approved": true, then run docs2mcp generate.')
     return 0

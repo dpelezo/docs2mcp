@@ -37,12 +37,14 @@ def wire_route(
     arguments: dict[str, str] | None = None,
     requires: Sequence[str] = (),
     constants: dict[str, str] | None = None,
+    omitted: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     return {
         "endpoint": endpoint,
         "requires": list(requires),
         "arguments": [{"argument": a, "parameter": p} for a, p in (arguments or {}).items()],
         "constants": [{"parameter": p, "value_json": v} for p, v in (constants or {}).items()],
+        "omitted": [{"parameter": p, "reason": r} for p, r in (omitted or {}).items()],
     }
 
 
@@ -205,6 +207,17 @@ def test_long_and_missing_descriptions_are_fixed_and_noted() -> None:
     assert len(result.notes) == 3
 
 
+def test_model_messages_do_not_repeat_the_tool_name() -> None:
+    twice = wire_tool(
+        "sprite",
+        [wire_route("get_sprite", {"id": "id"})],
+        wire_arg("id", required=True),
+        wire_arg("id"),
+    )
+    errors = convert(design(POKEMON, twice), SPEC).errors
+    assert "tool 'sprite': tool 'sprite'" not in " ".join(errors)
+
+
 @pytest.mark.parametrize(
     ("tools", "excluded", "message"),
     [
@@ -274,7 +287,9 @@ def test_an_argument_mapped_twice_is_reported() -> None:
 
 def test_a_keyword_argument_name_is_renamed_not_rejected() -> None:
     tool = wire_tool(
-        "sprite", [wire_route("get_sprite", {"from": "id"})], wire_arg("from", required=True)
+        "sprite",
+        [wire_route("get_sprite", {"from": "id"}, omitted={"size": "one size is enough"})],
+        wire_arg("from", required=True),
     )
     result = convert(design(POKEMON, tool), SPEC)
     assert result.errors == []
@@ -301,6 +316,60 @@ def test_repair_keeps_sound_tools_and_adds_direct_tools_for_the_rest() -> None:
     assert [d.split(":")[0] for d in repairs.dropped_tools] == ["sprite", "get_sprite", "more"]
     assert repairs.dropped_exclusions == ["list_pokemon", "ghost"]
     assert repairs.added_direct == ["get_sprite"]
+
+
+def test_omissions_pass_through_to_the_route() -> None:
+    lister = wire_tool(
+        "pokemon_list",
+        [wire_route("list_pokemon", {"limit": "limit"}, omitted={"offset": "first page only"})],
+        wire_arg("limit"),
+    )
+    getter = wire_tool(
+        "pokemon",
+        [wire_route("get_pokemon", {"name": "id_or_name"})],
+        wire_arg("name", required=True),
+    )
+    result = convert(design(getter, lister, SPRITE), SPEC)
+
+    assert result.errors == []
+    assert result.tools[1].routes[0].omitted == {"offset": "first page only"}
+
+
+def test_repair_adds_arguments_for_unhandled_optional_parameters() -> None:
+    lister = wire_tool("pokemon", POKEMON["routes"][:1], wire_arg("name"))
+    lister["routes"] = [
+        wire_route("get_pokemon", {"name": "id_or_name"}, ["name"]),
+        wire_route("list_pokemon"),
+    ]
+    conversion = convert(design(lister, SPRITE), SPEC)
+    assert any("['limit', 'offset'] are not handled" in e for e in conversion.errors)
+
+    toolset, repairs = repair(conversion, SPEC)
+
+    assert validate_toolset(toolset, SPEC) == []
+    assert [p.name for p in toolset.tools[0].parameters] == ["name", "limit", "offset"]
+    assert toolset.tools[0].routes[1].arguments == {"limit": "limit", "offset": "offset"}
+    assert repairs.added_arguments == [
+        "pokemon.limit -> list_pokemon.limit",
+        "pokemon.offset -> list_pokemon.offset",
+    ]
+    assert repairs.dropped_tools == []
+    assert repairs.added_direct == []
+
+
+def test_an_added_argument_gets_a_free_name() -> None:
+    tool = wire_tool(
+        "pokemon",
+        [
+            wire_route("get_pokemon", {"limit": "id_or_name"}, ["limit"]),
+            wire_route("list_pokemon", omitted={"offset": "x"}),
+        ],
+        wire_arg("limit"),
+    )
+    toolset, repairs = repair(convert(design(tool, SPRITE), SPEC), SPEC)
+
+    assert repairs.added_arguments == ["pokemon.limit_2 -> list_pokemon.limit"]
+    assert validate_toolset(toolset, SPEC) == []
 
 
 def test_a_direct_tool_never_takes_a_kept_tool_name() -> None:
@@ -471,7 +540,7 @@ def test_design_command_replays_a_recorded_design(
     printed = capsys.readouterr().out
     assert "PokéAPI: 2 tools for 3 endpoints (task design, 0 excluded)" in printed
     assert "3 model calls, 3,000 input and 600 output tokens (fake-model)" in printed
-    assert "dropped 0 tools and added 1 direct tools" in printed
+    assert "added 0 arguments, dropped 0 tools and added 1 direct tools" in printed
 
     report = json.loads((out.parent / "design_report.json").read_text())
     assert report["repairs"]["added_direct"] == ["get_sprite"]

@@ -88,7 +88,7 @@
     },
     "Route": {
       "additionalProperties": false,
-      "description": "One API request a tool can make.\n\n`requires` lists the tool arguments that select this route: a call takes the\nfirst route whose `requires` are all present. `arguments` maps tool argument\nnames to the endpoint's parameter names. `constants` sets endpoint parameters\nto fixed values (for example `format: \"json\"`).",
+      "description": "One API request a tool can make.\n\n`requires` lists the tool arguments that select this route: a call takes the\nfirst route whose `requires` are all present. `arguments` maps tool argument\nnames to the endpoint's parameter names. `constants` sets endpoint parameters\nto fixed values (for example `format: \"json\"`). `omitted` lists the optional\nendpoint parameters the route deliberately does not send, each with a reason\n(for example an alias of another parameter). Every endpoint parameter is in\nexactly one of `arguments`, `constants` and `omitted`.",
       "properties": {
         "arguments": {
           "additionalProperties": {
@@ -109,6 +109,15 @@
           "pattern": "^[a-z][a-z0-9_]*$",
           "title": "Endpoint",
           "type": "string"
+        },
+        "omitted": {
+          "additionalProperties": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": "Endpoint parameter -> why the route does not send it.",
+          "title": "Omitted",
+          "type": "object"
         },
         "requires": {
           "items": {
