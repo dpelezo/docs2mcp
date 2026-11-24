@@ -3,7 +3,7 @@
 import argparse
 import json
 import sys
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import asdict
 from pathlib import Path
 
@@ -13,7 +13,15 @@ from docs2mcp import __version__
 from docs2mcp.config import Settings, get_settings
 from docs2mcp.design import ToolSet, direct_design, validate_toolset
 from docs2mcp.design import json_schema as tools_json_schema
-from docs2mcp.evals import Reference, format_score, score, score_json
+from docs2mcp.evals import (
+    Reference,
+    format_metrics,
+    format_score,
+    measure_design,
+    metrics_json,
+    score,
+    score_json,
+)
 from docs2mcp.extract import (
     AnthropicModel,
     ExtractionModel,
@@ -122,6 +130,19 @@ def build_parser() -> argparse.ArgumentParser:
     check_cmd.add_argument(
         "--spec", type=Path, required=True, help="the spec.json it was designed from"
     )
+    measure_cmd = commands.add_parser(
+        "measure",
+        help="measure a tools.json for the design eval",
+        description=(
+            "Count tools, routes, covered and excluded endpoints, and the estimated tokens an "
+            "agent loads to see the tools. Rules: evals/design/README.md."
+        ),
+    )
+    measure_cmd.add_argument("tools", type=Path, help="tools.json to measure")
+    measure_cmd.add_argument(
+        "--spec", type=Path, required=True, help="the spec.json it was designed from"
+    )
+    measure_cmd.add_argument("--out", type=Path, help="also write the metrics as JSON here")
     # generate and the tool-use eval arrive with their milestones.
     return parser
 
@@ -286,22 +307,41 @@ def _run_check_tools(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_measure(args: argparse.Namespace) -> int:
+    spec = ApiSpec.model_validate_json(args.spec.read_text(encoding="utf-8"))
+    try:
+        toolset = ToolSet.model_validate_json(args.tools.read_text(encoding="utf-8"))
+    except ValidationError as error:
+        print(f"{args.tools} is not a valid tools.json:\n{error}", file=sys.stderr)
+        return 1
+    metrics = measure_design(toolset, spec)
+    print(format_metrics(metrics))
+    if args.out is not None:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        text = json.dumps(metrics_json(metrics), indent=2, ensure_ascii=False) + "\n"
+        args.out.write_text(text, encoding="utf-8")
+        print(f"Wrote {args.out}")
+    return 0
+
+
+_COMMANDS: dict[str, Callable[[argparse.Namespace], int]] = {
+    "ingest": _run_ingest,
+    "extract": _run_extract,
+    "score": _run_score,
+    "design": _run_design,
+    "check-tools": _run_check_tools,
+    "measure": _run_measure,
+}
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    match args.command:
-        case "schema":
-            sys.stdout.write(tools_json_schema() if args.tools else json_schema())
-        case "design":
-            return _run_design(args)
-        case "check-tools":
-            return _run_check_tools(args)
-        case "ingest":
-            return _run_ingest(args)
-        case "extract":
-            return _run_extract(args)
-        case "score":
-            return _run_score(args)
-        case _:
-            parser.print_help()
-    return 0
+    if args.command == "schema":
+        sys.stdout.write(tools_json_schema() if args.tools else json_schema())
+        return 0
+    run = _COMMANDS.get(args.command)
+    if run is None:
+        parser.print_help()
+        return 0
+    return run(args)
