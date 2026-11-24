@@ -1,4 +1,4 @@
-# Documentation sources for the five eval APIs.
+# Documentation sources for the eval APIs.
 #
 # scripts/snapshot_docs.py fetches every page listed here, trims it, and saves it:
 #   - redistribute = true  -> tests/fixtures/docs/<id>/ (committed, used by offline unit tests)
@@ -36,10 +36,18 @@ redistribute = false
 licence = "Docs site is AGPL-3.0 (github.com/open-meteo/open-meteo-website). Not committed; cached locally."
 openapi = ""
 openapi_note = "No OpenAPI file in github.com/open-meteo/open-meteo or open-meteo-website (checked 2026-11-23). Report docs2mcp's score alone."
-pages = [
-  "https://open-meteo.com/en/docs",
-  "https://open-meteo.com/en/docs/geocoding-api",
-]
+# The forecast API only. Geocoding is on another host, so it is its own eval API below.
+pages = ["https://open-meteo.com/en/docs"]
+
+[[api]]
+id = "open_meteo_geocoding"
+name = "Open-Meteo Geocoding"
+base_url = "https://geocoding-api.open-meteo.com/v1"
+redistribute = false
+licence = "Docs site is AGPL-3.0 (github.com/open-meteo/open-meteo-website). Not committed; cached locally."
+openapi = ""
+openapi_note = "No OpenAPI file in github.com/open-meteo/open-meteo or open-meteo-website (checked 2026-11-23). Split from open_meteo because an ApiSpec has one base_url (approved 2026-11-24)."
+pages = ["https://open-meteo.com/en/docs/geocoding-api"]
 
 [[api]]
 id = "open_library"

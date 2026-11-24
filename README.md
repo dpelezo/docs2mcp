@@ -31,7 +31,7 @@ flowchart LR
 | 3 | Eval harness: 100 tasks, an agent runner, and results against direct conversion |
 | 4 | Demo and release: web playground, package on PyPI (`uvx docs2mcp`), write-up |
 
-**Eval APIs** (public, no key needed): Open-Meteo, PokéAPI, Postcodes.io, Open Library and Frankfurter. Postcodes.io replaced REST Countries, whose open v3.1 API was retired in favour of a keyed v5.
+**Eval APIs** (public, no key needed): Open-Meteo (forecast and geocoding, scored separately because they are on different hosts), PokéAPI, Postcodes.io, Open Library and Frankfurter. Postcodes.io replaced REST Countries, whose open v3.1 API was retired in favour of a keyed v5.
 
 **Metrics:** task success rate, tool calls per task, tokens per task, and the share of invalid tool calls.
 
