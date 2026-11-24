@@ -157,8 +157,13 @@ def test_committed_references_are_valid(path: Path) -> None:
     assert len(routes) == len(set(routes))
 
 
-def test_the_committed_references_cover_the_apis_with_openapi_files() -> None:
-    assert {p.stem for p in REFERENCES.glob("*.json")} >= {"frankfurter", "pokeapi", "postcodes_io"}
+def test_the_committed_references_cover_the_eval_apis_so_far() -> None:
+    assert {p.stem for p in REFERENCES.glob("*.json")} >= {
+        "frankfurter",
+        "pokeapi",
+        "postcodes_io",
+        "open_library",
+    }
 
 
 GET = HttpMethod.GET
