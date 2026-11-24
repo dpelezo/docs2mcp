@@ -1,5 +1,6 @@
 """Keep the documentation part of a page and convert it to Markdown."""
 
+import re
 from dataclasses import dataclass
 from html.parser import HTMLParser
 
@@ -18,6 +19,20 @@ EXCLUDE_SELECTORS = [
     "button",
     "[role=navigation]",
 ]
+
+
+# Heading permalinks that docs generators add, such as Docusaurus's
+# `[​](https://site/page#quick-start "Direct link to Quick Start")`: a link whose text
+# is empty, invisible or a symbol, pointing at a fragment.
+_PERMALINK = re.compile(
+    r'\[[\s\u200b\u200c\u200d\ufeff#¶§🔗]*\]\([^()\s]*#[^()\s]*(?:\s+"[^"]*")?\)'
+)
+_INVISIBLE = re.compile("[\u200b\u200c\u200d\ufeff]")
+
+
+def strip_permalinks(markdown: str) -> str:
+    """Remove heading permalinks and zero-width characters."""
+    return _INVISIBLE.sub("", _PERMALINK.sub("", markdown))
 
 
 @dataclass(frozen=True)
@@ -89,7 +104,9 @@ def to_markdown(html: str, base_url: str) -> Converted:
     )
     result = h2m.convert(main_content(html), options)
     headings = [
-        Heading(level=h.level, text=" ".join(h.text.split()), anchor=h.id or None)
+        Heading(
+            level=h.level, text=" ".join(_INVISIBLE.sub("", h.text).split()), anchor=h.id or None
+        )
         for h in result.metadata.headers
     ]
-    return Converted(markdown=result.content or "", headings=headings)
+    return Converted(markdown=strip_permalinks(result.content or ""), headings=headings)

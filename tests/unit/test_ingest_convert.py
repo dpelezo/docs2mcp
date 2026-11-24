@@ -1,6 +1,6 @@
 import pytest
 
-from docs2mcp.ingest.convert import main_content, to_markdown
+from docs2mcp.ingest.convert import main_content, strip_permalinks, to_markdown
 
 
 @pytest.mark.parametrize(
@@ -53,3 +53,36 @@ def test_to_markdown_keeps_docs_and_drops_page_furniture() -> None:
     for furniture in ("Site header", "Contents", "Copy", "Footer", "chart.png", "=="):
         assert furniture not in md
     assert [(h.level, h.text, h.anchor) for h in result.headings] == [(2, "Latest rates", "latest")]
+
+
+@pytest.mark.parametrize(
+    ("markdown", "expected"),
+    [
+        (
+            "## Quick Start[\u200b](https://postcodes.io/docs/overview/#quick-start"
+            ' "Direct link to Quick Start")',
+            "## Quick Start",
+        ),
+        ("## Rates [¶](#rates)", "## Rates "),
+        ("## Rates [#](https://x.dev/page#rates)", "## Rates "),
+        ("## Rates[](#rates)", "## Rates"),
+        ("See [the guide](https://x.dev/a#b).", "See [the guide](https://x.dev/a#b)."),
+        ("See [#](https://x.dev/a) for more.", "See [#](https://x.dev/a) for more."),
+        ("Zero\u200bwidth\ufeff", "Zerowidth"),
+    ],
+    ids=["docusaurus", "pilcrow", "hash", "empty", "real-link", "no-fragment", "invisible"],
+)
+def test_strip_permalinks(markdown: str, expected: str) -> None:
+    assert strip_permalinks(markdown) == expected
+
+
+def test_to_markdown_drops_permalinks_from_text_and_headings() -> None:
+    html = (
+        '<main><h2 id="quick-start">Quick Start'
+        '<a href="#quick-start" class="hash-link">\u200b</a></h2>'
+        "<p>Body</p></main>"
+    )
+    converted = to_markdown(html, "https://postcodes.io/docs/overview")
+    assert "[" not in converted.markdown
+    assert "\u200b" not in converted.markdown
+    assert [h.text for h in converted.headings] == ["Quick Start"]
