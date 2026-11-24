@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/drop-other-base-endpoints (served_from, ADR 0007)",
+    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest https://open-meteo.com/en/docs --max-pages 1 (1 page, 12 chunks, ~7,022 tokens); the same chunks as the previous run",
     "calls": 2,
-    "input_tokens": 18412,
-    "output_tokens": 4155
+    "input_tokens": 19178,
+    "output_tokens": 3616
   },
   "api": "open_meteo",
   "endpoints": {

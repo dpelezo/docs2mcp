@@ -16,17 +16,17 @@ uv run docs2mcp score specs/frankfurter/spec.json \
 
 ## Results
 
-Latest run: out-of-scope endpoints (ADR 0007), `claude-haiku-5-5`, on the same ingested chunks as the baseline. Frankfurter and Open Library ran 3 times; the table shows run 1 and the notes give the spread. Each ingest used exactly the pages in `sources.toml`, except Frankfurter (see its notes).
+Latest run: shared parameters (ADR 0008), `claude-haiku-5-5`, on the same ingested chunks as the baseline. Frankfurter ran 3 times; the table shows run 1 and the notes give the spread. Each ingest used exactly the pages in `sources.toml`, except Frankfurter (see its notes).
 
 | API | Endpoints found | Endpoint precision | Parameters found | Parameter precision | Calls | Input / output tokens |
 |---|---|---|---|---|---|---|
-| Open-Meteo forecast | 1 / 1 (100%) | 100% | 26 / 27 (96%) | 100% | 2 | 18,412 / 4,155 |
-| Open-Meteo geocoding | 2 / 2 (100%) | 100% | 7 / 7 (100%) | 100% | 1 | 5,655 / 1,926 |
-| Postcodes.io | 14 / 14 (100%) | 100% | 20 / 27 (74%) | 100% | 6 | 69,865 / 10,185 |
-| Open Library | 11 / 11 (100%) | 100% | 14 / 18 (78%) | 100% | 2 | 20,113 / 6,763 |
-| Frankfurter | 8 / 9 (89%) | 89% (9 extracted) | 11 / 20 (55%) | 92% | 6 | 90,635 / 12,865 |
-| PokéAPI | 101 / 102 (99%) | 98% (103 extracted) | 100 / 144 (69%) | 100% | 8 | 109,165 / 17,018 |
-| **Total** | **137 / 139 (99%)** | **98% (140 extracted)** | **178 / 243 (73%)** | **99%** | **25** | **313,845 / 52,912** |
+| Open-Meteo forecast | 1 / 1 (100%) | 100% | 26 / 27 (96%) | 100% | 2 | 19,178 / 3,616 |
+| Open-Meteo geocoding | 2 / 2 (100%) | 100% | 7 / 7 (100%) | 100% | 1 | 6,038 / 1,623 |
+| Postcodes.io | 14 / 14 (100%) | 100% | 21 / 27 (78%) | 100% | 6 | 72,163 / 11,197 |
+| Open Library | 11 / 11 (100%) | 100% | 14 / 18 (78%) | 100% | 2 | 20,879 / 7,439 |
+| Frankfurter | 8 / 9 (89%) | 89% (9 extracted) | 18 / 20 (90%) | 90% | 6 | 92,933 / 13,154 |
+| PokéAPI | 101 / 102 (99%) | 98% (103 extracted) | 100 / 144 (69%) | 100% | 8 | 112,229 / 18,641 |
+| **Total** | **137 / 139 (99%)** | **98% (140 extracted)** | **186 / 243 (77%)** | **99%** | **25** | **323,420 / 55,670** |
 
 Every run produced a valid `spec.json` with no rejected endpoints and no failed batches. The two missed endpoints are routes their docs never mention (Frankfurter's `/coverage`, PokéAPI's `/meta`).
 
@@ -39,6 +39,7 @@ Each change is measured on the same ingested chunks, before and after. Moves on 
 | Baseline (#18, #19) | 87 / 139 (63%) | 94% | 78 / 99 (79%) | 99% |
 | Resource templates (ADR 0006) | 137 / 139 (99%) | 94% | 184 / 243 (76%) | 99% |
 | Out-of-scope endpoints (ADR 0007) | 137 / 139 (99%) | 98% | 178 / 243 (73%) | 99% |
+| Shared parameters (ADR 0008) | 137 / 139 (99%) | 98% | 186 / 243 (77%) | 99% |
 
 - **PokéAPI:** 51 → 101 endpoints. Claude flagged `GET /{endpoint}` and it expanded into 51 list routes. The parameter denominator grows because the list routes' `limit`, `offset` and `q` are now scored.
 - **Frankfurter:** nothing was flagged, so its v1 `/{date}` was correctly left alone. This run extracted two more v1 routes, so precision fell from 73% to 62%, and 4 more parameters, so recall rose from 55% to 75%. That is run-to-run variation, and all the extras come from the v1 page that change 4 (crawl scope) removes.
@@ -50,6 +51,20 @@ Out-of-scope endpoints (ADR 0007):
 - **Frankfurter:** precision 62% → 89% in all 3 runs. Every run dropped the v1 routes (4 or 5 per run, including v1's `/currencies`, while v2's was kept). The one extra left is `/rates.csv`.
 - **Frankfurter parameters vary between runs:** recall was 55%, 90% and 75% (mean 73%), with no difference in the code. This is the clearest measure of run-to-run noise so far; the 55% in the table is simply run 1.
 - **No other API dropped anything,** so the check had no false positives. The other APIs moved by at most 2 parameters (variation).
+
+Shared parameters (ADR 0008), Frankfurter over 3 runs before and 3 after:
+
+| | Before (ADR 0007 runs) | First attempt | Final |
+|---|---|---|---|
+| Parameters found (of 20) | 11, 18, 15 (mean 73%) | 19, 19, 18 (mean 93%) | 18, 19, 18 (mean 92%) |
+| Parameter precision | 92%, 95%, 94% | 90%, 68%, 90% | 90%, 90%, 90% |
+| Provider-route parameters (of 8) | 0, 7, 4 | 8, 8, 7 | 7, 8, 7 |
+
+- **Caused by the change:** every run copied the parameters shared with `/rates` onto `/providers/{provider}/rates`, and the report lists each copy.
+- **First attempt:** in one run Claude also attached the shared parameters to the single-pair route, which scored 68% precision. The prompt now says each route of a group lists only the endpoint it mirrors (with a generic example), and no final run made that mistake.
+- **Remaining extras:** `providers` is copied onto the single-provider route in every run, as ADR 0008 predicted, and `expand` on `/rate/{base}/{quote}`.
+- **Remaining misses:** `date` on `/providers/{provider}/rate/{base}/{quote}` in 2 of 3 runs. Its reference `/v2/rate` never matches, because the docs leave off the route's placeholders.
+- **No other API copied anything.** Their parameters moved by at most 1 (variation).
 
 ### Notes on the Open-Meteo results
 
@@ -73,7 +88,7 @@ Out-of-scope endpoints (ADR 0007):
 
 - **Missed:** `GET /coverage`. It is in the OpenAPI file but not on the docs page, so it cannot be found from the docs. It stays in the reference; see ADR 0005.
 - **Extras:** `/rates.csv`, a format of `/rates`. The v1 routes from the v1 docs page (`/latest`, `/{date}`, `/{start_date}..{end_date}`, `/{start_date}..`) are dropped as out of scope since ADR 0007.
-- **Parameters:** most misses are on `/providers/{provider}/rates`. The docs only say it "supports the same parameters as `/v2/rates`".
+- **Parameters:** `/providers/{provider}/rates` gets its parameters copied from `/rates` since ADR 0008, because the docs only say it "supports the same parameters as `/v2/rates`". The remaining misses are `date` on the single-pair provider route and `providers` on `/currencies`.
 - **Cost:** the crawl fetched 20 pages (the default limit), but only the home page documents v2. Each call also carries about 10,000 tokens of fixed prompt and schema.
 
 ### Notes on the PokéAPI results

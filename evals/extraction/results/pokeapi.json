@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/drop-other-base-endpoints (served_from, ADR 0007)",
+    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest https://pokeapi.co/docs/v2 (1 page, 172 chunks); the same chunks as the previous run",
     "calls": 8,
-    "input_tokens": 109165,
-    "output_tokens": 17018
+    "input_tokens": 112229,
+    "output_tokens": 18641
   },
   "api": "pokeapi",
   "endpoints": {

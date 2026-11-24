@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/drop-other-base-endpoints (served_from, ADR 0007)",
+    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest <the 22 pages in sources.toml> --max-pages 22 (22 pages, 88 chunks, ~27,798 tokens); the same chunks as the previous run",
     "calls": 6,
-    "input_tokens": 69865,
-    "output_tokens": 10185
+    "input_tokens": 72163,
+    "output_tokens": 11197
   },
   "api": "postcodes_io",
   "endpoints": {
@@ -17,10 +17,10 @@
     "precision": 1.0
   },
   "parameters": {
-    "matched": 20,
+    "matched": 21,
     "expected": 27,
-    "found": 20,
-    "recall": 0.7407,
+    "found": 21,
+    "recall": 0.7778,
     "precision": 1.0
   },
   "required_mismatches": 4,
@@ -146,15 +146,13 @@
     {
       "route": "GET /places",
       "parameters": {
-        "matched": 2,
+        "matched": 3,
         "expected": 3,
-        "found": 2,
-        "recall": 0.6667,
+        "found": 3,
+        "recall": 1.0,
         "precision": 1.0
       },
-      "missing": [
-        "query:query"
-      ],
+      "missing": [],
       "extra": [],
       "required_mismatches": [
         "query:q"
