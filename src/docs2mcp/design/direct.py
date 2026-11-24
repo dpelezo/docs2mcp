@@ -38,7 +38,7 @@ def shorten(text: str, limit: int) -> str:
     return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
 
 
-def _parameter(param: Parameter, name: str) -> ToolParameter:
+def direct_parameter(param: Parameter, name: str) -> ToolParameter:
     description = param.description or f"The {param.location} parameter '{param.name}'."
     return ToolParameter(
         name=name,
@@ -66,7 +66,7 @@ def direct_tool(endpoint: Endpoint) -> Tool:
             suffix += 1
         taken.add(name)
         names[name] = param.name
-        parameters.append(_parameter(param, name))
+        parameters.append(direct_parameter(param, name))
 
     text = (
         endpoint.summary

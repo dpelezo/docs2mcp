@@ -11,7 +11,7 @@ the API spec (coverage, buildable requests, types) are in `validate.py`.
 
 import json
 import keyword
-from typing import Literal, Self
+from typing import Annotated, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, JsonValue, model_validator
 
@@ -66,13 +66,20 @@ class Route(_Model):
     `requires` lists the tool arguments that select this route: a call takes the
     first route whose `requires` are all present. `arguments` maps tool argument
     names to the endpoint's parameter names. `constants` sets endpoint parameters
-    to fixed values (for example `format: "json"`).
+    to fixed values (for example `format: "json"`). `omitted` lists the optional
+    endpoint parameters the route deliberately does not send, each with a reason
+    (for example an alias of another parameter). Every endpoint parameter is in
+    exactly one of `arguments`, `constants` and `omitted`.
     """
 
     endpoint: str = Field(pattern=_IDENTIFIER, description="An endpoint id from the API spec.")
     requires: list[str] = Field(default_factory=list[str])
     arguments: dict[str, str] = Field(default_factory=dict[str, str])
     constants: dict[str, JsonValue] = Field(default_factory=dict[str, JsonValue])
+    omitted: dict[str, Annotated[str, Field(min_length=1)]] = Field(
+        default_factory=dict[str, str],
+        description="Endpoint parameter -> why the route does not send it.",
+    )
 
 
 class Tool(_Model):

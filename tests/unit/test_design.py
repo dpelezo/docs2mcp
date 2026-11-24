@@ -69,6 +69,13 @@ def arg(name: str, type_: str = "string", **extra: Any) -> ToolParameter:
     return ToolParameter.model_validate({"name": name, "type": type_, "description": name} | extra)
 
 
+POKEMON_GET = Tool(
+    name="pokemon",
+    description="Get one Pokémon.",
+    parameters=[arg("name", required=True)],
+    routes=[Route(endpoint="get_pokemon", arguments={"name": "id_or_name"})],
+)
+
 POKEMON = Tool(
     name="pokemon",
     description="Get one Pokémon by name or id, or list Pokémon.",
@@ -77,6 +84,13 @@ POKEMON = Tool(
         Route(endpoint="get_pokemon", requires=["name"], arguments={"name": "id_or_name"}),
         Route(endpoint="list_pokemon", arguments={"limit": "limit", "offset": "offset"}),
     ],
+)
+
+
+LIST = Tool(
+    name="lst",
+    description="d",
+    routes=[Route(endpoint="list_pokemon", omitted={"limit": "test", "offset": "test"})],
 )
 
 
@@ -215,16 +229,14 @@ def test_required_endpoint_parameters_must_always_be_filled() -> None:
         parameters=[arg("name")],
         routes=[Route(endpoint="get_pokemon", arguments={"name": "id_or_name"})],
     )
-    (error,) = errors_for(
-        optional_name, Tool(name="lst", description="d", routes=[Route(endpoint="list_pokemon")])
-    )
+    (error,) = errors_for(optional_name, LIST)
     assert "required endpoint parameters ['id_or_name'] are not always filled" in error
 
     required_name = optional_name.model_copy(update={"parameters": [arg("name", required=True)]})
     assert (
         errors_for(
             required_name,
-            Tool(name="lst", description="d", routes=[Route(endpoint="list_pokemon")]),
+            LIST,
         )
         == []
     )
@@ -234,12 +246,7 @@ def test_required_endpoint_parameters_must_always_be_filled() -> None:
         description="d",
         routes=[Route(endpoint="get_pokemon", constants={"id_or_name": "pikachu"})],
     )
-    assert (
-        errors_for(
-            constant, Tool(name="lst", description="d", routes=[Route(endpoint="list_pokemon")])
-        )
-        == []
-    )
+    assert errors_for(constant, LIST) == []
 
 
 def test_targets_must_exist_and_be_filled_once() -> None:
@@ -255,14 +262,57 @@ def test_targets_must_exist_and_be_filled_once() -> None:
             )
         ],
     )
-    errors = errors_for(
-        tool, Tool(name="lst", description="d", routes=[Route(endpoint="list_pokemon")])
-    )
+    errors = errors_for(tool, LIST)
     where = "tool 'pokemon', route to 'get_pokemon'"
-    assert f"{where}: endpoint parameter 'id_or_name' is filled more than once" in errors
+    assert (
+        f"{where}: endpoint parameter 'id_or_name' is in more than one of arguments, "
+        "constants and omitted"
+    ) in errors
     assert (
         "tool 'pokemon', route to 'get_pokemon': 'get_pokemon' has no parameter 'shiny'" in errors
     )
+
+
+def test_every_endpoint_parameter_is_passed_or_omitted() -> None:
+    def lister(**route: Any) -> Tool:
+        return Tool(
+            name="lst",
+            description="d",
+            parameters=[arg("limit", "number")],
+            routes=[Route(endpoint="list_pokemon", **route)],
+        )
+
+    where = "tool 'lst', route to 'list_pokemon'"
+    (error,) = errors_for(POKEMON_GET, lister(arguments={"limit": "limit"}))
+    assert f"{where}: endpoint parameters ['offset'] are not handled" in error
+
+    ok = lister(arguments={"limit": "limit"}, omitted={"offset": "paging is not needed"})
+    assert errors_for(POKEMON_GET, ok) == []
+
+    both = lister(arguments={"limit": "limit"}, omitted={"limit": "x", "offset": "x"})
+    assert (
+        f"{where}: endpoint parameter 'limit' is in more than one of arguments, "
+        "constants and omitted"
+    ) in errors_for(POKEMON_GET, both)
+
+    ghost = lister(arguments={"limit": "limit"}, omitted={"offset": "x", "page": "x"})
+    assert f"{where}: 'list_pokemon' has no parameter 'page'" in errors_for(POKEMON_GET, ghost)
+
+    required = Tool(
+        name="pokemon",
+        description="d",
+        routes=[Route(endpoint="get_pokemon", omitted={"id_or_name": "x"})],
+    )
+    errors = errors_for(required, ok)
+    assert errors == [
+        "tool 'pokemon', route to 'get_pokemon': required endpoint parameter 'id_or_name' "
+        "cannot be omitted"
+    ]
+
+
+def test_an_omission_needs_a_reason() -> None:
+    with pytest.raises(ValidationError):
+        Route(endpoint="list_pokemon", omitted={"offset": " "})
 
 
 def test_types_and_enums_must_be_compatible() -> None:

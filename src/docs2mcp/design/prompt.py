@@ -31,10 +31,15 @@ unrelated resources to reduce the tool count; an agent must be able to tell tool
 an argument that the route requires or that is required for the whole tool, or by a constant.
 - An argument is "required" only if every route of the tool fills it. Arguments that choose a \
 route are optional and listed in that route's "requires".
+- Every endpoint parameter is handled on its route: passed from an argument, set by a \
+constant, or listed in "omitted" with a reason. Omit only an optional parameter the agent \
+never needs: an alias of another parameter, or an API key for an API that needs none. When \
+unsure, pass it.
 - Each argument a tool declares is passed by at least one route. Arguments filling the same \
 kind of value on different routes share one name (for example limit and offset on every list \
 route).
-- Names: snake_case, at most 64 characters, not Python keywords. Name tools after the task or \
+- Names: snake_case, at most 64 characters, not Python keywords or soft keywords (such as \
+type, match or case). Name tools after the task or \
 resource, such as "pokemon" or "postcode_lookup", not after HTTP methods.
 - Tool descriptions are for an agent choosing a tool: say what it returns, when to use it, and \
 which arguments select which behaviour. At most 1000 characters. Argument descriptions say \

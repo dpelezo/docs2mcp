@@ -73,11 +73,23 @@ def _check_route(
     where = f"tool '{tool.name}', route to '{endpoint.id}'"
     by_name = {p.name: p for p in endpoint.parameters}
 
-    targets = list(route.arguments.values()) + list(route.constants)
+    targets = list(route.arguments.values()) + list(route.constants) + list(route.omitted)
     for target in sorted({t for t in targets if targets.count(t) > 1}):
-        errors.append(f"{where}: endpoint parameter '{target}' is filled more than once")
+        errors.append(
+            f"{where}: endpoint parameter '{target}' is in more than one of arguments, "
+            "constants and omitted"
+        )
     for target in sorted(set(targets) - set(by_name)):
         errors.append(f"{where}: '{endpoint.id}' has no parameter '{target}'")
+    for name in sorted(set(route.omitted) & set(by_name)):
+        if by_name[name].required:
+            errors.append(f"{where}: required endpoint parameter '{name}' cannot be omitted")
+    unhandled = [p.name for p in endpoint.parameters if p.name not in targets]
+    if unhandled:
+        errors.append(
+            f"{where}: endpoint parameters {unhandled} are not handled; pass each from an "
+            "argument, or list it in omitted with the reason the agent does not need it"
+        )
 
     guaranteed = set(route.constants)
     for argument, target in route.arguments.items():
@@ -90,7 +102,11 @@ def _check_route(
         if enum is not None and value not in enum:
             errors.append(f"{where}: constant {name}={value!r} is not in the endpoint's enum")
 
-    missing = sorted(p.name for p in endpoint.parameters if p.required and p.name not in guaranteed)
+    missing = sorted(
+        p.name
+        for p in endpoint.parameters
+        if p.required and p.name not in guaranteed and p.name not in route.omitted
+    )
     if missing:
         errors.append(
             f"{where}: required endpoint parameters {missing} are not always filled; "

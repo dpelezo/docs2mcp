@@ -90,7 +90,7 @@ def test_an_invalid_design_is_measured_and_its_problems_listed() -> None:
     assert not metrics.valid
     assert (metrics.covered, metrics.excluded) == (1, 0)
     assert any("get_pokemon" in p for p in metrics.problems)
-    assert "INVALID (2 problems)" in format_metrics(metrics)
+    assert "INVALID (3 problems)" in format_metrics(metrics)
 
 
 def test_unknown_endpoints_are_not_counted_as_covered() -> None:
