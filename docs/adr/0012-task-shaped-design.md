@@ -14,7 +14,7 @@ ADR 0011 decided that Claude groups endpoints into task-shaped tools, as structu
 Claude answers in a flat wire schema (`design/wire.py`): every field required, no unions, as in ADR 0004. For each tool it gives:
 - the name and the description;
 - each argument's name, its description, and whether it is required;
-- the routes: which endpoint each calls, which arguments select it, and which endpoint parameter each argument fills.
+- the routes: which endpoint each calls, which arguments select it, which endpoint parameter each argument fills, and which optional parameters it leaves out, each with a reason.
 
 It also lists the excluded endpoints, each with a reason.
 
@@ -29,11 +29,12 @@ Names that are not safe Python identifiers are renamed with the direct design's 
 ### Feedback, then repair
 
 Every problem from building the tools and from `validate_toolset` goes back to Claude, which gets up to `DOCS2MCP_DESIGN_MAX_RETRIES` (2) more tries. If problems remain after the last try, code repairs the design (`repair`):
-1. It drops any tool with a problem of its own, a route to an unknown endpoint, or an endpoint already used by an earlier tool.
-2. It drops exclusions of unknown endpoints, or of endpoints that are already routed or already excluded.
-3. It gives every endpoint left uncovered a direct tool (ADR 0011), renamed with a suffix if its name is taken.
+1. It adds an argument for every optional endpoint parameter a route leaves unhandled, built like a direct-design argument. A design that only forgot parameters keeps its grouping.
+2. It drops any tool with a problem of its own, a route to an unknown endpoint, or an endpoint already used by an earlier tool.
+3. It drops exclusions of unknown endpoints, or of endpoints that are already routed or already excluded.
+4. It gives every endpoint left uncovered a direct tool (ADR 0011), renamed with a suffix if its name is taken.
 
-The result is always valid. Each dropped tool and each added direct tool is listed under `repairs` in `design_report.json`, and the CLI prints the counts. A reply the model cannot complete (`max_tokens`, a refusal) is not repaired: the command fails, and `--direct` is the way out.
+The result is always valid. Each added argument, dropped tool and added direct tool is listed under `repairs` in `design_report.json`, and the CLI prints the counts. A reply the model cannot complete (`max_tokens`, a refusal) is not repaired: the command fails, and `--direct` is the way out.
 
 ### Model and calls
 
@@ -42,6 +43,10 @@ The result is always valid. Each dropped tool and each added direct tool is list
 - **Output cap:** `DOCS2MCP_DESIGN_MAX_OUTPUT_TOKENS` (32,000), with a long request timeout.
 - **Model:** the default is `DOCS2MCP_MODEL` (`claude-haiku-5-5`), the same as extraction. One extra run per API with `claude-sonnet-5-5` shows whether a larger model designs better.
 - **Record and replay:** same as extraction, with the same request keys and the same file format. Recordings for the three APIs whose docs are committed are replayed in CI.
+
+### Every parameter is handled
+
+The first live runs (24 designs, all valid) showed Haiku leaving out optional parameters: Open-Meteo forecast kept 14 of its 26 in every run. Validation only required the required ones, so nothing failed, and an agent would have quietly lost features such as `models` and `elevation`. So a route now has to pass, fix or omit every endpoint parameter, and an omission needs a reason a reviewer can check. The design eval counts what is exposed (`parameters_exposed`), so an omission is also visible in the numbers.
 
 ## Consequences
 
