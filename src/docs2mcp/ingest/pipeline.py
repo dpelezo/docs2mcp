@@ -22,6 +22,24 @@ class IngestResult:
     skipped: list[SkippedUrl]
 
 
+def read_chunks(ingest_dir: Path) -> list[Chunk]:
+    """Load chunks.jsonl written by `ingest`."""
+    path = ingest_dir / "chunks.jsonl"
+    if not path.exists():
+        msg = f"{path} not found; run docs2mcp ingest first"
+        raise FileNotFoundError(msg)
+    lines = path.read_text(encoding="utf-8").splitlines()
+    return [Chunk.model_validate_json(line) for line in lines if line.strip()]
+
+
+def read_pages(ingest_dir: Path) -> list[Page]:
+    path = ingest_dir / "pages.jsonl"
+    if not path.exists():
+        return []
+    lines = path.read_text(encoding="utf-8").splitlines()
+    return [Page.model_validate_json(line) for line in lines if line.strip()]
+
+
 def _write_jsonl(path: Path, records: Sequence[Page | Chunk]) -> None:
     lines = (
         json.dumps(json.loads(r.model_dump_json()), ensure_ascii=False, sort_keys=True)
