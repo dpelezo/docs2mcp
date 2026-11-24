@@ -195,8 +195,14 @@ def _route_key(endpoint: Endpoint) -> tuple[str, str]:
     return (endpoint.method, _PLACEHOLDER.sub("{}", endpoint.path))
 
 
-def merge_endpoints(endpoints: Iterable[Endpoint], notes: list[str]) -> list[Endpoint]:
-    """Merge duplicates (same method and route) and make ids unique."""
+def merge_endpoints(
+    endpoints: Iterable[Endpoint], notes: list[str], merges: list[str]
+) -> list[Endpoint]:
+    """Merge duplicates (same method and route) and make ids unique.
+
+    Merges are expected when a route is documented in several chunks, so they
+    go to `merges`, not to the repair `notes`.
+    """
     by_route: dict[tuple[str, str], Endpoint] = {}
     for endpoint in endpoints:
         key = _route_key(endpoint)
@@ -214,7 +220,7 @@ def merge_endpoints(endpoints: Iterable[Endpoint], notes: list[str]) -> list[End
         by_route[key] = existing.model_copy(
             update={"parameters": [*existing.parameters, *extra], "description": description}
         )
-        notes.append(f"{existing.method} {existing.path}: merged a duplicate from another chunk")
+        merges.append(f"{existing.method} {existing.path}: merged a duplicate from another chunk")
 
     unique: list[Endpoint] = []
     used: set[str] = set()

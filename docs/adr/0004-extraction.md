@@ -50,7 +50,7 @@ The base URL is the `--base-url` override, or the one the batches report most of
 
 ### Report
 
-Every run writes `extraction_report.json` next to `spec.json`. It records the model, calls, input and output tokens, each batch's chunks and endpoint count, rejected endpoints with their errors, and every repair.
+Every run writes `extraction_report.json` next to `spec.json`. It records the model, calls, input and output tokens, each batch's chunks and endpoint count, rejected endpoints with their errors, every repair, and every duplicate merged across chunks (listed apart from repairs: a route documented in several places is expected, not a model mistake).
 
 ## Consequences
 

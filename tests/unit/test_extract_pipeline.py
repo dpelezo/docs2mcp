@@ -127,10 +127,8 @@ def test_frankfurter_docs_become_a_valid_spec(ingest_dir: Path) -> None:
     ]
     assert str(rates.source_url) == "https://frankfurter.dev/#rates"
     assert str(spec.endpoints[2].source_url) == "https://frankfurter.dev/#rate"
-    assert sorted(report.repairs) == [
-        "GET /providers/{id}/rates: added missing path parameter 'id'",
-        "GET /rates: merged a duplicate from another chunk",
-    ]
+    assert report.repairs == ["GET /providers/{id}/rates: added missing path parameter 'id'"]
+    assert report.merged == ["GET /rates: merged a duplicate from another chunk"]
 
 
 def test_extract_command_writes_the_spec_and_report_and_replays_offline(
