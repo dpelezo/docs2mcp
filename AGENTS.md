@@ -16,6 +16,7 @@ These rules apply to any AI assistant (Claude Code, Codex, Cursor and others) an
 - Unit tests never call a live model or the network. Use recorded responses. Live calls belong in the eval suite and in `tests/integration/`.
 - Keep the eval honest: never change a task, an expected answer or a scorer in the same pull request as the code it measures.
 - To change anything the eval measures (extraction, prompts, the wire schema), follow `.claude/skills/eval-driven-change/SKILL.md`: name the failing case first, re-run every API on the same inputs, explain every score movement, and put the before/after table in the pull request.
+- `tests/unit/test_extraction_replay.py` replays recorded extraction offline. If it fails after your change, do not edit `score.json` by hand: record again with `just record-replay <id>` and explain the score change in the pull request.
 - Anchor `.gitignore` entries for output folders to the repo root (`/ingest/`, not `ingest/`). An unanchored name also matches source folders such as `src/docs2mcp/ingest/`, and new files there are silently ignored.
 
 ## Before saying "done"

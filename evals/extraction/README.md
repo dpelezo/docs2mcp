@@ -6,6 +6,13 @@ How well `docs2mcp extract` recovers an API's real endpoints and parameters from
 - `additions/<id>.json` adds the routes and parameters an official file leaves out but the docs document and the server serves, each with its evidence. Today that is only Postcodes.io: 3 routes and 12 parameters. The reference marks every addition with a `note`, and `just references` fails if the official file already covers one, so stale additions get noticed.
 - `results/<id>.json` is the score of one recorded run, with the run's code version, model, ingest command and token use.
 
+## Replay in CI
+
+`evals/extraction/replay/<id>/` holds Claude's recorded replies for the snapshot chunks of the three APIs whose docs we may commit (PokéAPI, Frankfurter and Postcodes.io), and the score they produced. `tests/unit/test_extraction_replay.py` ingests those snapshots offline, replays the recordings, scores the spec, and requires the same score. So every pull request re-runs the extraction eval for these APIs without a live call, and any change to ingest, merging or scoring that moves a result fails CI. See ADR 0010.
+
+- **A change meant to move the score:** run `just record-replay <id>` (live; it writes to `specs/replay/`). Copy `recordings/` and `score.json` into `evals/extraction/replay/<id>/`, and put the before/after in the pull request.
+- **A change to the prompt, the wire schema or chunking** changes the recording keys, so replay fails with "record again". That is intended, because those changes need a live run anyway.
+
 ## Score a run
 
 ```bash
