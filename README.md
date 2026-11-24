@@ -6,7 +6,7 @@ Turn messy API documentation into a curated, task-shaped [MCP](https://modelcont
 ![Python 3.14](https://img.shields.io/badge/python-3.14-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-> **Status: in progress (week 1 of 4).** The spec models, `docs2mcp ingest` and `docs2mcp extract` work, but extraction has not yet been measured on real docs; design, generation and the eval do not exist yet, so there are no results to report. The README will open with the eval numbers once they exist.
+> **Status: in progress (week 1 of 4).** The spec models, `docs2mcp ingest`, `docs2mcp extract` and `docs2mcp score` work. Extraction has a first baseline on Frankfurter: 8 of 9 endpoints and 55% of their parameters ([details](evals/extraction/README.md)). Design, generation and the tool-use eval do not exist yet. The README will open with the eval numbers once they exist.
 
 ## Why
 
@@ -69,6 +69,14 @@ uv run docs2mcp extract ingest/pokeapi --out specs/pokeapi/spec.json --replay re
 ```
 
 Claude reads the chunks in batches and fills a flat schema; code validates each endpoint, repairs what is mechanical, sends the rest back to Claude with the errors, and merges everything into `spec.json`. `extraction_report.json` lists calls, tokens, merged duplicates, repairs and rejected endpoints. How it works: [ADR 0004](docs/adr/0004-extraction.md).
+
+### Score an extraction
+
+```bash
+uv run docs2mcp score specs/frankfurter/spec.json --reference evals/extraction/reference/frankfurter.json
+```
+
+This compares the extracted endpoints and parameters with a reference built from the API's own OpenAPI file. Results and the baseline: [evals/extraction](evals/extraction/README.md). Rules: [ADR 0005](docs/adr/0005-extraction-scoring.md).
 
 ## How this repo is built
 

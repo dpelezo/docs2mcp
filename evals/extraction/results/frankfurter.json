@@ -1,0 +1,155 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "extraction as merged in #11 (ef5c57a)",
+    "model": "claude-haiku-5-5",
+    "ingest": "docs2mcp ingest https://frankfurter.dev/ (default 20-page limit; 20 pages, 182 chunks)",
+    "calls": 6,
+    "input_tokens": 87755,
+    "output_tokens": 13259
+  },
+  "api": "frankfurter",
+  "endpoints": {
+    "matched": 8,
+    "expected": 9,
+    "found": 11,
+    "recall": 0.8889,
+    "precision": 0.7273
+  },
+  "parameters": {
+    "matched": 11,
+    "expected": 20,
+    "found": 12,
+    "recall": 0.55,
+    "precision": 0.9167
+  },
+  "required_mismatches": 0,
+  "missing_endpoints": [
+    "GET /coverage"
+  ],
+  "extra_endpoints": [
+    "GET /latest",
+    "GET /rates.csv",
+    "GET /{}"
+  ],
+  "matched": [
+    {
+      "route": "GET /rates",
+      "parameters": {
+        "matched": 8,
+        "expected": 8,
+        "found": 8,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /rate/{}/{}",
+      "parameters": {
+        "matched": 2,
+        "expected": 2,
+        "found": 3,
+        "recall": 1.0,
+        "precision": 0.6667
+      },
+      "missing": [],
+      "extra": [
+        "query:expand"
+      ],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /providers/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /providers/{}/rates",
+      "parameters": {
+        "matched": 0,
+        "expected": 7,
+        "found": 0,
+        "recall": 0.0,
+        "precision": 1.0
+      },
+      "missing": [
+        "query:base",
+        "query:date",
+        "query:expand",
+        "query:from",
+        "query:group",
+        "query:quotes",
+        "query:to"
+      ],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /providers/{}/rate/{}/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 1,
+        "found": 0,
+        "recall": 0.0,
+        "precision": 1.0
+      },
+      "missing": [
+        "query:date"
+      ],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /currency/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /currencies",
+      "parameters": {
+        "matched": 1,
+        "expected": 2,
+        "found": 1,
+        "recall": 0.5,
+        "precision": 1.0
+      },
+      "missing": [
+        "query:providers"
+      ],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /providers",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    }
+  ]
+}
