@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/expand-resource-templates (resource templates, ADR 0006)",
+    "code": "feat/drop-other-base-endpoints (served_from, ADR 0007)",
     "model": "claude-haiku-5-5",
     "ingest": "docs2mcp ingest https://pokeapi.co/docs/v2 (1 page, 172 chunks); the same chunks as the previous run",
     "calls": 8,
-    "input_tokens": 107389,
-    "output_tokens": 17270
+    "input_tokens": 109165,
+    "output_tokens": 17018
   },
   "api": "pokeapi",
   "endpoints": {
