@@ -70,7 +70,7 @@ base_url = "https://api.postcodes.io"
 redistribute = true
 licence = "MIT. Source: github.com/ideal-postcodes/postcodes.io (LICENSE)."
 openapi = "https://raw.githubusercontent.com/ideal-postcodes/postcodes.io/main/static/openapi.json"
-openapi_note = "static/openapi.json in github.com/ideal-postcodes/postcodes.io, served at api.postcodes.io/openapi.json. It leaves out 3 documented routes and 8 documented parameters, which evals/extraction/additions/postcodes_io.json adds. Replaces REST Countries, whose v3.1 URLs now redirect and whose v5 API needs a key (checked 2026-11-24)."
+openapi_note = "static/openapi.json in github.com/ideal-postcodes/postcodes.io, served at api.postcodes.io/openapi.json. It leaves out 3 documented routes and 12 documented parameters, which evals/extraction/additions/postcodes_io.json adds. Replaces REST Countries, whose v3.1 URLs now redirect and whose v5 API needs a key (checked 2026-11-24)."
 # The hand-written guide pages. The generated /docs/api pages are left out: they are rendered
 # from the same OpenAPI file the reference is built from, so they would test copying, not reading.
 # The docs have no index page, so each page is listed.

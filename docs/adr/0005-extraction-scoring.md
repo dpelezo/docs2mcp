@@ -37,7 +37,7 @@ These were approved before the scorer was written, as `AGENTS.md` requires.
 
 ### Amendment (2026-11-24): hand additions to an official file
 
-Postcodes.io's OpenAPI file leaves out 3 routes and 8 parameters that its docs pages document and its server serves. Scoring against the file as published would mark correct extractions as wrong. So `evals/extraction/additions/<id>.json` can add routes and parameters, under these rules:
+Postcodes.io's OpenAPI file leaves out 3 routes and 12 parameters that its docs pages document and its server serves. Four of the parameters (on bulk `POST /postcodes`) were found only when the first live run counted them as extras. Scoring against the file as published would mark correct extractions as wrong. So `evals/extraction/additions/<id>.json` can add routes and parameters, under these rules:
 
 - Every addition needs a `note` with its evidence: the docs section and the server code at a named commit.
 - Additions are applied by `scripts/reference_from_openapi.py`, and the reference keeps the `note` on each one, so a reviewer can tell official entries from added ones.

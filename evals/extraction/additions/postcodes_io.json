@@ -149,6 +149,46 @@
         "required": false,
         "note": "Documented at https://postcodes.io/docs/place/query (limit); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/places_controller.ts reads limit."
       }
+    },
+    {
+      "method": "POST",
+      "path": "/postcodes",
+      "parameter": {
+        "name": "filter",
+        "location": "query",
+        "required": false,
+        "note": "Documented at https://postcodes.io/docs/postcode/bulk (Optional Query Parameters: filter); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/config/filter.ts line 33 reads request.query.filter for every JSON response (mounted in api/config/renderer.ts line 67)."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/postcodes",
+      "parameter": {
+        "name": "limit",
+        "location": "query",
+        "required": false,
+        "note": "Documented at https://postcodes.io/docs/postcode/bulk-reverse-geocode (Optional Query Parameters: limit); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/postcodes_controller.ts line 143 (bulk geocode)."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/postcodes",
+      "parameter": {
+        "name": "radius",
+        "location": "query",
+        "required": false,
+        "note": "Documented at https://postcodes.io/docs/postcode/bulk-reverse-geocode (Optional Query Parameters: radius); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/postcodes_controller.ts line 146 (bulk geocode)."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/postcodes",
+      "parameter": {
+        "name": "widesearch",
+        "location": "query",
+        "required": false,
+        "note": "Documented at https://postcodes.io/docs/postcode/bulk-reverse-geocode (Optional Query Parameters: widesearch); github.com/ideal-postcodes/postcodes.io at c611053 (2026-11-19), api/app/controllers/postcodes_controller.ts line 149 (bulk geocode)."
+      }
     }
   ]
 }
