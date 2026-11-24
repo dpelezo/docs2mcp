@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "extraction as merged in #11 (ef5c57a); unchanged since",
+    "code": "feat/expand-resource-templates (resource templates, ADR 0006)",
     "model": "claude-haiku-5-5",
-    "ingest": "docs2mcp ingest <the 3 pages in sources.toml> --max-pages 3 (3 pages, 25 chunks, ~8,098 tokens)",
+    "ingest": "docs2mcp ingest <the 3 pages in sources.toml> --max-pages 3 (3 pages, 25 chunks, ~8,098 tokens); the same chunks as the previous run",
     "calls": 2,
-    "input_tokens": 19153,
-    "output_tokens": 6494
+    "input_tokens": 19669,
+    "output_tokens": 6902
   },
   "api": "open_library",
   "endpoints": {
@@ -26,7 +26,7 @@
   "required_mismatches": 0,
   "missing_endpoints": [],
   "extra_endpoints": [
-    "GET /a/olid/{}-M.jpg"
+    "GET /a/olid/{}.jpg"
   ],
   "matched": [
     {
