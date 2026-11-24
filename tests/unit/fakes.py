@@ -38,6 +38,7 @@ def endpoint(
         "response_key_fields": [],
         "source_chunk_id": "p01-c001",
         "served_from": "",
+        "same_parameters_as": [],
         "for_every_resource": False,
     } | overrides
     return WireEndpoint.model_validate(data)

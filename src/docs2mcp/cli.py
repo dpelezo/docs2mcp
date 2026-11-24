@@ -130,6 +130,7 @@ def report_json(report: ExtractionReport) -> str:
         "merged": report.merged,
         "expanded": report.expanded,
         "out_of_scope": report.out_of_scope,
+        "shared_parameters": report.shared_parameters,
         "batches": [asdict(b) for b in report.batches],
     }
     return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
@@ -166,6 +167,8 @@ def _run_extract(args: argparse.Namespace) -> int:
     )
     for note in report.expanded:
         print(f"  resource template {note}")
+    for note in report.shared_parameters:
+        print(f"  shared parameters {note}")
     if report.out_of_scope:
         print(f"{len(report.out_of_scope)} endpoints dropped as served from another base URL:")
         for note in report.out_of_scope:

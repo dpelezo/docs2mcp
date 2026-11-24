@@ -16,6 +16,10 @@ Endpoints that Claude reports as served from a different base URL (another host,
 or another API version) are out of scope for this spec and are dropped with a
 note. See ADR 0007.
 
+When Claude reports that an endpoint accepts the same parameters as another
+(`same_parameters_as`), the other endpoint's query and header parameters are
+copied onto it. See ADR 0008.
+
 One transformation is not a repair: a route Claude flags as working for every
 resource (`GET /{endpoint}`) is expanded into one route per resource the docs
 document (`GET /pokemon`, `GET /ability`, ...). See ADR 0006.
@@ -24,7 +28,7 @@ document (`GET /pokemon`, `GET /ability`, ...). See ADR 0006.
 import json
 import re
 from collections import Counter
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from urllib.parse import urlsplit, urlunsplit
 
 from pydantic import ValidationError
@@ -235,6 +239,56 @@ def describe_error(wire: WireEndpoint, error: ValidationError) -> str:
 
 def _route_key(endpoint: Endpoint) -> tuple[str, str]:
     return (endpoint.method, _PLACEHOLDER.sub("{}", endpoint.path))
+
+
+def route_key(endpoint: Endpoint) -> tuple[str, str]:
+    """Method and path with placeholder names removed: what makes two routes the same."""
+    return _route_key(endpoint)
+
+
+def apply_shared_parameters(
+    endpoints: Sequence[Endpoint],
+    shares: Mapping[tuple[str, str], Sequence[str]],
+    base_url: str,
+    copied: list[str],
+) -> list[Endpoint]:
+    """Copy query and header parameters from the endpoints each one says it shares.
+
+    `shares` maps an endpoint's route key to the paths the docs say it shares
+    parameters with. A path is matched against the other endpoints by method and
+    route, then by route alone. Parameters the endpoint already has are kept;
+    path parameters are never copied. Sources are read as extracted, so a chain
+    (A shares B, B shares C) copies one level.
+    """
+    by_route: dict[tuple[str, str], Endpoint] = {_route_key(e): e for e in endpoints}
+    by_path: dict[str, Endpoint] = {}
+    for endpoint in endpoints:
+        by_path.setdefault(_route_key(endpoint)[1], endpoint)
+
+    result: list[Endpoint] = []
+    for endpoint in endpoints:
+        key = _route_key(endpoint)
+        where = f"{endpoint.method} {endpoint.path}"
+        params = list(endpoint.parameters)
+        have = {(p.location, p.name) for p in params}
+        for ref in shares.get(key, ()):
+            ref_path = _PLACEHOLDER.sub("{}", normalize_path(ref, base_url))
+            source = by_route.get((endpoint.method, ref_path)) or by_path.get(ref_path)
+            if source is None or _route_key(source) == key:
+                copied.append(f"{where}: same parameters as {ref}, but no such endpoint was found")
+                continue
+            new = [
+                p
+                for p in source.parameters
+                if p.location is not ParamLocation.PATH and (p.location, p.name) not in have
+            ]
+            have.update((p.location, p.name) for p in new)
+            params.extend(new)
+            names = ", ".join(p.name for p in new) or "nothing new"
+            copied.append(f"{where}: copied {names} from {source.method} {source.path}")
+        changed = len(params) != len(endpoint.parameters)
+        result.append(endpoint.model_copy(update={"parameters": params}) if changed else endpoint)
+    return result
 
 
 _TEMPLATE = re.compile(r"^/\{([^{}/]+)\}(/.*)?$")

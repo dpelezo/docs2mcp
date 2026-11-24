@@ -26,6 +26,10 @@ path), copied from its example URLs. It is how out-of-scope endpoints are found,
 normalise it to the API's main base URL: an image host, a different API version or a \
 different service keeps its own URL. When the docs give only a relative path, use the \
 API's base URL.
+- same_parameters_as: when the docs say this endpoint accepts the same parameters as other \
+endpoints ("supports the same parameters as /v2/rates", "takes the same filters as search"), \
+list those endpoints' paths as written. Still list any parameters documented for this endpoint \
+itself; the shared ones are copied in code. Use an empty list otherwise.
 - for_every_resource: true only when the docs describe one generic route that works for every \
 resource of the API (for example "calling any endpoint without an id returns a list: \
 GET /{endpoint}/"). Record such a route once, with the resource as its first placeholder; it is \

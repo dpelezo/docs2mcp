@@ -4,6 +4,7 @@ import pytest
 from pydantic import ValidationError
 
 from docs2mcp.extract.merge import (
+    apply_shared_parameters,
     choose_auth,
     choose_base_url,
     expand_resource_templates,
@@ -11,6 +12,7 @@ from docs2mcp.extract.merge import (
     merge_endpoints,
     normalize_path,
     outside_base,
+    route_key,
     to_endpoint,
     to_parameter,
 )
@@ -295,3 +297,74 @@ def test_a_template_that_cannot_be_expanded_is_kept_as_documented(
 )
 def test_outside_base(served_from: str, path: str, base_url: str, outside: bool) -> None:
     assert outside_base(served_from, path, base_url) is outside
+
+
+FRANKFURTER = "https://api.frankfurter.dev/v2"
+
+
+def _fep(operation: str, path: str, *params: WireParameter, method: str = "GET") -> Endpoint:
+    return to_endpoint(endpoint(operation, path, *params, method=method), FRANKFURTER, CHUNKS, [])
+
+
+RATES = _fep("get_rates", "/rates", param("base"), param("date"), param("X-Key", "header"))
+PROVIDER_RATES = _fep(
+    "get_provider_rates", "/providers/{key}/rates", param("key", "path"), param("date")
+)
+
+
+def test_shared_parameters_are_copied_without_duplicates_or_path_parameters() -> None:
+    copied: list[str] = []
+
+    result = apply_shared_parameters(
+        [RATES, PROVIDER_RATES], {route_key(PROVIDER_RATES): ["/v2/rates"]}, FRANKFURTER, copied
+    )
+
+    assert result[0] is RATES
+    assert [(p.name, p.location) for p in result[1].parameters] == [
+        ("key", ParamLocation.PATH),
+        ("date", ParamLocation.QUERY),
+        ("base", ParamLocation.QUERY),
+        ("X-Key", ParamLocation.HEADER),
+    ]
+    assert copied == ["GET /providers/{key}/rates: copied base, X-Key from GET /rates"]
+
+
+def test_a_shared_route_with_another_method_is_matched_by_path() -> None:
+    bulk = _fep("bulk_rates", "/rates/bulk", method="POST")
+    copied: list[str] = []
+
+    result = apply_shared_parameters(
+        [RATES, bulk],
+        {route_key(bulk): ["https://api.frankfurter.dev/v2/rates"]},
+        FRANKFURTER,
+        copied,
+    )
+
+    assert [p.name for p in result[1].parameters] == ["base", "date", "X-Key"]
+    assert copied == ["POST /rates/bulk: copied base, date, X-Key from GET /rates"]
+
+
+@pytest.mark.parametrize("ref", ["/v2/unknown", "/providers/{provider}/rates"])
+def test_a_missing_or_self_reference_copies_nothing_and_is_reported(ref: str) -> None:
+    copied: list[str] = []
+
+    result = apply_shared_parameters(
+        [RATES, PROVIDER_RATES], {route_key(PROVIDER_RATES): [ref]}, FRANKFURTER, copied
+    )
+
+    assert result == [RATES, PROVIDER_RATES]
+    assert copied == [
+        f"GET /providers/{{key}}/rates: same parameters as {ref}, but no such endpoint was found"
+    ]
+
+
+def test_sharing_parameters_that_are_already_there_says_so() -> None:
+    copied: list[str] = []
+    result = apply_shared_parameters(
+        [RATES, RATES.model_copy(update={"id": "rates_again", "path": "/rates/latest"})],
+        {("GET", "/rates/latest"): ["/rates"]},
+        FRANKFURTER,
+        copied,
+    )
+    assert result[1].parameters == RATES.parameters
+    assert copied == ["GET /rates/latest: copied nothing new from GET /rates"]

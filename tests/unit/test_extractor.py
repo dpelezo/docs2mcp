@@ -170,3 +170,29 @@ def test_endpoints_served_from_another_base_url_are_dropped_and_reported() -> No
     assert report.out_of_scope == [
         "GET /latest: served from https://api.frankfurter.dev/v1, not https://api.frankfurter.dev/v2"
     ]
+
+
+def test_parameters_shared_across_batches_are_copied_and_reported() -> None:
+    model = ScriptedModel(
+        [
+            batch(endpoint("get_rates", "/rates", param("base"), param("quotes"))),
+            batch(
+                endpoint(
+                    "get_provider_rates",
+                    "/providers/{key}/rates",
+                    param("key", "path"),
+                    same_parameters_as=["/v2/rates"],
+                )
+            ),
+        ]
+    )
+
+    spec, report = Extractor(model, batch_tokens=6000).run(
+        CHUNKS, base_url="https://api.frankfurter.dev/v2"
+    )
+
+    provider_rates = next(e for e in spec.endpoints if e.path == "/providers/{key}/rates")
+    assert [p.name for p in provider_rates.parameters] == ["key", "base", "quotes"]
+    assert report.shared_parameters == [
+        "GET /providers/{key}/rates: copied base, quotes from GET /rates"
+    ]
