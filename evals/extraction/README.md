@@ -16,25 +16,46 @@ uv run docs2mcp score specs/frankfurter/spec.json \
 
 ## Results
 
-Baseline: extraction as merged in #11, `claude-haiku-5-5`, one run per API.
+Baseline: extraction as merged in #11, `claude-haiku-5-5`, one run per API. Each ingest used exactly the pages in `sources.toml`, except Frankfurter (see its notes).
 
 | API | Endpoints found | Endpoint precision | Parameters found | Parameter precision | Calls | Input / output tokens |
 |---|---|---|---|---|---|---|
+| Open-Meteo forecast | 1 / 1 (100%) | 100% | 26 / 27 (96%) | 100% | 2 | 17,452 / 3,962 |
+| Open-Meteo geocoding | 2 / 2 (100%) | 100% | 7 / 7 (100%) | 100% | 1 | 5,175 / 1,578 |
+| Postcodes.io | 14 / 14 (100%) | 100% | 16 / 23 (70%) | 80% | 6 | 66,985 / 10,189 |
+| Open Library | 11 / 11 (100%) | 92% (12 extracted) | 14 / 18 (78%) | 100% | 2 | 19,153 / 6,494 |
 | Frankfurter | 8 / 9 (89%) | 73% (11 extracted) | 11 / 20 (55%) | 92% | 6 | 87,755 / 13,259 |
 | PokéAPI | 51 / 102 (50%) | 96% (53 extracted) | n/a: matched endpoints have only path parameters | n/a | 8 | 105,325 / 16,666 |
-| Postcodes.io | not run yet | | | | | |
-| Open Library | not run yet (reference written by hand) | | | | | |
-| Open-Meteo forecast | not run yet (reference written by hand) | | | | | |
-| Open-Meteo geocoding | not run yet (reference written by hand) | | | | | |
+| **Total** | **87 / 139 (63%)** | **94% (93 extracted)** | **74 / 95 (78%)** | **94%** | **25** | **301,845 / 52,148** |
 
-Notes on the Frankfurter baseline:
+Every run produced a valid `spec.json` with no rejected endpoints and no failed batches. PokéAPI's 50 list routes, which its docs describe only once as a generic route, account for most of the misses. Without them, endpoints found is 87 / 89 (98%); the other two misses are routes their docs never mention (Frankfurter's `/coverage`, PokéAPI's `/meta`).
+
+### Notes on the Open-Meteo baselines
+
+- **Forecast:** the only miss is `minutely_15`, which the page documents in its 15-Minutely section, not in the parameter table.
+- **Geocoding:** complete.
+
+### Notes on the Postcodes.io baseline
+
+- **Endpoints:** all 14 found, including the 3 added by hand.
+- **Missed parameters (7):** the official file's aliases `query`, `latitude` and `longitude`, plus `filter` on `GET /postcodes`. Also `limit` and `radius` on `GET /postcodes/{postcode}/nearest`, which its docs page documents.
+- **Extras (4) are a reference gap, not extraction errors.** `filter`, `limit`, `radius` and `widesearch` on `POST /postcodes` are documented as query parameters on the bulk lookup and bulk reverse geocode pages. Neither the official file nor the additions have them. Fixing the reference needs its own approved PR, and the score will be re-run when it lands.
+- **Required/optional mismatches (4):** `q`, `lon` and `lat` on `GET /postcodes`, and `q` on `GET /places`, were extracted as required. Each is required for one mode of a route that serves several (search, or reverse geocoding), so the reference marks them optional.
+
+### Notes on the Open Library baseline
+
+- **Endpoints:** all 11 found.
+- **Extra:** `GET /a/olid/{}-M.jpg`, the covers URL, which lives on `covers.openlibrary.org` but was extracted under the main base URL.
+- **Missed parameters (4):** `title` and `author` on `/search.json`, which appear only in examples; `editions.sort`, mentioned only in the notes; and `details` on `/api/books`, described as kept for backward compatibility.
+
+### Notes on the Frankfurter baseline
 
 - **Missed:** `GET /coverage`. It is in the OpenAPI file but not on the docs page, so it cannot be found from the docs. It stays in the reference; see ADR 0005.
 - **Extras:** `/rates.csv` is a format of `/rates`. `/latest` and `/{date}` come from the v1 docs page that the crawl reached from the site root.
 - **Parameters:** 7 of the 9 misses are on `/providers/{provider}/rates`. The docs only say it "supports the same parameters as `/v2/rates`".
 - **Cost:** the crawl fetched 20 pages (the default limit), but only the home page documents v2. Each call also carries about 10,000 tokens of fixed prompt and schema.
 
-Notes on the PokéAPI baseline:
+### Notes on the PokéAPI baseline
 
 - **Found:** all 51 `/<resource>/{id}` detail endpoints, from one docs page.
 - **Missed:** the 50 list endpoints (`/pokemon`, `/ability`, …) and `/meta`.
