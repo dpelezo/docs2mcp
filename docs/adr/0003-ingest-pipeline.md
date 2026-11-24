@@ -42,6 +42,11 @@ Extraction (#5) sends documentation to Claude and asks for an `ApiSpec`. It can 
 - **Small sections** (under 80 tokens, often a heading with no text of its own) join the next section, or the previous one at the end of a page. The merged chunk is labelled honestly: a parent and its child keep the child's path; siblings get the parent they share (Frankfurter's "Time Series" and "Grouping" become one chunk under "Rates").
 - **Output:** `pages.jsonl` and `chunks.jsonl`, with sorted keys and stable IDs (`p01-c007`). The same input always produces the same bytes.
 
+### Amendment (2026-11-24): crawl depth and heading permalinks
+
+- **`--depth N`** limits the crawl to N links from a start URL; `--depth 0` ingests only the URLs given. Crawling a site root (Frankfurter) otherwise reached 19 pages that do not document the API, and those made up 92% of its tokens. Links that are not followed are reported as "beyond the depth limit".
+- **Heading permalinks are removed** after conversion: links whose text is empty, invisible or a symbol (`¶`, `#`, `§`, `🔗`) and that point at a fragment. Zero-width characters are removed from the text and from heading paths. Docusaurus sites such as Postcodes.io add one permalink per heading, which came to 9% of that API's tokens. Real links are kept, including ones with fragments.
+
 ## Consequences
 
 - Chunk quality is measured for real in #5: if ingest drops or mangles a section, extraction recall for that API falls.

@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
+    "code": "feat/ingest-depth-and-anchors (crawl depth, permalink cleanup)",
     "model": "claude-haiku-5-5",
-    "ingest": "docs2mcp ingest <the 3 pages in sources.toml> --max-pages 3 (3 pages, 25 chunks, ~8,098 tokens); the same chunks as the previous run",
+    "ingest": "docs2mcp ingest <the pages in sources.toml> --depth 0 (3 pages, 25 chunks, ~8,098 tokens)",
     "calls": 2,
     "input_tokens": 20879,
-    "output_tokens": 7439
+    "output_tokens": 6336
   },
   "api": "open_library",
   "endpoints": {

@@ -1,12 +1,12 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/same-parameters-as (shared parameters, ADR 0008)",
+    "code": "feat/ingest-depth-and-anchors (crawl depth, permalink cleanup)",
     "model": "claude-haiku-5-5",
-    "ingest": "docs2mcp ingest https://open-meteo.com/en/docs --max-pages 1 (1 page, 12 chunks, ~7,022 tokens); the same chunks as the previous run",
+    "ingest": "docs2mcp ingest <the pages in sources.toml> --depth 0 (1 page, 12 chunks, ~7,022 tokens)",
     "calls": 2,
     "input_tokens": 19178,
-    "output_tokens": 3616
+    "output_tokens": 3759
   },
   "api": "open_meteo",
   "endpoints": {
