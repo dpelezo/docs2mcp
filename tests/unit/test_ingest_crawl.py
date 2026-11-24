@@ -186,3 +186,35 @@ def test_unreachable_robots_txt_allows_everything(tmp_path: Path) -> None:
 def test_invalid_seed_is_rejected(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="not an http"):
         make_crawler(Site(SITE), tmp_path).crawl(["ftp://docs.example.com"])
+
+
+def test_depth_zero_fetches_only_the_seeds_and_reports_the_links_it_did_not_follow(
+    tmp_path: Path,
+) -> None:
+    result = make_crawler(Site(SITE), tmp_path, max_depth=0).crawl([f"{HOST}/docs"])
+
+    assert [p.url for p in result.pages] == [f"{HOST}/docs"]
+    beyond = {s.url for s in result.skipped if s.reason == "beyond the depth limit"}
+    assert {f"{HOST}/docs/a", f"{HOST}/docs/b", f"{HOST}/docs/missing"} <= beyond
+
+
+def test_depth_one_follows_links_from_the_seed_but_not_further(tmp_path: Path) -> None:
+    result = make_crawler(Site(SITE), tmp_path, max_depth=1).crawl([f"{HOST}/docs"])
+
+    urls = [p.url for p in result.pages]
+    assert urls == [f"{HOST}/docs", f"{HOST}/docs/a", f"{HOST}/docs/b"]
+    assert f"{HOST}/docs/c" in {
+        s.url for s in result.skipped if s.reason == "beyond the depth limit"
+    }
+
+
+def test_several_seeds_at_depth_zero_are_all_fetched(tmp_path: Path) -> None:
+    result = make_crawler(Site(SITE), tmp_path, max_depth=0).crawl(
+        [f"{HOST}/docs/a", f"{HOST}/docs/b"]
+    )
+    assert [p.url for p in result.pages] == [f"{HOST}/docs/a", f"{HOST}/docs/b"]
+
+
+def test_negative_depth_is_rejected(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="max_depth must be 0 or more"):
+        make_crawler(Site(SITE), tmp_path, max_depth=-1)

@@ -54,6 +54,7 @@ def ingest(
     settings: Settings,
     *,
     max_pages: int | None = None,
+    max_depth: int | None = None,
     refresh: bool = False,
     client: httpx.Client | None = None,
 ) -> IngestResult:
@@ -73,6 +74,7 @@ def ingest(
             client=http,
             cache=PageCache(settings.cache_dir / "pages"),
             max_pages=max_pages or settings.ingest_max_pages,
+            max_depth=max_depth,
             refresh=refresh,
             delay_seconds=settings.crawl_delay_seconds,
         )
