@@ -46,6 +46,12 @@ class Settings(BaseSettings):
         default=True, description="Cache the system prompt across extraction calls."
     )
 
+    # Design
+    design_max_output_tokens: int = Field(
+        default=32000, ge=1000, description="Output cap for one design reply."
+    )
+    design_max_retries: int = Field(default=2, ge=0, description="Feedback rounds per design.")
+
     def require_anthropic_key(self) -> str:
         """Return the API key, or fail with a clear message if it is missing."""
         if self.anthropic_api_key is None:

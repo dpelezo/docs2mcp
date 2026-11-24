@@ -418,14 +418,6 @@ def test_design_and_check_tools_commands(
     assert "is not a valid tools.json" in capsys.readouterr().err
 
 
-def test_task_design_is_not_available_yet(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    code = main(["design", str(SPECS / "frankfurter.json"), "--out", str(tmp_path / "t.json")])
-    assert code == 2
-    assert "#29" in capsys.readouterr().err
-
-
 def test_schema_command_prints_the_tools_schema(capsys: pytest.CaptureFixture[str]) -> None:
     assert main(["schema", "--tools"]) == 0
     assert json.loads(capsys.readouterr().out)["title"] == "ToolSet"

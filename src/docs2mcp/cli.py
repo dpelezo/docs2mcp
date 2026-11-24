@@ -11,7 +11,17 @@ from pydantic import ValidationError
 
 from docs2mcp import __version__
 from docs2mcp.config import Settings, get_settings
-from docs2mcp.design import ToolSet, direct_design, validate_toolset
+from docs2mcp.design import (
+    AnthropicDesignModel,
+    Designer,
+    DesignModel,
+    DesignReport,
+    RecordingDesignModel,
+    ReplayDesignModel,
+    ToolSet,
+    direct_design,
+    validate_toolset,
+)
 from docs2mcp.design import json_schema as tools_json_schema
 from docs2mcp.evals import (
     Reference,
@@ -118,7 +128,15 @@ def build_parser() -> argparse.ArgumentParser:
     design_cmd.add_argument(
         "--direct",
         action="store_true",
-        help="one tool per endpoint, with no LLM (the task-shaped design is not available yet)",
+        help="one tool per endpoint, with no LLM (default: Claude groups them into tasks)",
+    )
+    design_cmd.add_argument("--model", help="Claude model (default: DOCS2MCP_MODEL)")
+    design_recording = design_cmd.add_mutually_exclusive_group()
+    design_recording.add_argument(
+        "--record", type=Path, help="save every model reply in this folder"
+    )
+    design_recording.add_argument(
+        "--replay", type=Path, help="use replies saved with --record; no API calls"
     )
 
     check_cmd = commands.add_parser(
@@ -269,17 +287,47 @@ def _summary(toolset: ToolSet, spec: ApiSpec) -> str:
     )
 
 
+def build_design_model(args: argparse.Namespace, settings: Settings) -> DesignModel:
+    model_name = args.model or settings.model
+    if args.replay:
+        return ReplayDesignModel(args.replay, model_name)
+    import anthropic  # noqa: PLC0415 - only needed for live calls
+
+    client = anthropic.Anthropic(api_key=settings.require_anthropic_key())
+    model: DesignModel = AnthropicDesignModel(
+        client, model_name, max_tokens=settings.design_max_output_tokens
+    )
+    return RecordingDesignModel(model, args.record) if args.record else model
+
+
+def design_report_json(report: DesignReport) -> str:
+    data = {
+        "model": report.model,
+        "calls": report.calls,
+        "input_tokens": report.input_tokens,
+        "output_tokens": report.output_tokens,
+        "cache_read_tokens": report.cache_read_tokens,
+        "cache_write_tokens": report.cache_write_tokens,
+        "notes": report.notes,
+        "repairs": asdict(report.repairs),
+        "attempts": [asdict(a) for a in report.attempts],
+    }
+    return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
+
+
 def _run_design(args: argparse.Namespace) -> int:
     spec = ApiSpec.model_validate_json(args.spec.read_text(encoding="utf-8"))
-    if not args.direct:
-        print(
-            "Only --direct is available so far: the task-shaped design arrives with issue #29.",
-            file=sys.stderr,
+    report: DesignReport | None = None
+    if args.direct:
+        toolset = direct_design(spec)
+    else:
+        settings = get_settings()
+        designer = Designer(
+            build_design_model(args, settings), max_retries=settings.design_max_retries
         )
-        return 2
-    toolset = direct_design(spec)
+        toolset, report = designer.run(spec)
     errors = validate_toolset(toolset, spec)
-    if errors:  # a bug in the direct design, never expected
+    if errors:  # both designs guarantee a valid tool set, so this would be a bug
         print("\n".join(["The design is invalid:", *errors]), file=sys.stderr)
         return 1
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -287,6 +335,20 @@ def _run_design(args: argparse.Namespace) -> int:
         toolset.model_dump_json(indent=2, exclude_none=True) + "\n", encoding="utf-8"
     )
     print(_summary(toolset, spec))
+    if report is not None:
+        report_path = args.out.with_name("design_report.json")
+        report_path.write_text(design_report_json(report), encoding="utf-8")
+        print(
+            f"{report.calls} model calls, {report.input_tokens:,} input and "
+            f"{report.output_tokens:,} output tokens ({report.model})"
+        )
+        repairs = report.repairs
+        if repairs.dropped_tools or repairs.added_direct:
+            print(
+                f"Problems remained after {report.calls} calls: dropped "
+                f"{len(repairs.dropped_tools)} tools and added {len(repairs.added_direct)} "
+                f"direct tools. See {report_path}."
+            )
     print(f'Wrote {args.out}. Review it, set "approved": true, then run docs2mcp generate.')
     return 0
 
