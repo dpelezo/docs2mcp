@@ -1,0 +1,87 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 14081,
+  "output_tokens": 1639,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "Postcodes.io",
+    "base_urls": [
+      "https://api.postcodes.io"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "lookup_postcode",
+        "method": "GET",
+        "path": "/postcodes/{postcode}",
+        "summary": "Retrieves detailed information for a UK postcode.",
+        "description": "Matches the postcode regardless of case or spacing. Returns 404 if not found, with a terminated property if the postcode was previously active.",
+        "parameters": [
+          {
+            "name": "postcode",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "UK postcode to look up, with or without spaces.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "status",
+          "result.postcode",
+          "result.latitude",
+          "result.longitude",
+          "result.codes"
+        ],
+        "source_chunk_id": "p02-c002",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "bulk_lookup_postcodes",
+        "method": "POST",
+        "path": "/postcodes",
+        "summary": "Retrieves data for up to 100 postcodes in a single request.",
+        "description": "Send a JSON body with a postcodes array and Content-Type application/json. Postcodes that are not found have a null result.",
+        "parameters": [
+          {
+            "name": "postcodes",
+            "location": "body",
+            "type": "array",
+            "required": true,
+            "description": "Array of up to 100 postcodes to look up.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "string"
+          },
+          {
+            "name": "filter",
+            "location": "query",
+            "type": "string",
+            "required": false,
+            "description": "Comma-separated list of attributes to include in each result object.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "status",
+          "result"
+        ],
+        "source_chunk_id": "p03-c001",
+        "served_from": "https://api.postcodes.io",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

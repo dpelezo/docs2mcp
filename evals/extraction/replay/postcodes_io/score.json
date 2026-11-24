@@ -1,0 +1,214 @@
+{
+  "api": "postcodes_io",
+  "endpoints": {
+    "matched": 14,
+    "expected": 14,
+    "found": 14,
+    "recall": 1.0,
+    "precision": 1.0
+  },
+  "parameters": {
+    "matched": 24,
+    "expected": 27,
+    "found": 24,
+    "recall": 0.8889,
+    "precision": 1.0
+  },
+  "required_mismatches": 4,
+  "missing_endpoints": [],
+  "extra_endpoints": [],
+  "matched": [
+    {
+      "route": "GET /postcodes/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /postcodes",
+      "parameters": {
+        "matched": 7,
+        "expected": 10,
+        "found": 7,
+        "recall": 0.7,
+        "precision": 1.0
+      },
+      "missing": [
+        "query:filter",
+        "query:latitude",
+        "query:longitude"
+      ],
+      "extra": [],
+      "required_mismatches": [
+        "query:lat",
+        "query:lon",
+        "query:q"
+      ]
+    },
+    {
+      "route": "POST /postcodes",
+      "parameters": {
+        "matched": 4,
+        "expected": 4,
+        "found": 4,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /postcodes/{}/nearest",
+      "parameters": {
+        "matched": 2,
+        "expected": 2,
+        "found": 2,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /random/postcodes",
+      "parameters": {
+        "matched": 1,
+        "expected": 1,
+        "found": 1,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /terminated_postcodes/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /scotland/postcodes/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /outcodes/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /places",
+      "parameters": {
+        "matched": 3,
+        "expected": 3,
+        "found": 3,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": [
+        "query:q"
+      ]
+    },
+    {
+      "route": "GET /places/{}",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /random/places",
+      "parameters": {
+        "matched": 0,
+        "expected": 0,
+        "found": 0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /postcodes/{}/autocomplete",
+      "parameters": {
+        "matched": 1,
+        "expected": 1,
+        "found": 1,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /outcodes",
+      "parameters": {
+        "matched": 4,
+        "expected": 4,
+        "found": 4,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    },
+    {
+      "route": "GET /outcodes/{}/nearest",
+      "parameters": {
+        "matched": 2,
+        "expected": 2,
+        "found": 2,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "missing": [],
+      "extra": [],
+      "required_mismatches": []
+    }
+  ]
+}

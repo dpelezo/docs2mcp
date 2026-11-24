@@ -1,0 +1,239 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 15307,
+  "output_tokens": 2755,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "PokéAPI",
+    "base_urls": [
+      "https://pokeapi.co/api/v2"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_pokemon_location_areas",
+        "method": "GET",
+        "path": "/pokemon/{id_or_name}/encounters",
+        "summary": "Lists the location areas where a Pokémon can be encountered.",
+        "description": "Pokémon Location Areas are areas where Pokémon can be found.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the Pokémon.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "location_area.name",
+          "location_area.url",
+          "version_details.max_chance",
+          "version_details.encounter_details.min_level",
+          "version_details.encounter_details.max_level",
+          "version_details.encounter_details.chance",
+          "version_details.encounter_details.method.name",
+          "version_details.version.name"
+        ],
+        "source_chunk_id": "p01-c134",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pokemon_color",
+        "method": "GET",
+        "path": "/pokemon-color/{id_or_name}/",
+        "summary": "Returns a Pokémon color used for sorting in a Pokédex.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the Pokémon color.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "names",
+          "pokemon_species"
+        ],
+        "source_chunk_id": "p01-c136",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pokemon_form",
+        "method": "GET",
+        "path": "/pokemon-form/{id_or_name}/",
+        "summary": "Returns a Pokémon form, including its sprites, types and trigger conditions.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the Pokémon form.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "form_name",
+          "pokemon.name",
+          "sprites.front_default",
+          "types",
+          "version_group.name",
+          "trigger_conditions"
+        ],
+        "source_chunk_id": "p01-c138",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pokemon_habitat",
+        "method": "GET",
+        "path": "/pokemon-habitat/{id_or_name}/",
+        "summary": "Returns a Pokémon habitat and the species found in it.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the Pokémon habitat.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "names",
+          "pokemon_species"
+        ],
+        "source_chunk_id": "p01-c143",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pokemon_shape",
+        "method": "GET",
+        "path": "/pokemon-shape/{id_or_name}/",
+        "summary": "Returns a Pokémon shape used for sorting in a Pokédex.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the Pokémon shape.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "awesome_names",
+          "names",
+          "pokemon_species"
+        ],
+        "source_chunk_id": "p01-c145",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pokemon_species",
+        "method": "GET",
+        "path": "/pokemon-species/{id_or_name}/",
+        "summary": "Returns a Pokémon species, which forms the basis for its varieties.",
+        "description": "Attributes of a species are shared across all of its varieties of Pokémon.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the Pokémon species.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "growth_rate.name",
+          "color.name",
+          "shape.name",
+          "habitat",
+          "generation.name",
+          "varieties"
+        ],
+        "source_chunk_id": "p01-c148",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_stat",
+        "method": "GET",
+        "path": "/stat/{id_or_name}/",
+        "summary": "Returns a battle stat and the moves, natures and items that affect it.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the stat.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "game_index",
+          "affecting_moves",
+          "affecting_natures",
+          "affecting_items",
+          "move_damage_class.name"
+        ],
+        "source_chunk_id": "p01-c152",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

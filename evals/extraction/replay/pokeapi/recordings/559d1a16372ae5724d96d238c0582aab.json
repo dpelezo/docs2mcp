@@ -1,0 +1,91 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 11522,
+  "output_tokens": 1259,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "PokéAPI",
+    "base_urls": [
+      "https://pokeapi.co/api/v2"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_type",
+        "method": "GET",
+        "path": "/type/{id_or_name}/",
+        "summary": "Returns a type with its damage relations, generations, Pokémon and moves.",
+        "description": "Each type has damage relations listing which types it is super effective against, not very effective against, or ineffective against.",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The numeric id or the name of the type.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "damage_relations.double_damage_to",
+          "damage_relations.half_damage_to",
+          "damage_relations.no_damage_to",
+          "damage_relations.double_damage_from",
+          "damage_relations.half_damage_from",
+          "damage_relations.no_damage_from",
+          "past_damage_relations",
+          "game_indices",
+          "generation",
+          "move_damage_class",
+          "names",
+          "pokemon",
+          "moves"
+        ],
+        "source_chunk_id": "p01-c156",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_language",
+        "method": "GET",
+        "path": "/language/{id_or_name}/",
+        "summary": "Returns a language used for translations of API resource information.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "The numeric id or the name of the language.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [
+          "id",
+          "name",
+          "official",
+          "iso639",
+          "iso3166",
+          "names"
+        ],
+        "source_chunk_id": "p01-c160",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

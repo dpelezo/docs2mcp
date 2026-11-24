@@ -1,0 +1,284 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 15700,
+  "output_tokens": 2936,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "PokéAPI",
+    "base_urls": [
+      "https://pokeapi.co/api/v2"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": [
+      {
+        "operation": "get_item",
+        "method": "GET",
+        "path": "/item/{id_or_name}/",
+        "summary": "Returns an item by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the item.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c053",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_item_attribute",
+        "method": "GET",
+        "path": "/item-attribute/{id_or_name}/",
+        "summary": "Returns an item attribute by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the item attribute.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c058",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_item_category",
+        "method": "GET",
+        "path": "/item-category/{id_or_name}/",
+        "summary": "Returns an item category by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the item category.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c060",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_item_fling_effect",
+        "method": "GET",
+        "path": "/item-fling-effect/{id_or_name}/",
+        "summary": "Returns an item fling effect by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the fling effect.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c062",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_item_price",
+        "method": "GET",
+        "path": "/item-price/{id_or_name}/",
+        "summary": "Returns the purchase and sell prices of an item by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the item price.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c064",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_item_pocket",
+        "method": "GET",
+        "path": "/item-pocket/{id_or_name}/",
+        "summary": "Returns an item pocket by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the item pocket.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c066",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_location",
+        "method": "GET",
+        "path": "/location/{id_or_name}/",
+        "summary": "Returns a location by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the location.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c068",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_location_area",
+        "method": "GET",
+        "path": "/location-area/{id_or_name}/",
+        "summary": "Returns a location area by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the location area.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c070",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_pal_park_area",
+        "method": "GET",
+        "path": "/pal-park-area/{id_or_name}/",
+        "summary": "Returns a Pal Park area by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the Pal Park area.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c075",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_region",
+        "method": "GET",
+        "path": "/region/{id_or_name}/",
+        "summary": "Returns a region by its id or name.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_or_name",
+            "location": "path",
+            "type": "string",
+            "required": true,
+            "description": "Numeric id or name of the region.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c078",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      },
+      {
+        "operation": "get_machine",
+        "method": "GET",
+        "path": "/machine/{id}/",
+        "summary": "Returns a machine by its id.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "location": "path",
+            "type": "integer",
+            "required": true,
+            "description": "Numeric id of the machine.",
+            "default_value": "",
+            "allowed_values": [],
+            "items_type": "none"
+          }
+        ],
+        "response_key_fields": [],
+        "source_chunk_id": "p01-c080",
+        "served_from": "https://pokeapi.co/api/v2",
+        "same_parameters_as": [],
+        "for_every_resource": false
+      }
+    ]
+  }
+}

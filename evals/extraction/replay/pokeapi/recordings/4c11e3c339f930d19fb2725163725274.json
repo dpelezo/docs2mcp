@@ -1,0 +1,19 @@
+{
+  "model": "claude-haiku-5-5",
+  "input_tokens": 14255,
+  "output_tokens": 342,
+  "cache_read_tokens": 3185,
+  "cache_write_tokens": 0,
+  "output": {
+    "api_name": "PokéAPI",
+    "base_urls": [
+      "https://pokeapi.co/api/v2"
+    ],
+    "auth": {
+      "type": "none",
+      "location": "none",
+      "name": ""
+    },
+    "endpoints": []
+  }
+}
