@@ -29,7 +29,11 @@ API's base URL.
 - same_parameters_as: when the docs say this endpoint accepts the same parameters as other \
 endpoints ("supports the same parameters as /v2/rates", "takes the same filters as search"), \
 list those endpoints' paths as written. Still list any parameters documented for this endpoint \
-itself; the shared ones are copied in code. Use an empty list otherwise.
+itself; the shared ones are copied in code. Use an empty list otherwise. When one sentence \
+covers a group of routes and names several endpoints, give each route only the endpoint it \
+mirrors: if "/teams/{id}/users and /teams/{id}/users/{user_id} take the same parameters as \
+/users and /users/{user_id}", the list route gets ["/users"] and the single-item route gets \
+["/users/{user_id}"], never both.
 - for_every_resource: true only when the docs describe one generic route that works for every \
 resource of the API (for example "calling any endpoint without an id returns a list: \
 GET /{endpoint}/"). Record such a route once, with the resource as its first placeholder; it is \
