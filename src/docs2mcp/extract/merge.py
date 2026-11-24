@@ -11,6 +11,10 @@ Safe fixes:
 - a required parameter with a default becomes optional;
 - a default outside its allowed values is dropped;
 - duplicate endpoints are merged, and repeated operation names get a suffix.
+
+One transformation is not a repair: a route Claude flags as working for every
+resource (`GET /{endpoint}`) is expanded into one route per resource the docs
+document (`GET /pokemon`, `GET /ability`, ...). See ADR 0006.
 """
 
 import json
@@ -193,6 +197,66 @@ def describe_error(wire: WireEndpoint, error: ValidationError) -> str:
 
 def _route_key(endpoint: Endpoint) -> tuple[str, str]:
     return (endpoint.method, _PLACEHOLDER.sub("{}", endpoint.path))
+
+
+_TEMPLATE = re.compile(r"^/\{([^{}/]+)\}(/.*)?$")
+
+
+def expand_resource_templates(
+    endpoints: Sequence[Endpoint], templates: Sequence[Endpoint], expanded: list[str]
+) -> list[Endpoint]:
+    """Replace each resource template with one route per resource.
+
+    The resources are the first path segments of the other endpoints that have
+    more than one segment (`pokemon` from `/pokemon/{id}`). The template's first
+    placeholder becomes the resource, and its path parameter is dropped; every
+    other parameter is kept. Routes that already exist are not added again. A
+    template that cannot be expanded is kept as documented, with a note.
+    """
+    result = list(endpoints)
+    known = {_route_key(e) for e in result}
+    resources: list[str] = []
+    for endpoint in endpoints:
+        segments = endpoint.path.strip("/").split("/")
+        if len(segments) > 1 and "{" not in segments[0] and segments[0] not in resources:
+            resources.append(segments[0])
+
+    for template in templates:
+        where = f"{template.method} {template.path}"
+        match = _TEMPLATE.match(template.path)
+        if match is None or not resources:
+            reason = (
+                "its path does not start with a placeholder"
+                if match is None
+                else ("no other endpoint names a resource")
+            )
+            expanded.append(f"{where}: kept as documented; {reason}")
+            if _route_key(template) not in known:
+                known.add(_route_key(template))
+                result.append(template)
+            continue
+        placeholder, rest = match.group(1), match.group(2) or ""
+        params = [
+            p
+            for p in template.parameters
+            if not (p.location is ParamLocation.PATH and p.name == placeholder)
+        ]
+        added = 0
+        for resource in resources:
+            data = template.model_dump(mode="json") | {
+                "id": identifier(f"{template.id} {resource}"),
+                "path": f"/{resource}{rest}",
+                "summary": f"{template.summary.rstrip('.')} ({resource}).",
+                "parameters": [p.model_dump(mode="json") for p in params],
+            }
+            endpoint = Endpoint.model_validate(data)
+            if _route_key(endpoint) in known:
+                continue
+            known.add(_route_key(endpoint))
+            result.append(endpoint)
+            added += 1
+        expanded.append(f"{where}: expanded into {added} routes, one per resource")
+    return result
 
 
 def merge_endpoints(
