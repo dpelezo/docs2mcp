@@ -245,6 +245,22 @@ def test_nothing_approved_means_nothing_is_generated(tmp_path: Path) -> None:
     assert not (tmp_path / "out").exists()
 
 
+@pytest.mark.parametrize(
+    ("api", "env"),
+    [
+        ("Open-Meteo Weather Forecast API", "OPEN_METEO_WEATHER_FORECAST_API_KEY"),
+        ("PokéAPI", "POKEAPI_API_KEY"),
+    ],
+)
+def test_api_key_variable_names(api: str, env: str, tmp_path: Path) -> None:
+    keyed = toolset(POKEMON).model_copy(
+        update={"api": api, "auth": AuthScheme(type=AuthType.BEARER, location="header")}
+    )
+    generate(keyed, SPEC, tmp_path)
+    assert f"API_KEY_ENV = {env!r}" in (tmp_path / "server.py").read_text()
+    assert f"Set `{env}` to send your API key." in (tmp_path / "README.md").read_text()
+
+
 def test_report_and_readme_list_every_gap(tmp_path: Path) -> None:
     generate(toolset(POKEMON, SPRITE), SPEC, tmp_path)
 
@@ -354,14 +370,14 @@ def test_api_keys_come_from_the_environment(
     set_transport(module, echo(requests))
 
     monkeypatch.delenv("POKEAPI_API_KEY", raising=False)
-    _, missing = run(module, [("pokemon", {"name": "ditto"})])
-    assert missing[0].is_error
-    assert "set POKEAPI_API_KEY" in missing[0].content[0].text
+    _, without = run(module, [("pokemon", {"name": "ditto"})])
+    assert not without[0].is_error
+    assert "key" not in requests[0].url.params
 
     monkeypatch.setenv("POKEAPI_API_KEY", "secret")
     _, ok = run(module, [("pokemon", {"name": "ditto"})])
     assert not ok[0].is_error
-    assert requests[0].url.params["key"] == "secret"
+    assert requests[1].url.params["key"] == "secret"
 
 
 @pytest.mark.parametrize(
