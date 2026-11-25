@@ -2,7 +2,7 @@
 
 Do agents finish more tasks with docs2mcp's task-shaped tools than with a direct conversion? This eval answers that. The plan and its reasons are in [ADR 0013](../../docs/adr/0013-agent-eval.md).
 
-**Status:** the task format, the scorer (#46), the 100 tasks (#47) and the condition A designs (#48) are in place. Recorded responses (#49), the runner (#50) and the results (#51) come next.
+**Status:** the task format, the scorer (#46), the 100 tasks (#47), the condition A designs (#48) and recorded responses (#49) are in place. The runner (#50) and the results (#51) come next.
 
 ## Task files
 
@@ -86,6 +86,27 @@ uv run docs2mcp generate evals/agent/conditions/openapi/postcodes_io/tools.json 
 ```
 
 The Postcodes.io gaps take away the direct route for some tasks in condition A: 009 (needs `radius`), 010 (autocomplete), 013 and 019 (place search) and 016 (nearest outcodes). 015 and 017 need one lookup per postcode instead of a bulk request. That is part of what the eval measures: documentation can say more than the official file.
+
+## Recorded responses
+
+Every eval server runs through `scripts/eval_server.py`. It loads the generated `server.py` unchanged and sets its `transport` hook to a cassette (`src/docs2mcp/evals/cassette.py`):
+
+```bash
+uv run python -m scripts.eval_server servers/openapi/frankfurter \
+    --cassette recordings/agent/frankfurter.jsonl.gz --mode cache
+```
+
+| Mode | Recorded request | New request |
+|---|---|---|
+| `record` | asks the API again | asks the API and records |
+| `cache` (default) | replays | asks the API and records |
+| `replay` | replays | fails with a "not recorded" tool error |
+
+- **One cassette per API**, shared by all three conditions, so the same request gets the same data whichever server makes it.
+- **Matching:** requests match on method, URL with sorted query parameters, and JSON body.
+- **No secrets:** headers are never stored, and query parameters whose name contains "key", "token" or "secret" are blanked.
+- **Format:** gzip-compressed JSON Lines. A PokéAPI `/pokemon` response is about 370 KB of JSON.
+- **Where they live:** `recordings/` is git-ignored, so cassettes stay on the machine that made them. Responses from the AGPL-licensed sites (Open Library, Open-Meteo) are never committed. Whether to commit the other three for CI replay is decided with the results (#51).
 
 ## Checking task files
 
