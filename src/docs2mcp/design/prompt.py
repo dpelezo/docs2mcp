@@ -45,6 +45,11 @@ resource, such as "pokemon" or "postcode_lookup", not after HTTP methods.
 which arguments select which behaviour. At most 1000 characters. Argument descriptions say \
 what to pass, with the format or an example where it is not obvious. At most 300 characters.
 - Use only what the spec says. Never invent endpoints, parameters, limits, values or behaviour.
+- Descriptions restate and combine the spec's summaries, descriptions and parameter text. Do \
+not add facts from your own knowledge of the API, even true ones: no lists of what a response \
+contains, no expansions of abbreviations, no explanations of the domain beyond the spec. \
+Example argument values that show a format are fine, and so is advice on which argument or \
+tool to use.
 - Constants are for parameters that must always take one value on a route; usually there are \
 none.
 """
