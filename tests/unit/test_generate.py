@@ -419,6 +419,46 @@ def test_an_argument_no_matching_route_takes_is_named_not_dropped_silently(
     )
 
 
+def test_redirects_on_the_api_host_are_followed(pokemon_server: ModuleType) -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        if request.url.path == "/api/v2/pokemon/ditto":
+            return httpx.Response(302, headers={"location": "/api/v2/pokemon/132"})
+        return httpx.Response(200, json={"name": "ditto", "id": 132})
+
+    set_transport(pokemon_server, handler)
+    _, results = run(pokemon_server, [("pokemon", {"name": "ditto"})])
+    assert not results[0].is_error
+    assert json.loads(results[0].content[0].text) == {"name": "ditto", "id": 132}
+    assert [r.url.path for r in requests] == ["/api/v2/pokemon/ditto", "/api/v2/pokemon/132"]
+    assert requests[1].headers["user-agent"] == requests[0].headers["user-agent"]
+
+
+@pytest.mark.parametrize(
+    ("location", "message"),
+    [
+        ("https://evil.example.dev/steal", "redirected to another host, evil.example.dev"),
+        ("/api/v2/pokemon/ditto", "More than 5 redirects"),
+    ],
+)
+def test_redirects_off_the_host_or_in_a_loop_are_refused(
+    pokemon_server: ModuleType, location: str, message: str
+) -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(302, headers={"location": location})
+
+    set_transport(pokemon_server, handler)
+    _, results = run(pokemon_server, [("pokemon", {"name": "ditto"})])
+    assert results[0].is_error
+    assert message in results[0].content[0].text
+    assert all(r.url.host == "pokeapi.co" for r in requests)
+
+
 def test_schema_types_enums_and_required(pokemon_server: ModuleType) -> None:
     listed, _ = run(pokemon_server, [])
     sprite = next(t for t in listed if t.name == "sprite")

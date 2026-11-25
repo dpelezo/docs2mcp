@@ -20,6 +20,7 @@ from pydantic import Field
 BASE_URL = {{ base_url | py }}
 MAX_RESULT_CHARS = int(os.environ.get("DOCS2MCP_MAX_RESULT_CHARS", "{{ max_result_chars }}"))
 TIMEOUT_SECONDS = float(os.environ.get("DOCS2MCP_TIMEOUT_SECONDS", "30"))
+MAX_REDIRECTS = 5
 API_KEY_ENV = {{ auth.env | py }}
 USER_AGENT = "docs2mcp-generated-server/{{ version }}"
 
@@ -93,7 +94,7 @@ def _choose(tool: str, given: dict[str, Any]) -> tuple[Route, list[str]]:
 
 
 def call(tool: str, arguments: dict[str, Any]) -> str:
-    """Take the first route whose required arguments are given, call it, and return JSON text."""
+    """Pick the route for these arguments, call it, and return the response as text."""
     given = {name: value for name, value in arguments.items() if value is not None}
     route, unused = _choose(tool, given)
     path = route["path"]
@@ -123,6 +124,7 @@ def call(tool: str, arguments: dict[str, Any]) -> str:
             response = client.request(
                 route["method"], path, params=query, headers=headers, json=body or None
             )
+            response = _follow(client, response)
     except httpx.HTTPError as error:
         raise ToolError(f"{route['method']} {path} failed: {error}") from error
     if response.is_error:
@@ -137,6 +139,25 @@ def call(tool: str, arguments: dict[str, Any]) -> str:
     if unused:
         text += f"\n[Not used by {route['method']} {route['path']}: {', '.join(unused)}.]"
     return text
+
+
+def _follow(client: httpx.Client, response: httpx.Response) -> httpx.Response:
+    """Follow redirects on the API's own host, up to MAX_REDIRECTS.
+
+    A redirect to another host is refused, so headers such as an API key never
+    leave the API. Open Library's /isbn/ answers with a redirect, for example.
+    """
+    home = httpx.URL(BASE_URL).host
+    for _ in range(MAX_REDIRECTS):
+        target = response.next_request
+        if target is None:
+            return response
+        if target.url.host != home:
+            raise ToolError(f"The API redirected to another host, {target.url.host}; not followed")
+        response = client.send(target)
+    if response.next_request is not None:
+        raise ToolError(f"More than {MAX_REDIRECTS} redirects; stopped")
+    return response
 
 
 def _cut(text: str) -> str:
