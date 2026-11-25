@@ -1,19 +1,29 @@
 {
-  "model": "claude-sonnet-5-5",
-  "input_tokens": 6209,
-  "output_tokens": 4709,
-  "cache_read_tokens": 3154,
+  "model": "claude-haiku-5-5",
+  "input_tokens": 6325,
+  "output_tokens": 12948,
+  "cache_read_tokens": 3270,
   "cache_write_tokens": 3051,
   "output": {
     "tools": [
       {
         "name": "postcode_lookup",
-        "description": "Get detailed data for one UK postcode. Case and spacing are ignored. Returns 404 if not found; the response has a terminated property if the postcode was previously active.",
+        "description": "Looks up UK postcodes. Pass postcode to get one postcode's detailed information, matched regardless of case or spacing. Returns 404 if not found, and a terminated property if the postcode was previously active. Pass postcodes (up to 100) for a bulk lookup in one request; postcodes not found have a null result. For bulk lookups, filter limits which attributes each result includes.",
         "arguments": [
           {
             "name": "postcode",
-            "description": "UK postcode to look up, with or without spaces, e.g. 'SW1A 1AA'.",
-            "required": true
+            "description": "UK postcode to look up, with or without spaces, e.g. E1W1UU. Use for a single postcode.",
+            "required": false
+          },
+          {
+            "name": "postcodes",
+            "description": "JSON array of up to 100 UK postcode strings for a bulk lookup, e.g. [\"SW1A 1AA\",\"M1 1AE\"]. Use instead of postcode.",
+            "required": false
+          },
+          {
+            "name": "filter",
+            "description": "Comma-separated attribute names to include in each result object, for bulk lookups.",
+            "required": false
           }
         ],
         "routes": [
@@ -30,50 +40,11 @@
             ],
             "constants": [],
             "omitted": []
-          }
-        ]
-      },
-      {
-        "name": "bulk_postcode_lookup",
-        "description": "Bulk request for up to 100 postcodes in one call. Postcodes not found get a null result. Both postcodes and geolocations must be provided. For a single postcode use postcode_lookup.",
-        "arguments": [
-          {
-            "name": "postcodes",
-            "description": "Array of up to 100 postcode strings.",
-            "required": true
           },
-          {
-            "name": "geolocations",
-            "description": "Array of up to 100 objects, each with longitude and latitude.",
-            "required": true
-          },
-          {
-            "name": "filter",
-            "description": "Comma-separated attributes to include in each result object, e.g. 'postcode,longitude,latitude'.",
-            "required": false
-          },
-          {
-            "name": "limit",
-            "description": "Maximum postcodes returned per location; must be less than 100. Default 10.",
-            "required": false
-          },
-          {
-            "name": "radius",
-            "description": "Search radius in metres; must be less than 2000. Default 100.",
-            "required": false
-          },
-          {
-            "name": "widesearch",
-            "description": "If true, extends search radius up to 20km, returning at most 10 results.",
-            "required": false
-          }
-        ],
-        "routes": [
           {
             "endpoint": "bulk_lookup_postcodes",
             "requires": [
-              "postcodes",
-              "geolocations"
+              "postcodes"
             ],
             "arguments": [
               {
@@ -81,74 +52,72 @@
                 "parameter": "postcodes"
               },
               {
-                "argument": "geolocations",
-                "parameter": "geolocations"
-              },
-              {
                 "argument": "filter",
                 "parameter": "filter"
-              },
-              {
-                "argument": "limit",
-                "parameter": "limit"
-              },
-              {
-                "argument": "radius",
-                "parameter": "radius"
-              },
-              {
-                "argument": "widesearch",
-                "parameter": "widesearch"
               }
             ],
-            "constants": [],
-            "omitted": []
+            "constants": [
+              {
+                "parameter": "geolocations",
+                "value_json": "[]"
+              }
+            ],
+            "omitted": [
+              {
+                "parameter": "limit",
+                "reason": "only applies to geolocation searches"
+              },
+              {
+                "parameter": "radius",
+                "reason": "only applies to geolocation searches"
+              },
+              {
+                "parameter": "widesearch",
+                "reason": "only applies to geolocation searches"
+              }
+            ]
           }
         ]
       },
       {
         "name": "postcode_search",
-        "description": "Search postcodes by query string near a longitude/latitude. Each result includes a distance in metres from the given coordinates. widesearch extends to 20km (max 10 results, ignores radius and limit).",
+        "description": "Searches UK postcodes matching a query string around a required longitude and latitude. Each result includes a distance in metres from those coordinates. Set widesearch to true for a wide area search up to 20km returning at most 10 results; this ignores radius and limit.",
         "arguments": [
           {
             "name": "q",
-            "description": "The search query string.",
+            "description": "The search query string for postcodes.",
             "required": true
           },
           {
             "name": "lon",
-            "description": "Longitude, WGS84 value between -180 and 180.",
+            "description": "Longitude, a WGS84 value between -180 and 180.",
             "required": true
           },
           {
             "name": "lat",
-            "description": "Latitude, WGS84 value between -90 and 90.",
+            "description": "Latitude, a WGS84 value between -90 and 90.",
             "required": true
           },
           {
             "name": "limit",
-            "description": "Maximum results, max 100. Default 10.",
+            "description": "Maximum number of results to return, max 100.",
             "required": false
           },
           {
             "name": "radius",
-            "description": "Search radius in metres, max 2000. Default 100.",
+            "description": "Search radius in metres, max 2000.",
             "required": false
           },
           {
             "name": "widesearch",
-            "description": "If true, wide area search up to 20km, at most 10 results.",
+            "description": "true for a wide area search up to 20km returning at most 10 results; ignores radius and limit.",
             "required": false
           }
         ],
         "routes": [
           {
             "endpoint": "query_postcodes",
-            "requires": [
-              "q",
-              "lon",
-              "lat"
-            ],
+            "requires": [],
             "arguments": [
               {
                 "argument": "q",
@@ -186,31 +155,29 @@
         ]
       },
       {
-        "name": "nearest_postcodes",
-        "description": "List postcodes nearest to a given postcode, ordered by distance. Returns 404 if the input postcode is not found.",
+        "name": "postcode_nearest",
+        "description": "Finds UK postcodes nearest to a given postcode, ordered by distance. Returns 404 if the input postcode is not found.",
         "arguments": [
           {
             "name": "postcode",
-            "description": "The postcode to search from, e.g. 'AB10 1XG'.",
+            "description": "The postcode to search from, e.g. E1W1UU.",
             "required": true
           },
           {
             "name": "limit",
-            "description": "Maximum postcodes to return, max 100. Default 10.",
+            "description": "Maximum number of postcodes to return, max 100.",
             "required": false
           },
           {
             "name": "radius",
-            "description": "Search radius in metres, max 2000. Default 100.",
+            "description": "Search radius in metres, max 2000.",
             "required": false
           }
         ],
         "routes": [
           {
             "endpoint": "find_nearest_postcodes",
-            "requires": [
-              "postcode"
-            ],
+            "requires": [],
             "arguments": [
               {
                 "argument": "postcode",
@@ -232,25 +199,23 @@
       },
       {
         "name": "postcode_autocomplete",
-        "description": "Complete a partial postcode: returns postcodes matching the given prefix.",
+        "description": "Lists UK postcodes matching a partial postcode, for suggesting completions while a postcode is being typed.",
         "arguments": [
           {
             "name": "postcode",
-            "description": "Partial postcode to match, e.g. 'SW1A'.",
+            "description": "The partial postcode to match.",
             "required": true
           },
           {
             "name": "limit",
-            "description": "Maximum matches, must be less than 100. Default 10.",
+            "description": "Maximum number of postcode matches to return, must be less than 100.",
             "required": false
           }
         ],
         "routes": [
           {
             "endpoint": "autocomplete_postcode",
-            "requires": [
-              "postcode"
-            ],
+            "requires": [],
             "arguments": [
               {
                 "argument": "postcode",
@@ -268,11 +233,11 @@
       },
       {
         "name": "random_postcode",
-        "description": "Get a random postcode with all its data, optionally restricted to an outcode. An invalid outcode returns null.",
+        "description": "Returns a random UK postcode with all its available data. Optionally pass outcode to pick a random postcode from that outcode; an invalid outcode returns null.",
         "arguments": [
           {
             "name": "outcode",
-            "description": "Optional outcode to restrict to, e.g. 'CM8' or 'SW1'.",
+            "description": "Outcode to filter random postcodes by, e.g. CM8 or SW1.",
             "required": false
           }
         ],
@@ -292,21 +257,69 @@
         ]
       },
       {
+        "name": "terminated_postcode_lookup",
+        "description": "Looks up a terminated UK postcode, one that is no longer in use. Matches input with or without the space and in any letter case. Returns 404 if not found.",
+        "arguments": [
+          {
+            "name": "postcode",
+            "description": "The terminated UK postcode, e.g. E1W1UU.",
+            "required": true
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_terminated_postcode",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "postcode",
+                "parameter": "postcode"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "scottish_postcode_lookup",
+        "description": "Looks up the Scottish Postcode Directory record for a Scottish postcode. Returns 404 if the postcode is not in the SPD; a 404 with the message Postcode exists in ONSPD but not in SPD means it is only in ONSPD.",
+        "arguments": [
+          {
+            "name": "postcode",
+            "description": "The Scottish postcode, e.g. AB101XG.",
+            "required": true
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_scottish_postcode",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "postcode",
+                "parameter": "postcode"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
         "name": "outcode_lookup",
-        "description": "Get detailed information about a UK outward code (first half of a postcode). Returns 404 if not found.",
+        "description": "Retrieves detailed information about a UK outward code, the first half of a postcode. Matching is case-insensitive. Returns 404 if the outward code is not found.",
         "arguments": [
           {
             "name": "outcode",
-            "description": "UK outward code, case-insensitive, e.g. 'BR8'.",
+            "description": "UK outward code, the first half of a postcode, e.g. BR8.",
             "required": true
           }
         ],
         "routes": [
           {
             "endpoint": "lookup_outcode",
-            "requires": [
-              "outcode"
-            ],
+            "requires": [],
             "arguments": [
               {
                 "argument": "outcode",
@@ -319,32 +332,32 @@
         ]
       },
       {
-        "name": "nearest_outcodes",
-        "description": "Find nearest outcodes ordered by proximity, either to a given outcode (pass outcode) or to a coordinate (pass lon and lat). Results have the same shape as outcode lookup.",
+        "name": "outcode_nearest",
+        "description": "Finds UK outcodes nearest to an outcode, or nearest to a longitude and latitude pair, ordered by proximity. Pass outcode to find its neighbours (404 if not found). Pass lon and lat to find outcodes nearest to coordinates; these results have the same shape as an outcode lookup.",
         "arguments": [
           {
             "name": "outcode",
-            "description": "Outcode to find neighbours of, e.g. 'NW1'. Returns 404 if not found.",
+            "description": "The outcode to find neighbours of, e.g. NW1. Use instead of lon and lat.",
             "required": false
           },
           {
             "name": "lon",
-            "description": "Longitude, WGS84 between -180 and 180. Use with lat.",
+            "description": "Longitude, a WGS84 value between -180 and 180. Use together with lat.",
             "required": false
           },
           {
             "name": "lat",
-            "description": "Latitude, WGS84 between -90 and 90. Use with lon.",
+            "description": "Latitude, a WGS84 value between -90 and 90. Use together with lon.",
             "required": false
           },
           {
             "name": "limit",
-            "description": "Maximum outcodes returned, max 100. Default 10.",
+            "description": "Maximum number of outcodes returned, max 100.",
             "required": false
           },
           {
             "name": "radius",
-            "description": "Search radius in metres, max 25000. Default 5000.",
+            "description": "Search radius in metres, max 25000.",
             "required": false
           }
         ],
@@ -401,22 +414,22 @@
         ]
       },
       {
-        "name": "places",
-        "description": "GB places: pass code to fetch one place by OSGB code, pass q to search places by name (full-text, falling back to prefix; up to 100), or pass nothing for a random place with all its data.",
+        "name": "place_lookup",
+        "description": "Looks up GB places. Pass code to get one place by its OSGB code; returns 404 if not found. Pass q to search places by name: full-text match on primary and secondary names, falling back to prefix matching, returning an empty array or up to 100 places.",
         "arguments": [
           {
             "name": "code",
-            "description": "OSGB code of a place, e.g. 'osgb4000000074564391'. Returns 404 if not found.",
+            "description": "OSGB code of the place, e.g. osgb4000000074564391. Use instead of q.",
             "required": false
           },
           {
             "name": "q",
-            "description": "Search query matched against primary and secondary place names.",
+            "description": "The search query string matched against place names. Use instead of code.",
             "required": false
           },
           {
             "name": "limit",
-            "description": "Maximum search results, max 100. Default 10. Only used with q.",
+            "description": "Maximum number of search results to return, max 100.",
             "required": false
           }
         ],
@@ -457,65 +470,18 @@
                 "reason": "alias of q"
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "name": "random_place",
+        "description": "Returns a random GB place with all its data. Takes no arguments.",
+        "arguments": [],
+        "routes": [
           {
             "endpoint": "get_random_place",
             "requires": [],
             "arguments": [],
-            "constants": [],
-            "omitted": []
-          }
-        ]
-      },
-      {
-        "name": "terminated_postcode_lookup",
-        "description": "Look up a terminated (no longer in use) UK postcode. Case and spacing are ignored. Returns 404 if not found.",
-        "arguments": [
-          {
-            "name": "postcode",
-            "description": "The terminated UK postcode, e.g. 'E1W1UU'.",
-            "required": true
-          }
-        ],
-        "routes": [
-          {
-            "endpoint": "get_terminated_postcode",
-            "requires": [
-              "postcode"
-            ],
-            "arguments": [
-              {
-                "argument": "postcode",
-                "parameter": "postcode"
-              }
-            ],
-            "constants": [],
-            "omitted": []
-          }
-        ]
-      },
-      {
-        "name": "scottish_postcode_lookup",
-        "description": "Look up the Scottish Postcode Directory record for a Scottish postcode. Returns 404 if not in the SPD (a specific message appears if it exists only in ONSPD).",
-        "arguments": [
-          {
-            "name": "postcode",
-            "description": "The Scottish postcode, e.g. 'AB101XG'.",
-            "required": true
-          }
-        ],
-        "routes": [
-          {
-            "endpoint": "get_scottish_postcode",
-            "requires": [
-              "postcode"
-            ],
-            "arguments": [
-              {
-                "argument": "postcode",
-                "parameter": "postcode"
-              }
-            ],
             "constants": [],
             "omitted": []
           }

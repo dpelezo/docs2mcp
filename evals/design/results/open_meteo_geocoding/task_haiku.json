@@ -1,0 +1,125 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-no-extra-claims",
+    "model": "claude-haiku-5-5",
+    "design": "docs2mcp design --model claude-haiku-5-5, run 1 of 3, with the no-extra-claims rule",
+    "input": "specs/open_meteo_geocoding/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_meteo_geocoding.json)",
+    "calls": 1,
+    "input_tokens": 3863,
+    "output_tokens": 2513,
+    "cache_read_tokens": 3270,
+    "cache_write_tokens": 589,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "before_and_after": {
+      "before": {
+        "prompt": "ADR 0012 as merged in #37",
+        "runs": [
+          {
+            "valid": true,
+            "tools": 1,
+            "parameters_exposed": 6,
+            "tool_list_tokens": 304,
+            "calls": 1,
+            "input_tokens": 3747,
+            "output_tokens": 1899
+          },
+          {
+            "valid": true,
+            "tools": 1,
+            "parameters_exposed": 6,
+            "tool_list_tokens": 332,
+            "calls": 1,
+            "input_tokens": 3747,
+            "output_tokens": 1594
+          },
+          {
+            "valid": true,
+            "tools": 1,
+            "parameters_exposed": 6,
+            "tool_list_tokens": 309,
+            "calls": 1,
+            "input_tokens": 3747,
+            "output_tokens": 2206
+          }
+        ]
+      },
+      "after": {
+        "prompt": "with the no-extra-claims rule",
+        "runs": [
+          {
+            "valid": true,
+            "tools": 1,
+            "parameters_exposed": 5,
+            "tool_list_tokens": 281,
+            "calls": 1,
+            "input_tokens": 3863,
+            "output_tokens": 2513
+          },
+          {
+            "valid": true,
+            "tools": 1,
+            "parameters_exposed": 7,
+            "tool_list_tokens": 311,
+            "calls": 1,
+            "input_tokens": 3863,
+            "output_tokens": 1957
+          },
+          {
+            "valid": true,
+            "tools": 1,
+            "parameters_exposed": 7,
+            "tool_list_tokens": 350,
+            "calls": 1,
+            "input_tokens": 3863,
+            "output_tokens": 2197
+          }
+        ]
+      },
+      "tools_with_unsupported_claims": {
+        "before": [
+          1,
+          0,
+          0
+        ],
+        "after": [
+          0,
+          0,
+          0
+        ],
+        "how": "word screen against the spec text, then each flagged tool judged by hand against checklist question 7"
+      }
+    }
+  },
+  "api": "Open-Meteo Geocoding API",
+  "design": "task",
+  "valid": true,
+  "endpoints": 2,
+  "covered": 2,
+  "excluded": 0,
+  "tools": 1,
+  "routes": 2,
+  "tool_list_tokens": 281,
+  "description_tokens": 198,
+  "parameters_exposed": 5,
+  "parameters_total": 7,
+  "unexposed": [
+    "search_locations.format",
+    "search_locations.apikey"
+  ],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "location",
+      "routes": 2,
+      "arguments": 5,
+      "tokens": 281
+    }
+  ],
+  "max_routes_per_tool": 2
+}
