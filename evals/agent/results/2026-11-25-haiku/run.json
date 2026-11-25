@@ -1,0 +1,39 @@
+{
+  "started": "2026-11-25T18:47:17+00:00",
+  "commit": "12c4762",
+  "model": "claude-haiku-5-5",
+  "repeats": 3,
+  "condition_repeats": {
+    "D": 1
+  },
+  "max_steps": 12,
+  "mode": "cache",
+  "runs": [
+    "A/frankfurter: 20 tasks",
+    "B/frankfurter: 20 tasks",
+    "C/frankfurter: 20 tasks",
+    "D/frankfurter: 20 tasks",
+    "B/open_library: 20 tasks",
+    "C/open_library: 20 tasks",
+    "B/open_meteo: 12 tasks",
+    "C/open_meteo: 12 tasks",
+    "B/open_meteo_geocoding: 8 tasks",
+    "C/open_meteo_geocoding: 8 tasks",
+    "A/pokeapi: 20 tasks",
+    "B/pokeapi: 20 tasks",
+    "C/pokeapi: 20 tasks",
+    "D/pokeapi: 20 tasks",
+    "A/postcodes_io: 20 tasks",
+    "B/postcodes_io: 20 tasks",
+    "C/postcodes_io: 20 tasks",
+    "D/postcodes_io: 20 tasks"
+  ],
+  "skipped": [
+    "A/open_library",
+    "D/open_library",
+    "A/open_meteo",
+    "D/open_meteo",
+    "A/open_meteo_geocoding",
+    "D/open_meteo_geocoding"
+  ]
+}

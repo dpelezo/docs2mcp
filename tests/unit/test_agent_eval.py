@@ -26,13 +26,14 @@ from docs2mcp.evals.agent import (
     format_table,
     load_runs,
     metrics_json,
+    report,
     summarize,
 )
 from docs2mcp.evals.cassette import Cassette
 from docs2mcp.evals.tasks import Exact, Task, Verdict
 from docs2mcp.generate import generate
 from docs2mcp.spec import ApiSpec
-from scripts import agent_eval, build_eval_servers
+from scripts import agent_eval, agent_report, build_eval_servers
 from scripts.eval_server import load_server
 
 pytestmark = pytest.mark.unit
@@ -444,3 +445,41 @@ def test_errored_runs_are_moved_aside_and_run_again(tmp_path: Path) -> None:
     assert load_runs(results) == [good]
     assert load_runs(tmp_path / "errored.jsonl") == [failed]
     assert agent_eval.drop_errored(results) == 0
+
+
+def test_the_report_has_the_headline_levels_b_against_c_and_every_miss() -> None:
+    ok = Outcome.OK
+    runs = [
+        _task_run("A", "pokeapi", "pokeapi-001", 1, True, [ok]),
+        _task_run("C", "pokeapi", "pokeapi-001", 1, True, [ok]),
+        _task_run("B", "pokeapi", "pokeapi-001", 1, False, [Outcome.INVALID]),
+        _task_run("C", "open_library", "open_library-001", 1, True, [ok]).model_copy(
+            update={"grounded": False}
+        ),
+        _task_run("B", "open_library", "open_library-001", 1, False, []).model_copy(
+            update={"stop": "no_answer", "answer": None}
+        ),
+    ]
+    text = report(runs, ["pokeapi"], (0.10, 0.50))
+    assert "## Every condition, on pokeapi" in text
+    assert (
+        "| A (OpenAPI direct) | 1 | 100.0% / 100.0% | 100.0% | 1.00 | 1,100 | $0.0002 | 0% |"
+        in text
+    )
+    assert (
+        "| B (docs2mcp direct) | 1 | 0.0% / 0.0% | 0.0% | 1.00 | 1,100 | $0.0002 | 100% |" in text
+    )
+    assert "| single | 100% | 0% | 100% |" in text
+    assert "| complex |  |  |  |" in text
+    assert "| open_library C | 1 |" in text
+    assert "| all B | 2 |" in text
+    assert "| open_library-001 | B1 no answer: ``; C1 not grounded: `x` |" in text
+    assert "| pokeapi-001 | B1 wrong: `x` |" in text
+
+
+def test_the_report_script_needs_runs(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    results = tmp_path / "results.jsonl"
+    assert agent_report.main([str(results)]) == 1
+    append_run(results, _task_run("C", "pokeapi", "pokeapi-001", 1, True, [Outcome.OK]))
+    assert agent_report.main([str(results)]) == 0
+    assert "## Every condition, on frankfurter, pokeapi, postcodes_io" in capsys.readouterr().out

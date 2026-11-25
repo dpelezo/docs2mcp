@@ -1,0 +1,92 @@
+{
+  "A/frankfurter": {
+    "design": "42fcd6768eff8582f9e1fb6e0dc96e79a69af03aa745c98b165a76d103ea0d35",
+    "skipped": [],
+    "spec": "acc0070910477f8e605a7e81a163f72420d7ecace0482fa498be6375df8ac0d7",
+    "tools": 9
+  },
+  "A/pokeapi": {
+    "design": "3b6aa5851631c9d180981e00f86752d7ee47b100c8fc476065c7b8738b5369c6",
+    "skipped": [],
+    "spec": "1dbfea85e3fb7d9bb9b6b9fbd9665c47bdd435783455fc32c84e4f73f7a936af",
+    "tools": 102
+  },
+  "A/postcodes_io": {
+    "design": "39c66815e55b6f22a262699cf91e81ee73d0140c78fffe9136f62fc54d268ff2",
+    "skipped": [],
+    "spec": "3568a46cc1f81f6e1a4817ff9529562a76a9cb09ae140540364d2ae6b911dd1f",
+    "tools": 11
+  },
+  "B/frankfurter": {
+    "design": "direct",
+    "skipped": [],
+    "spec": "fcc88659e4c4b4f24b1fbf312a0bc3b3df1a5ab7c30025497481caca18a9c88a",
+    "tools": 8
+  },
+  "B/open_library": {
+    "design": "direct",
+    "skipped": [],
+    "spec": "ace46b032e74bfeee54ceae7fb4eab4540bc61346baf997562c895d3c7785aa2",
+    "tools": 11
+  },
+  "B/open_meteo": {
+    "design": "direct",
+    "skipped": [],
+    "spec": "2ae7f153bf25de6f480dd8c3b041b3617a385c2e8d8cbe200cd51fc89c31bd4e",
+    "tools": 1
+  },
+  "B/open_meteo_geocoding": {
+    "design": "direct",
+    "skipped": [],
+    "spec": "ea4c9b9ce38e3ddcbe0afcb57d19b97d4288243c87513a3f9ca4dfce5ef69960",
+    "tools": 2
+  },
+  "B/pokeapi": {
+    "design": "direct",
+    "skipped": [],
+    "spec": "b3d7dae311a6c9a6e8ebd690dcd6df57d028b5ba6edd6477e76d5ad65e500b91",
+    "tools": 103
+  },
+  "B/postcodes_io": {
+    "design": "direct",
+    "skipped": [],
+    "spec": "ba0b7228294274537bab502382ad0ead445416a6d436f98a3daab973aa617a26",
+    "tools": 14
+  },
+  "C/frankfurter": {
+    "design": "cca8fadb9a981e0a7ac0fc33220c4a0ba91e2bdaf65bfbe0f5bd74d435f4dd02",
+    "skipped": [],
+    "spec": "fcc88659e4c4b4f24b1fbf312a0bc3b3df1a5ab7c30025497481caca18a9c88a",
+    "tools": 4
+  },
+  "C/open_library": {
+    "design": "5db3e5e6c043fc97823b79326147f920a8e7c369afa9e9c4b280b8f34313a5c4",
+    "skipped": [],
+    "spec": "ace46b032e74bfeee54ceae7fb4eab4540bc61346baf997562c895d3c7785aa2",
+    "tools": 9
+  },
+  "C/open_meteo": {
+    "design": "7f45f0d3cc8f3c09d12dc27717d38616893851b29021c443a4bf3bd8b883155d",
+    "skipped": [],
+    "spec": "2ae7f153bf25de6f480dd8c3b041b3617a385c2e8d8cbe200cd51fc89c31bd4e",
+    "tools": 1
+  },
+  "C/open_meteo_geocoding": {
+    "design": "f7b4cf5b66df3a9533da1aac06c51da489e1037208b2a4aea6c5b228fc801184",
+    "skipped": [],
+    "spec": "ea4c9b9ce38e3ddcbe0afcb57d19b97d4288243c87513a3f9ca4dfce5ef69960",
+    "tools": 1
+  },
+  "C/pokeapi": {
+    "design": "0e329f37553f51c1a9b01c81eb4b0301d3fdd2619226994ac8de526d0715756c",
+    "skipped": [],
+    "spec": "b3d7dae311a6c9a6e8ebd690dcd6df57d028b5ba6edd6477e76d5ad65e500b91",
+    "tools": 52
+  },
+  "C/postcodes_io": {
+    "design": "a1dab386a68bd2aa27778c3f9bce4256e2e2a5ed44d6bf2665c5c7f0d599d2a5",
+    "skipped": [],
+    "spec": "ba0b7228294274537bab502382ad0ead445416a6d436f98a3daab973aa617a26",
+    "tools": 12
+  }
+}

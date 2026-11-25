@@ -218,3 +218,77 @@ def format_table(metrics: Sequence[Metrics]) -> str:
 
 def metrics_json(metrics: Sequence[Metrics]) -> str:
     return json.dumps([m.model_dump() for m in metrics], indent=2) + "\n"
+
+
+# The report (#51)
+
+
+def _row(label: str, runs: Sequence[TaskRun], price: tuple[float, float]) -> str:
+    by_repeat: dict[int, list[TaskRun]] = defaultdict(list)
+    for run in runs:
+        by_repeat[run.repeat].append(run)
+    rates = [sum(r.verdict.passed for r in rs) / len(rs) for rs in by_repeat.values()]
+    grounded = statistics.fmean(
+        sum(r.grounded_pass for r in rs) / len(rs) for rs in by_repeat.values()
+    )
+    tokens = statistics.fmean(r.input_tokens + r.output_tokens for r in runs)
+    calls = sum(r.tool_calls for r in runs)
+    invalid = sum(r.invalid_calls for r in runs) / calls if calls else 0.0
+    cost = statistics.fmean(
+        r.input_tokens * price[0] / 1e6 + r.output_tokens * price[1] / 1e6 for r in runs
+    )
+    return (
+        f"| {label} | {len(runs)} | {min(rates):.1%} / {statistics.fmean(rates):.1%} "
+        f"| {grounded:.1%} | {calls / len(runs):.2f} | {tokens:,.0f} | ${cost:.4f} "
+        f"| {invalid:.0%} |"
+    )
+
+
+_HEADER = (
+    "| {first} | Runs | Success (min / mean) | Grounded success | Tool calls | Tokens "
+    "| Cost per task | Invalid calls |\n|---|---|---|---|---|---|---|---|"
+)
+
+
+def report(runs: Sequence[TaskRun], shared: Sequence[str], price: tuple[float, float]) -> str:
+    """The results as Markdown: the headline on the APIs every condition covers, the
+    task-shaped design against the direct one on every API, results by level, and
+    every task that failed or was not grounded. price is (input, output) per million."""
+    shared_runs = [r for r in runs if r.api in shared]
+    conditions: list[Condition] = [c for c in CONDITIONS if any(r.condition == c for r in runs)]
+    out = [
+        f"## Every condition, on {', '.join(shared)}\n",
+        _HEADER.format(first="Condition"),
+        *(
+            _row(f"{c} ({CONDITIONS[c]})", [r for r in shared_runs if r.condition == c], price)
+            for c in conditions
+            if any(r.condition == c for r in shared_runs)
+        ),
+        "\n## By level, on the same APIs\n",
+        "| Level | " + " | ".join(conditions) + " |\n|---|" + "---|" * len(conditions),
+    ]
+    for level in ("single", "multi", "complex"):
+        cells: list[str] = []
+        for c in conditions:
+            rows = [r for r in shared_runs if r.condition == c and r.level == level]
+            cells.append(f"{sum(r.verdict.passed for r in rows) / len(rows):.0%}" if rows else "")
+        out.append(f"| {level} | " + " | ".join(cells) + " |")
+    apis = sorted({r.api for r in runs})
+    out += ["\n## Direct (B) and task-shaped (C), on every API\n", _HEADER.format(first="API")]
+    for api in [*apis, "all"]:
+        for c in ("B", "C"):
+            rows = [r for r in runs if r.condition == c and api in ("all", r.api)]
+            if rows:
+                out.append(_row(f"{api} {c}", rows, price))
+    out += ["\n## Tasks that failed or were not grounded\n", "| Task | Runs |\n|---|---|"]
+    misses: dict[str, list[str]] = defaultdict(list)
+    for r in sorted(runs, key=lambda r: (r.task, r.condition, r.repeat)):
+        if not r.grounded_pass:
+            if r.verdict.passed:
+                tag = "not grounded"
+            else:
+                tag = "wrong" if r.stop == "answered" else r.stop.replace("_", " ")
+            answer = (r.answer or "").replace("|", "/")[:40]
+            misses[r.task].append(f"{r.condition}{r.repeat} {tag}: `{answer}`")
+    out += [f"| {task} | {'; '.join(items)} |" for task, items in sorted(misses.items())]
+    return "\n".join(out) + "\n"
