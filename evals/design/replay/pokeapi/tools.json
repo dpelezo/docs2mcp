@@ -53,7 +53,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "berry_firmness",
@@ -101,7 +102,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "berry_flavor",
@@ -149,7 +151,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "contest_type",
@@ -197,7 +200,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "contest_effect",
@@ -245,7 +249,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "super_contest_effect",
@@ -293,7 +298,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "currency",
@@ -341,7 +347,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "encounter_method",
@@ -389,7 +396,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "encounter_condition",
@@ -437,7 +445,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "encounter_condition_value",
@@ -485,7 +494,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "evolution_chain",
@@ -533,7 +543,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "evolution_trigger",
@@ -581,7 +592,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "evolution_variable",
@@ -629,7 +641,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "generation",
@@ -677,7 +690,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokedex",
@@ -725,7 +739,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "version",
@@ -773,7 +788,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "version_group",
@@ -821,7 +837,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "item",
@@ -869,7 +886,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "item_attribute",
@@ -917,7 +935,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "item_category",
@@ -965,7 +984,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "item_fling_effect",
@@ -1013,7 +1033,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "item_price",
@@ -1061,7 +1082,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "item_pocket",
@@ -1109,7 +1131,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "location",
@@ -1157,7 +1180,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "location_area",
@@ -1205,7 +1229,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pal_park_area",
@@ -1253,7 +1278,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "region",
@@ -1301,7 +1327,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "machine",
@@ -1349,7 +1376,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "move",
@@ -1397,7 +1425,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "move_ailment",
@@ -1445,7 +1474,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "move_battle_style",
@@ -1493,7 +1523,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "move_category",
@@ -1541,7 +1572,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "move_damage_class",
@@ -1589,7 +1621,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "move_learn_method",
@@ -1637,7 +1670,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "move_target",
@@ -1685,7 +1719,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "ability",
@@ -1733,7 +1768,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "characteristic",
@@ -1781,7 +1817,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "egg_group",
@@ -1829,7 +1866,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "gender",
@@ -1877,7 +1915,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "growth_rate",
@@ -1925,7 +1964,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "nature",
@@ -1973,7 +2013,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokeathlon_stat",
@@ -2021,7 +2062,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokemon",
@@ -2069,7 +2111,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokemon_location_areas",
@@ -2092,7 +2135,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokemon_color",
@@ -2140,7 +2184,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokemon_form",
@@ -2188,7 +2233,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokemon_habitat",
@@ -2236,7 +2282,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokemon_shape",
@@ -2284,7 +2331,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "pokemon_species",
@@ -2332,7 +2380,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "stat",
@@ -2380,7 +2429,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "type_",
@@ -2428,7 +2478,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "language",
@@ -2476,9 +2527,9 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     }
   ],
-  "excluded": [],
-  "approved": false
+  "excluded": []
 }

@@ -389,7 +389,7 @@ def test_a_valid_first_reply_needs_one_call() -> None:
     toolset, report = Designer(model).run(SPEC)
 
     assert toolset.design == "task"
-    assert not toolset.approved
+    assert toolset.approved_tools == []
     assert [t.name for t in toolset.tools] == ["pokemon", "sprite"]
     assert (report.calls, report.input_tokens, report.output_tokens) == (1, 1000, 200)
     assert report.cache_read_tokens == 10

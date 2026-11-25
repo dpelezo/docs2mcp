@@ -136,6 +136,12 @@
     "Tool": {
       "additionalProperties": false,
       "properties": {
+        "approved": {
+          "default": false,
+          "description": "Set to true by a person after review; generate skips unapproved tools.",
+          "title": "Approved",
+          "type": "boolean"
+        },
         "description": {
           "maxLength": 1000,
           "minLength": 1,
@@ -147,6 +153,20 @@
           "pattern": "^[a-z][a-z0-9_]*$",
           "title": "Name",
           "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The reviewer's note, such as why it waits.",
+          "title": "Note"
         },
         "parameters": {
           "items": {
@@ -254,12 +274,6 @@
       "minLength": 1,
       "title": "Api",
       "type": "string"
-    },
-    "approved": {
-      "default": false,
-      "description": "Set to true by a person after review; generate refuses false.",
-      "title": "Approved",
-      "type": "boolean"
     },
     "auth": {
       "$ref": "#/$defs/AuthScheme"
