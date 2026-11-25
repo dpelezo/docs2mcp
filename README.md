@@ -113,6 +113,14 @@ uv run docs2mcp measure tools/frankfurter.json --spec specs/frankfurter/spec.jso
 
 This counts tools, routes, covered and excluded endpoints, and the estimated tokens an agent loads to see the tools. A person also reviews each design against a pass/fail [checklist](evals/design/checklist.md). Baseline and rules: [evals/design](evals/design/README.md).
 
+### Check agent eval tasks
+
+```bash
+uv run docs2mcp check-tasks evals/agent/tasks/*.toml
+```
+
+The agent eval asks an agent the same questions through three servers per API, and scores each answer with a fixed rule, never a model. This command validates the task files and counts tasks by level. Format and rules: [evals/agent](evals/agent/README.md) and [ADR 0013](docs/adr/0013-agent-eval.md).
+
 ### Trace a run
 
 Tracing is off by default. Turn it on by setting either:

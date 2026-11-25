@@ -3,6 +3,7 @@
 import argparse
 import json
 import sys
+import tomllib
 from collections.abc import Callable, Sequence
 from dataclasses import asdict
 from pathlib import Path
@@ -34,6 +35,8 @@ from docs2mcp.evals import (
     score,
     score_json,
 )
+from docs2mcp.evals.tasks import json_schema as tasks_json_schema
+from docs2mcp.evals.tasks import level_counts, load_tasks
 from docs2mcp.extract import (
     AnthropicModel,
     ExtractionModel,
@@ -57,8 +60,10 @@ def build_parser() -> argparse.ArgumentParser:
     commands = parser.add_subparsers(dest="command", metavar="COMMAND")
 
     schema_cmd = commands.add_parser("schema", help="print the JSON Schema of the API spec")
-    schema_cmd.add_argument(
-        "--tools", action="store_true", help="print the schema of tools.json instead"
+    which = schema_cmd.add_mutually_exclusive_group()
+    which.add_argument("--tools", action="store_true", help="print the schema of tools.json")
+    which.add_argument(
+        "--tasks", action="store_true", help="print the schema of an agent eval task file"
     )
 
     ingest_cmd = commands.add_parser(
@@ -153,6 +158,15 @@ def build_parser() -> argparse.ArgumentParser:
     check_cmd.add_argument(
         "--spec", type=Path, required=True, help="the spec.json it was designed from"
     )
+    _add_review_commands(commands)
+    return parser
+
+
+type Commands = argparse._SubParsersAction[argparse.ArgumentParser]  # pyright: ignore[reportPrivateUsage]
+
+
+def _add_review_commands(commands: Commands) -> None:
+    """approve, measure, generate and check-tasks: the steps after design."""
     approve_cmd = commands.add_parser(
         "approve",
         help="approve or revoke tools in tools.json after review",
@@ -199,8 +213,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--spec", type=Path, required=True, help="the spec.json it was designed from"
     )
     generate_cmd.add_argument("--out", type=Path, required=True, help="folder for the server")
-    # The tool-use eval arrives with its milestone.
-    return parser
+    tasks_cmd = commands.add_parser(
+        "check-tasks",
+        help="validate agent eval task files",
+        description="Check task files against the format in ADR 0013 and count tasks by level.",
+    )
+    tasks_cmd.add_argument("files", type=Path, nargs="+", help="task files (TOML)")
 
 
 def _run_ingest(args: argparse.Namespace) -> int:
@@ -454,6 +472,24 @@ def _run_generate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_check_tasks(args: argparse.Namespace) -> int:
+    failed = 0
+    total = 0
+    for path in args.files:
+        try:
+            tasks = load_tasks(path)
+        except (ValidationError, tomllib.TOMLDecodeError) as error:
+            print(f"{path}: invalid\n{error}", file=sys.stderr)
+            failed += 1
+            continue
+        counts = level_counts(tasks)
+        total += len(tasks.task)
+        levels = ", ".join(f"{n} {level}" for level, n in counts.items())
+        print(f"{path}: {tasks.api}, {len(tasks.task)} tasks ({levels})")
+    print(f"{total} tasks in {len(args.files) - failed} valid files")
+    return 1 if failed else 0
+
+
 def _run_check_tools(args: argparse.Namespace) -> int:
     spec = ApiSpec.model_validate_json(args.spec.read_text(encoding="utf-8"))
     try:
@@ -492,6 +528,7 @@ _COMMANDS: dict[str, Callable[[argparse.Namespace], int]] = {
     "score": _run_score,
     "design": _run_design,
     "check-tools": _run_check_tools,
+    "check-tasks": _run_check_tasks,
     "approve": _run_approve,
     "generate": _run_generate,
     "measure": _run_measure,
@@ -502,7 +539,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.command == "schema":
-        sys.stdout.write(tools_json_schema() if args.tools else json_schema())
+        if args.tools:
+            sys.stdout.write(tools_json_schema())
+        elif args.tasks:
+            sys.stdout.write(tasks_json_schema())
+        else:
+            sys.stdout.write(json_schema())
         return 0
     run = _COMMANDS.get(args.command)
     if run is None:

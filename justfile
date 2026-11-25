@@ -29,10 +29,11 @@ test:
 integration:
     uv run pytest -m integration --no-cov
 
-# Regenerate docs/spec.schema.json and docs/tools.schema.json after changing the models
+# Regenerate docs/spec.schema.json, tools.schema.json and tasks.schema.json after changing the models
 schema:
     uv run docs2mcp schema > docs/spec.schema.json
     uv run docs2mcp schema --tools > docs/tools.schema.json
+    uv run docs2mcp schema --tasks > docs/tasks.schema.json
 
 # Record live extraction on the committed snapshots, for the CI replay test (needs ANTHROPIC_API_KEY)
 record-replay *ids:
