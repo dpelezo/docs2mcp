@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     )
     model: str = Field(
         default="claude-haiku-5-5",
-        description="Claude model used for extraction and design.",
+        description="Claude model used for extraction.",
     )
     http_timeout_seconds: float = Field(default=30.0, gt=0)
     user_agent: str = "docs2mcp (+https://github.com/dpelezo/docs2mcp)"
@@ -47,6 +47,10 @@ class Settings(BaseSettings):
     )
 
     # Design
+    design_model: str = Field(
+        default="claude-sonnet-5-5",
+        description="Claude model used for tool design (ADR 0012).",
+    )
     design_max_output_tokens: int = Field(
         default=32000, ge=1000, description="Output cap for one design reply."
     )

@@ -29,3 +29,11 @@ def test_invalid_timeout_is_rejected_at_startup(monkeypatch: pytest.MonkeyPatch)
     monkeypatch.setenv("DOCS2MCP_HTTP_TIMEOUT_SECONDS", "0")
     with pytest.raises(ValueError, match="greater than 0"):
         Settings(_env_file=None)  # pyright: ignore[reportCallIssue]
+
+
+def test_design_and_extraction_use_their_own_models(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("DOCS2MCP_MODEL", raising=False)
+    monkeypatch.delenv("DOCS2MCP_DESIGN_MODEL", raising=False)
+    settings = Settings(_env_file=None)  # pyright: ignore[reportCallIssue]
+    assert settings.model == "claude-haiku-5-5"
+    assert settings.design_model == "claude-sonnet-5-5"
