@@ -26,6 +26,7 @@ answer = { rule = "number", value = 1.0945, abs_tolerance = 0.0001 }
 | `question` | What the agent is asked, word for word |
 | `evidence` | How the expected answer was checked, usually the request that returns it |
 | `answer` | The scoring rule (below) |
+| `grounding` | `literal` (default): the answer is a value in an API response. `derived`: it is worked out, such as a sum, count, conversion, mean, or yes or no. |
 | `note` | Optional, for reviewers. The agent never sees it. |
 
 Every answer must be stable: a past date, a fixed record, never "today".
@@ -58,6 +59,14 @@ Choices that keep answers stable:
 - **Postcodes.io:** tasks avoid counts of postcodes, which change as postcodes are added and terminated.
 
 Every expected answer was checked on 2026-11-24 against the live responses (`scripts/fetch_evidence.py`, below). 87 answers appear word for word in a response. The other 13 are worked out from one, such as a sum, a conversion, a count or a yes or no. Their `note` shows the working where it isn't obvious.
+
+## Grounded success
+
+A correct answer can come from the model's memory instead of the tools. In the pilot, Haiku answered pokeapi-007 (Jolteon's Speed, 130) correctly in every condition, although the server had cut the response 300,000 characters before `stats`. So each run also checks whether a literal answer appears in a tool result the agent saw, using the task's own rule. For `number`, any number within the tolerance counts. The report shows **grounded success** next to success.
+
+- **Literal tasks:** 83 of the 100. Each one's expected answer was checked against its own recorded evidence, and all 83 are found there.
+- **Derived tasks:** 17. They are not checked, because the answer is not in any response. Two of them (open_meteo-012's 6 and postcodes_io-012's "no") would match by chance.
+- **Known gap:** a grounded number can still be a coincidence, so the check can only lower a score, never raise one.
 
 ## Checking the evidence
 

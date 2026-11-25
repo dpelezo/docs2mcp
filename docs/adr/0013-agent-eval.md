@@ -56,6 +56,7 @@ Scoring is deterministic, with no LLM judge. The agent ends a task by submitting
 
 These are the reported metrics, per API and condition:
 - **success rate**;
+- **grounded success rate** (added 2026-11-25, #57): a pass counts only if the answer appears in a tool result the agent saw. Answers that are worked out (sums, counts, conversions, yes or no) are marked `grounding = "derived"` in the task file and are not checked. The pilot showed why this is needed: Haiku answered pokeapi-007 correctly from memory after the server cut the response before the field;
 - **tool calls per task**;
 - **tokens per task**, input and output;
 - **invalid tool calls (%):** calls rejected by the tool's schema, plus calls the API answered with a 4xx caused by the arguments.

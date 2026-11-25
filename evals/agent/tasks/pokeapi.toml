@@ -57,6 +57,7 @@ level = "single"
 question = "What is Garchomp's base stat total (the sum of its six base stats)?"
 evidence = "GET https://pokeapi.co/api/v2/pokemon/garchomp"
 answer = { rule = "number", value = 600 }
+grounding = "derived"
 
 # multi: two or three calls
 
@@ -79,6 +80,7 @@ GET https://pokeapi.co/api/v2/move/earthquake
 GET https://pokeapi.co/api/v2/type/ground
 """
 answer = { rule = "exact", value = "yes" }
+grounding = "derived"
 
 [[task]]
 id = "pokeapi-011"
@@ -140,6 +142,7 @@ GET https://pokeapi.co/api/v2/pokemon/snorlax
 GET https://pokeapi.co/api/v2/pokemon/wailord
 """
 answer = { rule = "number", value = 8580 }
+grounding = "derived"
 
 # complex: several steps
 

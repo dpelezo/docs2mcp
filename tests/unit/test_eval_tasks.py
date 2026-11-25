@@ -14,6 +14,7 @@ from docs2mcp.evals.tasks import (
     Number,
     SetOf,
     first_number,
+    grounded,
     json_schema,
     level_counts,
     load_tasks,
@@ -212,3 +213,55 @@ def test_check_tasks_fails_on_an_invalid_file(
 def test_schema_tasks_prints_the_task_schema(capsys: pytest.CaptureFixture[str]) -> None:
     assert main(["schema", "--tasks"]) == 0
     assert '"TaskFile"' in capsys.readouterr().out
+
+
+# Grounding (#57)
+
+
+def test_tasks_default_to_literal_grounding(tmp_path: Path) -> None:
+    tasks = load_tasks(_write(tmp_path, _FILE))
+    assert {t.grounding for t in tasks.task} == {"literal"}
+    derived = _FILE.replace('note = "JPY fell."', 'grounding = "derived"')
+    assert load_tasks(_write(tmp_path, derived)).task[1].grounding == "derived"
+    with pytest.raises(ValidationError):
+        load_tasks(_write(tmp_path, _FILE.replace('note = "JPY fell."', 'grounding = "guess"')))
+
+
+def test_exact_answers_are_grounded_when_a_result_contains_them() -> None:
+    rule = Exact(rule="exact", value="Icelandic Króna")
+    results = ['{"iso_code": "ISK", "name": "Icelandic Kr\\u00f3na"}']
+    assert grounded(rule, "icelandic  KRÓNA", results)
+    assert not grounded(rule, "Icelandic Krona", results)
+    assert not grounded(rule, "Icelandic Króna", [])
+    assert grounded(rule, "plain text", ["not json, but plain   text"])
+
+
+def test_numbers_are_grounded_within_the_task_tolerance() -> None:
+    results = ['{"rate": 1.0945, "date": "2024-01-15"}', '{"population": 3426354}']
+    assert grounded(Number(rule="number", value=1.0945, abs_tolerance=0.0001), "1.0946", results)
+    assert not grounded(Number(rule="number", value=1.0945), "1.0946", results)
+    assert grounded(Number(rule="number", value=3426354), "3,426,354 people", results)
+    assert not grounded(Number(rule="number", value=130), "130", results)
+    assert not grounded(Number(rule="number", value=1), "about one", results)
+
+
+def test_contains_and_set_answers_need_every_item_in_the_results() -> None:
+    results = ['{"abilities": ["static", "lightning-rod"]}', '{"types": ["grass", "poison"]}']
+    assert grounded(Contains(rule="contains", value=["static", "lightning-rod"]), "x", results)
+    assert not grounded(Contains(rule="contains", value=["static", "levitate"]), "x", results)
+    rule = SetOf(rule="set", value=["grass", "poison"])
+    assert grounded(rule, "Grass, Poison", results)
+    assert not grounded(rule, "grass, fire", results)
+    assert not grounded(rule, " , ", results)
+
+
+def test_every_derived_task_is_marked_and_literal_answers_are_not_derived() -> None:
+    derived = {
+        t.id
+        for path in Path("evals/agent/tasks").glob("*.toml")
+        for t in load_tasks(path).task
+        if t.grounding == "derived"
+    }
+    assert len(derived) == 17
+    assert {"pokeapi-008", "frankfurter-013", "postcodes_io-014", "open_meteo-004"} <= derived
+    assert "pokeapi-007" not in derived

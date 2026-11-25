@@ -52,7 +52,7 @@ from docs2mcp.evals.agent import (
     metrics_json,
     summarize,
 )
-from docs2mcp.evals.tasks import Task, Verdict, load_tasks, score
+from docs2mcp.evals.tasks import Task, Verdict, grounded, load_tasks, score
 from docs2mcp.tracing import content_enabled, set_attributes, setup_tracing, tracer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -94,6 +94,8 @@ class Recorder:
     """What one task run did, gathered while the graph runs."""
 
     calls: list[ToolCall] = field(default_factory=list[ToolCall])
+    results: list[str] = field(default_factory=list[str])
+    """Every tool result text the agent saw, for the grounding check."""
     model_calls: int = 0
     input_tokens: int = 0
     output_tokens: int = 0
@@ -158,6 +160,7 @@ def build_graph(
                     name=call["name"], arguments=call["args"], outcome=outcome, chars=len(text)
                 )
             )
+            recorder.results.append(text)
             status = "error" if result.is_error else "success"
             replies.append(ToolMessage(text, tool_call_id=call_id, status=status))
         return {"messages": replies, "answer": answer}
@@ -220,13 +223,25 @@ async def run_task(
             if error is None
             else Verdict(passed=False, reason="the run failed")
         )
+        is_grounded = (
+            grounded(task.answer, answer, recorder.results)
+            if task.grounding == "literal" and answer is not None
+            else None
+        )
         if error is not None:
             stop = "error"
         elif answer is not None:
             stop = "answered"
         else:
             stop = "step_limit" if steps >= max_steps else "no_answer"
-        set_attributes(span, {"docs2mcp.passed": verdict.passed, "docs2mcp.stop": stop})
+        set_attributes(
+            span,
+            {
+                "docs2mcp.passed": verdict.passed,
+                "docs2mcp.grounded": is_grounded,
+                "docs2mcp.stop": stop,
+            },
+        )
         if content_enabled() and answer is not None:
             span.set_attribute("docs2mcp.answer", answer)
     return TaskRun(
@@ -238,6 +253,7 @@ async def run_task(
         model=model_name,
         answer=answer,
         verdict=verdict,
+        grounded=is_grounded,
         stop=stop,
         error=error,
         calls=recorder.calls,
@@ -357,6 +373,8 @@ async def run_plan(
                 )
             append_run(results, run)
             mark = "pass" if run.verdict.passed else "FAIL"
+            if run.verdict.passed and run.grounded is False:
+                mark = "pass (not grounded)"
             print(
                 f"{mark} {item.condition} {task.id} r{repeat}: {run.answer!r} "
                 f"({run.tool_calls} calls, {run.input_tokens + run.output_tokens:,} tokens, "

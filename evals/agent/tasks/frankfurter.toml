@@ -73,6 +73,7 @@ GET https://api.frankfurter.dev/v2/rate/EUR/USD?date=2024-01-02&providers=ecb
 GET https://api.frankfurter.dev/v2/rate/EUR/USD?date=2024-01-31&providers=ecb
 """
 answer = { rule = "exact", value = "fell" }
+grounding = "derived"
 
 [[task]]
 id = "frankfurter-010"
@@ -80,6 +81,7 @@ level = "multi"
 question = "Convert 250 British pounds to euros at the European Central Bank rate on 2023-09-15."
 evidence = "GET https://api.frankfurter.dev/v2/rate/GBP/EUR?date=2023-09-15&providers=ecb"
 answer = { rule = "number", value = 291.1, rel_tolerance = 0.001 }
+grounding = "derived"
 
 [[task]]
 id = "frankfurter-011"
@@ -104,6 +106,7 @@ level = "multi"
 question = "What was the average European Central Bank EUR to CHF rate over the days it published rates from 2024-04-01 to 2024-04-05?"
 evidence = "GET https://api.frankfurter.dev/v2/rates?from=2024-04-01&to=2024-04-05&base=EUR&quotes=CHF&providers=ecb"
 answer = { rule = "number", value = 0.9799, abs_tolerance = 0.0005 }
+grounding = "derived"
 note = "2024-04-01 was Easter Monday, a TARGET holiday. The range response starts with the 2024-03-28 rate carried forward, which must not be counted. Mean of 2024-04-02 to 2024-04-05: 0.97990. Counting 2024-03-28 too gives 0.97924, outside the tolerance."
 
 [[task]]
@@ -112,6 +115,7 @@ level = "multi"
 question = "On how many days did the European Central Bank publish a EUR to USD rate in January 2024?"
 evidence = "GET https://api.frankfurter.dev/v2/rates?from=2024-01-01&to=2024-01-31&base=EUR&quotes=USD&providers=ecb"
 answer = { rule = "number", value = 22 }
+grounding = "derived"
 note = "The range response also starts with the 2023-12-29 rate carried forward. 23 rows, 22 in January."
 
 [[task]]
@@ -127,6 +131,7 @@ level = "multi"
 question = "Convert 1,000 Swiss francs to Swedish kronor at the European Central Bank rate on 2024-07-01."
 evidence = "GET https://api.frankfurter.dev/v2/rate/CHF/SEK?date=2024-07-01&providers=ecb"
 answer = { rule = "number", value = 11732.4, rel_tolerance = 0.001 }
+grounding = "derived"
 
 # complex: several steps, or an unusual parameter
 
@@ -168,3 +173,4 @@ level = "complex"
 question = "Using monthly European Central Bank EUR to USD rates, which month of the first quarter of 2023 had the highest rate?"
 evidence = "GET https://api.frankfurter.dev/v2/rates?from=2023-01-01&to=2023-03-31&base=EUR&quotes=USD&group=month&providers=ecb"
 answer = { rule = "exact", value = "January", accept = ["Jan", "January 2023", "2023-01"] }
+grounding = "derived"

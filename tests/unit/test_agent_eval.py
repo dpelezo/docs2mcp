@@ -162,6 +162,7 @@ def test_a_task_that_looks_up_and_submits_the_answer_passes(server: Path) -> Non
     model = Scripted(replies=[_call("currencies", {"currency": "ISK"}), _submit("Icelandic Króna")])
     run = _run(server, model)
     assert (run.stop, run.answer, run.verdict.passed) == ("answered", "Icelandic Króna", True)
+    assert run.grounded is True
     assert [(c.name, c.outcome) for c in run.calls] == [("currencies", Outcome.OK)]
     assert (run.model_calls, run.input_tokens, run.output_tokens) == (2, 200, 20)
     assert run.cache_read_tokens == 10
@@ -239,6 +240,19 @@ def _task_run(
     )
 
 
+def test_grounded_success_drops_passes_that_did_not_come_from_the_tools() -> None:
+    literal = _task_run("C", "pokeapi", "pokeapi-007", 1, True, [Outcome.OK])
+    from_memory = literal.model_copy(update={"grounded": False, "task": "pokeapi-001"})
+    derived = literal.model_copy(update={"grounded": None, "task": "pokeapi-008"})
+    assert (literal.grounded_pass, from_memory.grounded_pass, derived.grounded_pass) == (
+        True,
+        False,
+        True,
+    )
+    (metrics, _) = summarize([literal, from_memory, derived])
+    assert (metrics.success_mean, metrics.grounded_mean) == (1.0, 2 / 3)
+
+
 def test_summaries_report_min_and_mean_success_over_repeats() -> None:
     ok, bad = Outcome.OK, Outcome.INVALID
     runs = [
@@ -266,7 +280,10 @@ def test_summaries_report_min_and_mean_success_over_repeats() -> None:
         ("all", "C"),
     ]
     table = format_table(summarize(runs))
-    assert "| pokeapi | C (docs2mcp task-shaped) | 2 x 2 | 50% / 75% | 1.2 | 1,100 | 20% |" in table
+    row = (
+        "| pokeapi | C (docs2mcp task-shaped) | 2 x 2 | 50% / 75% | 50% / 75% | 1.2 | 1,100 | 20% |"
+    )
+    assert row in table
     assert json.loads(metrics_json(summarize(runs)))[0]["api"] == "frankfurter"
 
 

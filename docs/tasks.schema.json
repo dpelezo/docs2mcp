@@ -180,6 +180,16 @@
           ],
           "title": "Answer"
         },
+        "grounding": {
+          "default": "literal",
+          "description": "literal: the answer is a value in an API response, so a grounded answer appears in a tool result. derived: it is worked out (a sum, a count, a conversion, yes or no), so it is not checked for grounding.",
+          "enum": [
+            "literal",
+            "derived"
+          ],
+          "title": "Grounding",
+          "type": "string"
+        },
         "note": {
           "anyOf": [
             {
