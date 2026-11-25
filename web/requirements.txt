@@ -1,0 +1,5 @@
+# The live-call function (api/call.py) runs generated servers, which need only these.
+# Kept to direct dependencies, pinned to the versions in the root uv.lock.
+mcp==2.3.0
+httpx==0.28.1
+pydantic==2.14.4
