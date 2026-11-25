@@ -60,11 +60,16 @@ As in extraction, validation errors go back to Claude for another try, and code 
 
 ### Checks on every generated server
 
-`docs2mcp generate --check`, and CI on the six eval APIs, run:
+CI runs these as unit tests (`tests/unit/test_generated_code.py` and `tests/unit/test_generate.py`). They cover servers generated from the committed designs, the direct design of each committed spec, and one design built to hit awkward cases. *(Amended 2026-11-24, #31.)*
 
-- **Ruff** lint and format, and **Pyright strict**, on the generated code;
-- **a smoke test:** start the server, list its tools, and call each tool once against a recorded API response through a mock transport, with no network;
-- **the official MCP conformance tests**, if they can run in CI. Their setup is checked in their own issue before this rule is final.
+- **Ruff** format and lint, and **Pyright strict**, on the generated code. The rules ship in each generated `pyproject.toml`, so a person running the tools in that folder gets the same result. Three rules are off there, with the reason recorded:
+  - `B008`: `Field(...)` defaults are how the SDK reads argument descriptions;
+  - `PLR0913` and `PLR0917`: a tool has one argument per API parameter.
+  
+  The generator writes code in the layout Ruff's formatter produces (`generate/pycode.py`), so no formatter is needed at generation time.
+- **A smoke test:** import the server, list its tools, and call every route of every tool once with the official MCP client, in process. Requests go to an `httpx.MockTransport` that returns canned JSON, with no network. Each request's method and path are checked against the spec. Recorded real responses would test more, but none are committed yet.
+- **Only three of the six eval APIs run in CI.** The Open-Meteo and Open Library specs come from AGPL docs that are not committed. Their servers were checked by hand on the owner's machine.
+- **The official MCP conformance suite** (`@modelcontextprotocol/conformance`, an npm package, version 0.1.16 when checked) exists and can test a server over streamable HTTP, with a baseline file for known failures. It is not wired into CI yet. That is a decision for the owner, because it means running an npm package in CI.
 
 ## Out of scope for v1
 
