@@ -46,7 +46,7 @@ The pilots and the full run turned up four problems in what docs2mcp generates o
 1. **The 20,000-character limit hid PokéAPI's stats and types** in every condition. Long lists and objects are now shortened first (#58).
 2. **Routes dropped arguments silently:** Frankfurter's date was lost when base and quote were also given. The server now picks the route that takes the most arguments, and names any it leaves out (#63).
 3. **The runner ended a run when the MCP client rejected a tool result.** That happened with FastMCP, whose results don't match the official file's response schemas. Now the agent gets the rejection as a tool error and carries on, as it would in an MCP host (#64).
-4. **Open Library's `/isbn/` endpoint answers with a 302 redirect, which generated servers do not follow.** So the agent gets an empty body. This is likely behind 10 of the 22 Open Library failures in B and C (open_library-004, -005 and -016). The other 12 are the scoring and task problems above. It is not fixed yet (#68).
+4. **Open Library's `/isbn/` endpoint answers with a 302 redirect, which generated servers do not follow.** So the agent gets an empty body. This is likely behind 10 of the 22 Open Library failures in B and C (open_library-004, -005 and -016). The other 12 are the scoring and task problems above. It was fixed after this run (#68, PR #70), so these numbers still include it. The run was not repeated.
 
 ### Limits
 
