@@ -26,7 +26,7 @@
 ## Re-check after #36 (draft)
 
 - **tools.json:** Haiku 5.5 run 1 on the repaired spec, on the owner's machine (`tools/open_meteo/v4/haiku/run1/`).
-- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner: *pending*.
+- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner (dpelezo) on 2026-11-24, as drafted.
 
 `latitude` is now an array of numbers, because its description says values can be comma-separated. `longitude` is still a number, because the extracted spec only says this for latitude. The docs probably say it once for both. That note on question 2 is still open in #36.
 
