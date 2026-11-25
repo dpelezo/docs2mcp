@@ -432,3 +432,15 @@ def test_condition_repeats_parse_and_reject_bad_values() -> None:
     for bad in ("E=1", "D=0", "D", "D=x"):
         with pytest.raises(argparse.ArgumentTypeError):
             agent_eval._repeats(bad)  # pyright: ignore[reportPrivateUsage]
+
+
+def test_errored_runs_are_moved_aside_and_run_again(tmp_path: Path) -> None:
+    results = tmp_path / "results.jsonl"
+    good = _task_run("C", "pokeapi", "pokeapi-001", 1, True, [Outcome.OK])
+    failed = good.model_copy(update={"task": "pokeapi-002", "stop": "error", "error": "429"})
+    append_run(results, good)
+    append_run(results, failed)
+    assert agent_eval.drop_errored(results) == 1
+    assert load_runs(results) == [good]
+    assert load_runs(tmp_path / "errored.jsonl") == [failed]
+    assert agent_eval.drop_errored(results) == 0
