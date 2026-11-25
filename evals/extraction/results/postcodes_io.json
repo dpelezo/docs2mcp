@@ -8,7 +8,8 @@
     "input_tokens": 63658,
     "output_tokens": 8947,
     "cache_read_tokens": 15925,
-    "cache_write_tokens": 0
+    "cache_write_tokens": 0,
+    "rescored": "2026-11-24: the same recorded replies replayed with the #36 merge fix (fix/spec-contradictions); only required_mismatches changed"
   },
   "api": "postcodes_io",
   "endpoints": {
@@ -25,7 +26,7 @@
     "recall": 0.8889,
     "precision": 1.0
   },
-  "required_mismatches": 4,
+  "required_mismatches": 1,
   "missing_endpoints": [],
   "extra_endpoints": [],
   "matched": [
@@ -57,11 +58,7 @@
         "query:longitude"
       ],
       "extra": [],
-      "required_mismatches": [
-        "query:lat",
-        "query:lon",
-        "query:q"
-      ]
+      "required_mismatches": []
     },
     {
       "route": "POST /postcodes",

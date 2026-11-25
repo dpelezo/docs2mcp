@@ -22,3 +22,12 @@
 - **Fit to approve:** yes.
 - **Failures to fix first:** none.
 - **Notes:** Haiku exposed 14 of 26 before the parameter rule (ADR 0012). Sonnet runs 2 and 3 exposed all 26.
+
+## Re-check after #36 (draft)
+
+- **tools.json:** Haiku 5.5 run 1 on the repaired spec, on the owner's machine (`tools/open_meteo/v4/haiku/run1/`).
+- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner: *pending*.
+
+`latitude` is now an array of numbers, because its description says values can be comma-separated. `longitude` is still a number, because the extracted spec only says this for latitude. The docs probably say it once for both. That note on question 2 is still open in #36.
+
+This Haiku design also says at least one of `hourly`, `daily` or `current` "is needed to get data back", which the spec does not state. It is a minor question 7 fail, so the Sonnet design reviewed above stays the one fit to approve.

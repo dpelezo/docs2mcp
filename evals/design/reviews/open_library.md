@@ -32,3 +32,18 @@
   - remove the `jscmd=details` hint, and fix the spec's description or enum in extraction;
   - trim the extra claims.
 - **Notes:** runs 2 and 3 needed one retry each. Claude first tried to put all the work endpoints in one tool with flag arguments, which the routing model cannot express. Recorded as held-out behaviour, not tuned against.
+
+## Re-review after #36 (draft)
+
+- **tools.json:** Haiku 5.5 run 1 on the repaired spec, on the owner's machine (`tools/open_library/v4/haiku/run1/`).
+- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner: *pending*.
+
+The spec now lists `details` among `jscmd`'s values, so the hint an agent follows is accepted. Question 2 passes for `books_by_bibkey`. The design also fixes `format` to `json` and omits `callback` with a reason.
+
+Two minor question 7 fails remain:
+- `book_search` says it finds books "by title, author or other terms";
+- `author_search` says its results give the author's identifier.
+
+Neither is in the spec. Open Library is held out, so this is recorded and not tuned against.
+
+**Fit to approve:** no, until question 7 passes.
