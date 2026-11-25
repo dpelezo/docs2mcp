@@ -25,9 +25,11 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 from urllib.robotparser import RobotFileParser
 
 import httpx
+from opentelemetry.trace import Span
 
 from docs2mcp.ingest.cache import CachedPage, PageCache
 from docs2mcp.ingest.models import SkippedUrl
+from docs2mcp.tracing import mark_failed, tracer
 
 ASSET_SUFFIXES = frozenset(
     {
@@ -210,8 +212,18 @@ class Crawler:
         return CrawlResult(pages=pages, skipped=skipped)
 
     def _load(self, url: str) -> tuple[CachedPage | None, str]:
+        with tracer.start_as_current_span("fetch") as span:
+            span.set_attribute("url.full", url)
+            page, reason = self._fetch(url, span)
+            if page is None:
+                mark_failed(span, reason)
+            return page, reason
+
+    def _fetch(self, url: str, span: Span) -> tuple[CachedPage | None, str]:
         if not self.refresh and (cached := self.cache.get(url)) is not None:
+            span.set_attribute("docs2mcp.cache_hit", value=True)
             return cached, ""
+        span.set_attribute("docs2mcp.cache_hit", value=False)
         if self._fetched_live and self.delay_seconds:
             self.sleep(self.delay_seconds)
         self._fetched_live = True
@@ -219,6 +231,7 @@ class Crawler:
             response = self.client.get(url)
         except httpx.HTTPError as exc:
             return None, f"request failed: {exc.__class__.__name__}"
+        span.set_attribute("http.response.status_code", response.status_code)
         if response.is_error:
             return None, f"HTTP {response.status_code}"
         content_type = response.headers.get("content-type", "")

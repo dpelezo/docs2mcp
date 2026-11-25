@@ -23,6 +23,7 @@ from docs2mcp.extract.prompt import SYSTEM, batch_message, feedback_message
 from docs2mcp.extract.wire import WireAuth, WireEndpoint
 from docs2mcp.ingest.models import Chunk
 from docs2mcp.spec import ApiSpec, Endpoint
+from docs2mcp.tracing import model_call, record_usage, set_attributes, tracer
 
 
 @dataclass
@@ -117,6 +118,29 @@ class Extractor:
         base_url: str | None = None,
         docs_url: str | None = None,
     ) -> tuple[ApiSpec, ExtractionReport]:
+        with tracer.start_as_current_span("extract") as span:
+            span.set_attribute("docs2mcp.chunks", len(chunks))
+            spec, report = self._run(chunks, name=name, base_url=base_url, docs_url=docs_url)
+            set_attributes(
+                span,
+                {
+                    "docs2mcp.endpoints": len(spec.endpoints),
+                    "docs2mcp.model_calls": report.calls,
+                    "docs2mcp.repairs": len(report.repairs),
+                    "gen_ai.usage.input_tokens": report.input_tokens,
+                    "gen_ai.usage.output_tokens": report.output_tokens,
+                },
+            )
+            return spec, report
+
+    def _run(
+        self,
+        chunks: Sequence[Chunk],
+        *,
+        name: str | None,
+        base_url: str | None,
+        docs_url: str | None,
+    ) -> tuple[ApiSpec, ExtractionReport]:
         if not chunks:
             msg = "no chunks to extract from; run docs2mcp ingest first"
             raise ValueError(msg)
@@ -126,6 +150,18 @@ class Extractor:
         for batch in make_batches(chunks, self.batch_tokens):
             self._run_batch(batch, lookup, report, accepted)
 
+        with tracer.start_as_current_span("extract.merge"):
+            return self._merge(accepted, lookup, report, name, base_url, docs_url)
+
+    def _merge(
+        self,
+        accepted: _Accepted,
+        lookup: dict[str, Chunk],
+        report: ExtractionReport,
+        name: str | None,
+        base_url: str | None,
+        docs_url: str | None,
+    ) -> tuple[ApiSpec, ExtractionReport]:
         chosen_base = choose_base_url(accepted.base_urls, base_url)
         notes: list[str] = []
         endpoints: list[Endpoint] = []
@@ -173,12 +209,25 @@ class Extractor:
         report: ExtractionReport,
         accepted: _Accepted,
     ) -> None:
+        with tracer.start_as_current_span("extract.batch") as span:
+            span.set_attribute("docs2mcp.chunks", len(batch))
+            self._batch(batch, lookup, report, accepted)
+
+    def _batch(
+        self,
+        batch: list[Chunk],
+        lookup: dict[str, Chunk],
+        report: ExtractionReport,
+        accepted: _Accepted,
+    ) -> None:
         log = BatchLog(chunk_ids=[c.id for c in batch])
         report.batches.append(log)
         turns = [Turn("user", batch_message(batch))]
         for attempt in range(self.max_retries + 1):
             try:
-                reply = self.model.extract(SYSTEM, turns)
+                with model_call("extract", self.model.name, SYSTEM, turns) as call:
+                    reply = self.model.extract(SYSTEM, turns)
+                    record_usage(call, reply, reply.batch)
             except ModelOutputError as error:
                 log.calls += 1
                 if error.reason == "max_tokens" and len(batch) > 1:
@@ -197,12 +246,21 @@ class Extractor:
 
             valid: list[WireEndpoint] = []
             errors: list[str] = []
-            for wire in reply.batch.endpoints:
-                try:
-                    to_endpoint(wire, None, lookup, [])
-                    valid.append(wire)
-                except ValidationError as error:
-                    errors.append(describe_error(wire, error))
+            with tracer.start_as_current_span("extract.validate") as check:
+                for wire in reply.batch.endpoints:
+                    try:
+                        to_endpoint(wire, None, lookup, [])
+                        valid.append(wire)
+                    except ValidationError as error:
+                        errors.append(describe_error(wire, error))
+                set_attributes(
+                    check,
+                    {
+                        "docs2mcp.attempt": attempt,
+                        "docs2mcp.valid": len(valid),
+                        "docs2mcp.problems": len(errors),
+                    },
+                )
             if not errors or attempt == self.max_retries:
                 log.endpoints = len(valid)
                 log.rejected = errors

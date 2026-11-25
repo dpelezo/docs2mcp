@@ -56,6 +56,18 @@ class Settings(BaseSettings):
     )
     design_max_retries: int = Field(default=2, ge=0, description="Feedback rounds per design.")
 
+    # Tracing (off unless an exporter is configured; see docs2mcp.tracing)
+    langfuse_public_key: str | None = Field(default=None, validation_alias="LANGFUSE_PUBLIC_KEY")
+    langfuse_secret_key: SecretStr | None = Field(
+        default=None, validation_alias="LANGFUSE_SECRET_KEY"
+    )
+    langfuse_host: str = Field(
+        default="https://cloud.langfuse.com", validation_alias="LANGFUSE_HOST"
+    )
+    trace_content: bool = Field(
+        default=False, description="Add prompts and model replies to traces."
+    )
+
     def require_anthropic_key(self) -> str:
         """Return the API key, or fail with a clear message if it is missing."""
         if self.anthropic_api_key is None:
