@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TryTool } from "@/components/try-tool";
 import { CONDITION_NOTE, CONDITIONS, apiName, demo, rate, type Tool } from "@/lib/data";
+import { fieldOf } from "@/lib/schema";
+import manifest from "@/api/_servers/manifest.json";
 
 export function generateStaticParams() {
   return demo.shared_apis.map((api) => ({ api }));
@@ -18,8 +21,7 @@ function Parameters({ tool }: { tool: Tool }) {
         <li key={name}>
           <code>{name}</code>
           {required.has(name) ? " (required)" : ""}
-          {p.type ? <span className="muted"> {Array.isArray(p.type) ? p.type.join(" | ") : p.type}</span> : null}
-          {p.enum ? <span className="muted"> one of {p.enum.map(String).join(", ")}</span> : null}
+          <span className="muted"> {fieldOf(p).label}</span>
         </li>
       ))}
     </ul>
@@ -47,6 +49,12 @@ export default async function ApiTools({ params }: { params: Promise<{ api: stri
         The same API, four ways. Each column is the tool list the eval&apos;s agent received over MCP,
         with estimated tokens for the whole list, and how often it solved this API&apos;s 20 tasks.
       </p>
+      <TryTool
+        api={api}
+        tools={{ B: tools.B, C: tools.C }}
+        callable={(manifest as Record<string, { B: string[]; C: string[] }>)[api] ?? { B: [], C: [] }}
+      />
+      <h2>All four tool lists</h2>
       <div className="cols">
         {CONDITIONS.map((k) => {
           const list = tools[k];

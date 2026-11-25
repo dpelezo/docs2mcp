@@ -2,12 +2,22 @@ import raw from "@/data/demo.json";
 
 export type Condition = "A" | "B" | "C" | "D";
 
+export interface Property {
+  type?: string | string[];
+  description?: string;
+  enum?: unknown[];
+  const?: unknown;
+  default?: unknown;
+  items?: Property;
+  anyOf?: Property[];
+}
+
 export interface Tool {
   name: string;
   description: string;
   input_schema: {
     type?: string;
-    properties?: Record<string, { type?: string | string[]; description?: string; enum?: unknown[]; default?: unknown }>;
+    properties?: Record<string, Property>;
     required?: string[];
   };
   tokens: number;

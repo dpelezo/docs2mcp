@@ -6,6 +6,9 @@
   in each condition (name, description, input schema, estimated tokens). A, B and
   C come from servers generated from the committed inputs, and D from FastMCP on
   the committed OpenAPI file, all listed over MCP, as the eval's agent saw them.
+- **Live servers:** the generated B and C servers for the same APIs, copied to
+  web/api/_servers/ for the playground's live calls (#74), with a manifest of
+  the tools whose every route is a GET.
 - **Results:** every task of a committed run, with each condition's passes, runs,
   grounding, tool calls and tokens, plus the headline on the shared APIs.
 
@@ -43,6 +46,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONDITIONS_DIR = ROOT / "evals" / "agent" / "conditions"
 RESULTS = ROOT / "evals" / "agent" / "results" / "2026-11-25-haiku"
 OUT = ROOT / "web" / "data" / "demo.json"
+LIVE = ROOT / "web" / "api" / "_servers"
 SHARED = ("pokeapi", "frankfurter", "postcodes_io")
 
 
@@ -93,6 +97,26 @@ def tools_for(api: str) -> dict[str, list[dict[str, Any]]]:
         "C": _generated_tools(task, spec),
         "D": _fastmcp_tools(api),
     }
+
+
+def live_servers(out: Path) -> dict[str, dict[str, list[str]]]:
+    """Write the B and C servers of the shared APIs, and which of their tools are GET-only."""
+    out.mkdir(parents=True, exist_ok=True)
+    manifest: dict[str, dict[str, list[str]]] = {}
+    for api in SHARED:
+        docs = CONDITIONS_DIR / "docs2mcp" / api
+        spec = ApiSpec.model_validate_json((docs / "spec.json").read_text("utf-8"))
+        task = ToolSet.model_validate_json((docs / "tools.json").read_text("utf-8"))
+        for condition, toolset in (("B", direct_design(spec)), ("C", task)):
+            with tempfile.TemporaryDirectory() as folder:
+                generate(set_approval(toolset, every=True).toolset, spec, Path(folder))
+                code = (Path(folder) / "server.py").read_text("utf-8")
+                routes: dict[str, list[dict[str, Any]]] = vars(load_server(Path(folder)))["ROUTES"]
+            (out / f"{api}_{condition.lower()}.py").write_text(code, "utf-8")
+            get_only = [t for t, rs in routes.items() if all(r["method"] == "GET" for r in rs)]
+            manifest.setdefault(api, {})[condition] = sorted(get_only)
+    (out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", "utf-8")
+    return manifest
 
 
 def _summary(runs: Sequence[TaskRun], *, answers: bool = False) -> dict[str, Any]:
@@ -166,6 +190,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Export the demo playground's data.")
     parser.add_argument("--results", type=Path, default=RESULTS, help="a committed run folder")
     parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument("--live", type=Path, default=LIVE, help="folder for the live servers")
     args = parser.parse_args(argv)
     runs = load_runs(args.results / "results.jsonl")
     if not runs:
@@ -187,6 +212,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     args.out.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", "utf-8")
     counts = {api: {c: len(t) for c, t in (v["tools"] or {}).items()} for api, v in apis.items()}
     print(f"Wrote {args.out}: {len(data['results']['tasks'])} tasks; tools {counts}")
+    live = live_servers(args.live)
+    callable_ = {api: {c: len(t) for c, t in v.items()} for api, v in live.items()}
+    print(f"Wrote {args.live}: GET-only tools {callable_}")
     return 0
 
 

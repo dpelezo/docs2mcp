@@ -81,3 +81,14 @@ def test_the_committed_bundle_is_up_to_date(tmp_path: Path) -> None:
     assert export_demo.main(["--out", str(out)]) == 0
     committed = export_demo.OUT.read_text("utf-8")
     assert out.read_text("utf-8") == committed, "run: uv run python -m scripts.export_demo"
+
+
+def test_committed_live_servers_are_up_to_date(tmp_path: Path) -> None:
+    manifest = export_demo.live_servers(tmp_path)
+    for path in sorted(tmp_path.iterdir()):
+        committed = export_demo.LIVE / path.name
+        assert committed.read_text("utf-8") == path.read_text("utf-8"), (
+            f"{committed} is stale: run `uv run python -m scripts.export_demo`"
+        )
+    assert {p.name for p in export_demo.LIVE.iterdir()} >= {p.name for p in tmp_path.iterdir()}
+    assert manifest["frankfurter"]["C"]

@@ -55,3 +55,12 @@ details.tool ul { margin: 0; padding-left: 18px; font-size: 0.82rem; }
 .filters { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; align-items: center; }
 select, input { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--fg); }
 footer { margin-top: 60px; color: var(--muted); font-size: 0.875rem; }
+
+.try { border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; margin: 24px 0 8px; background: var(--card); }
+.try h2 { margin-top: 0; }
+.args { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; align-items: end; margin: 12px 0; }
+.args label { display: flex; flex-direction: column; gap: 4px; }
+.args input, .args select { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); }
+.args button { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); cursor: pointer; }
+.args button:disabled { opacity: 0.6; cursor: wait; }
+.result pre { max-height: 420px; overflow: auto; font-size: 0.8rem; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); white-space: pre-wrap; word-break: break-word; }

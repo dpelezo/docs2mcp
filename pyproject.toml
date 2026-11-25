@@ -70,6 +70,7 @@ eval = [
 line-length = 100
 target-version = "py314"
 src = ["src", "tests"]
+extend-exclude = ["web/api/_servers"]  # generated; checked by their own config
 
 [tool.ruff.lint]
 select = [
@@ -104,7 +105,8 @@ known-first-party = ["docs2mcp", "scripts"]
 # --- Types ------------------------------------------------------------------
 
 [tool.pyright]
-include = ["src", "tests", "scripts"]
+include = ["src", "tests", "scripts", "web/api"]
+exclude = ["web/api/_servers"]
 pythonVersion = "3.14"
 typeCheckingMode = "strict"
 venvPath = "."
