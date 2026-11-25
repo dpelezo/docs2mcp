@@ -42,6 +42,7 @@ from docs2mcp.extract import (
     RecordingModel,
     ReplayModel,
 )
+from docs2mcp.generate import NothingToGenerateError, generate
 from docs2mcp.ingest import ingest, read_chunks, read_pages
 from docs2mcp.spec import ApiSpec, json_schema
 
@@ -184,7 +185,20 @@ def build_parser() -> argparse.ArgumentParser:
         "--spec", type=Path, required=True, help="the spec.json it was designed from"
     )
     measure_cmd.add_argument("--out", type=Path, help="also write the metrics as JSON here")
-    # generate and the tool-use eval arrive with their milestones.
+    generate_cmd = commands.add_parser(
+        "generate",
+        help="generate an MCP server from the approved tools in tools.json",
+        description=(
+            "Write server.py, pyproject.toml, README.md and generation_report.json. Only "
+            "approved, valid tools are built; every skipped tool is reported with its reason."
+        ),
+    )
+    generate_cmd.add_argument("tools", type=Path, help="reviewed tools.json")
+    generate_cmd.add_argument(
+        "--spec", type=Path, required=True, help="the spec.json it was designed from"
+    )
+    generate_cmd.add_argument("--out", type=Path, required=True, help="folder for the server")
+    # The tool-use eval arrives with its milestone.
     return parser
 
 
@@ -414,6 +428,31 @@ def _run_approve(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_generate(args: argparse.Namespace) -> int:
+    spec = ApiSpec.model_validate_json(args.spec.read_text(encoding="utf-8"))
+    try:
+        toolset = ToolSet.model_validate_json(args.tools.read_text(encoding="utf-8"))
+    except ValidationError as error:
+        print(f"{args.tools} is not a valid tools.json:\n{error}", file=sys.stderr)
+        return 1
+    try:
+        plan = generate(toolset, spec, args.out)
+    except NothingToGenerateError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    print(
+        f"{toolset.api}: generated {len(plan.tools)} tools into {args.out} "
+        f"({len(plan.skipped)} skipped, {len(plan.excluded)} endpoints excluded, "
+        f"{len(plan.unreachable)} unreachable)"
+    )
+    for skipped in plan.skipped:
+        print(f"  skipped {skipped.name}: {skipped.reason}")
+    if plan.unreachable:
+        print(f"  unreachable: {', '.join(plan.unreachable)}")
+    print(f"Run it: uv run --directory {args.out} server.py")
+    return 0
+
+
 def _run_check_tools(args: argparse.Namespace) -> int:
     spec = ApiSpec.model_validate_json(args.spec.read_text(encoding="utf-8"))
     try:
@@ -453,6 +492,7 @@ _COMMANDS: dict[str, Callable[[argparse.Namespace], int]] = {
     "design": _run_design,
     "check-tools": _run_check_tools,
     "approve": _run_approve,
+    "generate": _run_generate,
     "measure": _run_measure,
 }
 

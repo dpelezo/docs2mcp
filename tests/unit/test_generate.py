@@ -1,0 +1,409 @@
+"""Generated MCP servers: what gets built, and that each server lists and calls its tools (#30).
+
+The servers are generated into a temporary folder, imported, and driven in-process
+with the official MCP client. Their HTTP calls go to an httpx.MockTransport, so no
+request leaves the process.
+"""
+
+import asyncio
+import importlib.util
+import json
+import re
+import sys
+from collections.abc import Callable, Iterator
+from pathlib import Path
+from types import ModuleType
+from typing import Any
+
+import httpx
+import pytest
+from mcp import Client
+
+from docs2mcp.cli import main
+from docs2mcp.design import Route, Tool, ToolParameter, ToolSet, direct_design, set_approval
+from docs2mcp.generate import NothingToGenerateError, generate, plan_generation
+from docs2mcp.generate.render import python_type, slug
+from docs2mcp.spec import ApiSpec, AuthScheme, AuthType, ParamType
+from tests.unit.test_design import SPEC, arg
+
+ROOT = Path(__file__).parents[2]
+SPECS = ROOT / "tests" / "fixtures" / "specs"
+REPLAY = ROOT / "evals" / "design" / "replay"
+COMMITTED = ("frankfurter", "postcodes_io", "pokeapi")
+
+Handler = Callable[[httpx.Request], httpx.Response]
+
+
+def load_spec(api: str) -> ApiSpec:
+    return ApiSpec.model_validate_json((SPECS / f"{api}.json").read_text(encoding="utf-8"))
+
+
+def approved_design(api: str) -> ToolSet:
+    toolset = ToolSet.model_validate_json((REPLAY / api / "tools.json").read_text("utf-8"))
+    return set_approval(toolset, every=True).toolset
+
+
+@pytest.fixture
+def server_module(tmp_path: Path) -> Iterator[Callable[[ToolSet, ApiSpec], ModuleType]]:
+    loaded: list[str] = []
+
+    def build(toolset: ToolSet, spec: ApiSpec) -> ModuleType:
+        out = tmp_path / f"server_{len(loaded)}"
+        generate(toolset, spec, out)
+        name = f"generated_server_{len(loaded)}_{slug(toolset.api).replace('-', '_')}"
+        module_spec = importlib.util.spec_from_file_location(name, out / "server.py")
+        assert module_spec is not None
+        assert module_spec.loader is not None
+        module = importlib.util.module_from_spec(module_spec)
+        sys.modules[name] = module
+        module_spec.loader.exec_module(module)
+        loaded.append(name)
+        return module
+
+    yield build
+    for name in loaded:
+        sys.modules.pop(name, None)
+
+
+def set_transport(module: ModuleType, handler: Handler) -> None:
+    """Send the generated server's requests to a mock, never to the network."""
+    vars(module)["transport"] = httpx.MockTransport(handler)
+
+
+def echo(requests: list[httpx.Request], payload: Any = None) -> Handler:
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={"ok": True} if payload is None else payload)
+
+    return handler
+
+
+async def _list_and_call(
+    module: ModuleType, calls: list[tuple[str, dict[str, Any]]]
+) -> tuple[list[Any], list[Any]]:
+    async with Client(module.mcp) as client:
+        listed = (await client.list_tools()).tools
+        results = [await client.call_tool(name, arguments) for name, arguments in calls]
+    return listed, results
+
+
+def run(module: ModuleType, calls: list[tuple[str, dict[str, Any]]]) -> tuple[list[Any], list[Any]]:
+    return asyncio.run(_list_and_call(module, calls))
+
+
+SAMPLES: dict[ParamType, Any] = {
+    ParamType.STRING: "abc",
+    ParamType.INTEGER: 2,
+    ParamType.NUMBER: 1.5,
+    ParamType.BOOLEAN: True,
+    ParamType.OBJECT: {"a": 1},
+}
+
+
+def sample(parameter: ToolParameter) -> Any:
+    kind = parameter.items_type if parameter.type is ParamType.ARRAY else parameter.type
+    value: Any = (
+        parameter.enum[0]
+        if parameter.enum is not None
+        else SAMPLES.get(kind or ParamType.STRING, "abc")
+    )
+    return [value] if parameter.type is ParamType.ARRAY else value
+
+
+def route_calls(toolset: ToolSet) -> list[tuple[str, dict[str, Any], Route]]:
+    """One call per route: its selecting arguments plus every required argument."""
+    calls: list[tuple[str, dict[str, Any], Route]] = []
+    for tool in toolset.tools:
+        params = {p.name: p for p in tool.parameters}
+        for route in tool.routes:
+            names = [*route.requires, *(p.name for p in tool.parameters if p.required)]
+            calls.append((tool.name, {n: sample(params[n]) for n in dict.fromkeys(names)}, route))
+    return calls
+
+
+def path_pattern(path: str) -> re.Pattern[str]:
+    return re.compile("^" + re.sub(r"\\\{[^}]+\\\}", "[^/]+", re.escape(path)) + "$")
+
+
+# --- every committed design generates a working server ---------------------------------
+
+
+@pytest.mark.parametrize("api", COMMITTED)
+def test_generated_server_lists_and_calls_every_route(
+    api: str, server_module: Callable[[ToolSet, ApiSpec], ModuleType]
+) -> None:
+    spec = load_spec(api)
+    toolset = approved_design(api)
+    module = server_module(toolset, spec)
+    requests: list[httpx.Request] = []
+    set_transport(module, echo(requests))
+    calls = route_calls(toolset)
+
+    listed, results = run(module, [(name, arguments) for name, arguments, _ in calls])
+
+    assert sorted(t.name for t in listed) == sorted(t.name for t in toolset.tools)
+    assert [r.is_error for r in results] == [False] * len(calls), [
+        r.content[0].text for r in results if r.is_error
+    ]
+    endpoints = {e.id: e for e in spec.endpoints}
+    base_path = httpx.URL(str(toolset.base_url)).path.rstrip("/")
+    for request, (_, _, route) in zip(requests, calls, strict=True):
+        endpoint = endpoints[route.endpoint]
+        assert request.method == endpoint.method.value
+        assert path_pattern(base_path + endpoint.path).match(request.url.path), request.url
+
+
+def test_direct_design_generates_too(
+    server_module: Callable[[ToolSet, ApiSpec], ModuleType],
+) -> None:
+    spec = load_spec("frankfurter")
+    toolset = set_approval(direct_design(spec), every=True).toolset
+    module = server_module(toolset, spec)
+    listed, _ = run(module, [])
+    assert len(listed) == len(spec.endpoints)
+
+
+# --- only approved, valid tools are built ----------------------------------------------
+
+
+POKEMON = Tool(
+    name="pokemon",
+    description="Get one Pokémon, or list them.",
+    parameters=[arg("name"), arg("limit", "number"), arg("offset", "integer")],
+    routes=[
+        Route(endpoint="get_pokemon", requires=["name"], arguments={"name": "id_or_name"}),
+        Route(endpoint="list_pokemon", arguments={"limit": "limit", "offset": "offset"}),
+    ],
+    approved=True,
+)
+SPRITE = Tool(
+    name="sprite",
+    description="Get a sprite.",
+    parameters=[arg("id", "integer", required=True), arg("size", enum=["S", "M"])],
+    routes=[Route(endpoint="get_sprite", arguments={"id": "id", "size": "size"})],
+    approved=False,
+    note="images, not JSON",
+)
+
+
+def toolset(*tools: Tool) -> ToolSet:
+    return ToolSet(
+        api="PokéAPI",
+        base_url="https://pokeapi.co/api/v2",  # pyright: ignore[reportArgumentType]
+        design="task",
+        tools=list(tools),
+    )
+
+
+def test_unapproved_and_invalid_tools_are_skipped_with_reasons() -> None:
+    broken = Tool(
+        name="broken",
+        description="Lists Pokémon but forgets offset.",
+        parameters=[arg("limit", "number")],
+        routes=[Route(endpoint="list_pokemon", arguments={"limit": "limit"})],
+        approved=True,
+    )
+    pokemon_get = Tool(
+        name="pokemon",
+        description="Get one Pokémon.",
+        parameters=[arg("name", required=True)],
+        routes=[Route(endpoint="get_pokemon", arguments={"name": "id_or_name"})],
+        approved=True,
+    )
+    plan = plan_generation(toolset(pokemon_get, broken, SPRITE), SPEC)
+
+    assert [t.name for t in plan.tools] == ["pokemon"]
+    reasons = {s.name: s.reason for s in plan.skipped}
+    assert reasons["sprite"] == "not approved: images, not JSON"
+    assert reasons["broken"].startswith("invalid: tool 'broken', route to 'list_pokemon': ")
+    assert plan.unreachable == ["list_pokemon", "get_sprite"]
+
+
+def test_a_tool_reusing_an_endpoint_or_routing_nowhere_is_skipped() -> None:
+    again = POKEMON.model_copy(update={"name": "pokemon_again"})
+    ghost = Tool(
+        name="ghost",
+        description="Nothing.",
+        routes=[Route(endpoint="no_such_endpoint")],
+        approved=True,
+    )
+    unapproved = SPRITE.model_copy(update={"note": None})
+    plan = plan_generation(toolset(POKEMON, again, ghost, unapproved), SPEC)
+
+    reasons = {s.name: s.reason for s in plan.skipped}
+    assert reasons["pokemon_again"] == (
+        "invalid: endpoint 'get_pokemon' is already reached by tool 'pokemon' (and 1 more)"
+    )
+    assert reasons["ghost"] == "invalid: route to unknown endpoint 'no_such_endpoint'"
+    assert reasons["sprite"] == "not approved"
+
+
+def test_nothing_approved_means_nothing_is_generated(tmp_path: Path) -> None:
+    unapproved = POKEMON.model_copy(update={"approved": False})
+    with pytest.raises(NothingToGenerateError, match="pokemon: not approved"):
+        generate(toolset(unapproved, SPRITE), SPEC, tmp_path / "out")
+    assert not (tmp_path / "out").exists()
+
+
+def test_report_and_readme_list_every_gap(tmp_path: Path) -> None:
+    generate(toolset(POKEMON, SPRITE), SPEC, tmp_path)
+
+    report = json.loads((tmp_path / "generation_report.json").read_text())
+    assert report["tools"] == ["pokemon"]
+    assert report["skipped"] == [
+        {"name": "sprite", "reason": "not approved: images, not JSON", "endpoints": ["get_sprite"]}
+    ]
+    assert report["unreachable"] == ["get_sprite"]
+    readme = (tmp_path / "README.md").read_text()
+    assert "| `sprite` | not approved: images, not JSON | get_sprite |" in readme
+    assert "No generated tool calls these: `GET /sprites/{id}`." in readme
+    pyproject = (tmp_path / "pyproject.toml").read_text()
+    assert 'name = "pokeapi-mcp"' in pyproject
+    assert '"mcp>=2.3,<3"' in pyproject
+
+
+# --- what a generated server does at run time ------------------------------------------
+
+
+@pytest.fixture
+def pokemon_server(server_module: Callable[[ToolSet, ApiSpec], ModuleType]) -> ModuleType:
+    sprite = SPRITE.model_copy(update={"approved": True})
+    return server_module(toolset(POKEMON, sprite), SPEC)
+
+
+def test_route_choice_and_request_building(pokemon_server: ModuleType) -> None:
+    requests: list[httpx.Request] = []
+    set_transport(pokemon_server, echo(requests))
+
+    _, results = run(
+        pokemon_server,
+        [
+            ("pokemon", {"name": "mr mime"}),
+            ("pokemon", {"limit": 5, "offset": 10}),
+            ("sprite", {"id": 7, "size": "M"}),
+        ],
+    )
+
+    assert not any(r.is_error for r in results)
+    urls = [str(r.url) for r in requests]
+    assert urls == [
+        "https://pokeapi.co/api/v2/pokemon/mr%20mime",
+        "https://pokeapi.co/api/v2/pokemon?limit=5.0&offset=10",
+        "https://pokeapi.co/api/v2/sprites/7?size=M",
+    ]
+    assert requests[0].headers["user-agent"].startswith("docs2mcp-generated-server/")
+
+
+def test_schema_types_enums_and_required(pokemon_server: ModuleType) -> None:
+    listed, _ = run(pokemon_server, [])
+    sprite = next(t for t in listed if t.name == "sprite")
+    assert sprite.description == "Get a sprite."
+    assert sprite.input_schema["required"] == ["id"]
+    size = sprite.input_schema["properties"]["size"]
+    assert {"enum": ["S", "M"], "type": "string"} in size["anyOf"]
+    assert size["description"] == "size"
+
+
+def test_errors_come_back_as_tool_errors(pokemon_server: ModuleType) -> None:
+    def failing(request: httpx.Request) -> httpx.Response:
+        if request.url.path.endswith("/boom"):
+            raise httpx.ConnectError("connection refused", request=request)  # noqa: TRY003
+        return httpx.Response(404, text="Not Found")
+
+    set_transport(pokemon_server, failing)
+    _, results = run(
+        pokemon_server,
+        [("pokemon", {"name": "missingno"}), ("pokemon", {"name": "boom"}), ("sprite", {})],
+    )
+
+    assert [r.is_error for r in results] == [True, True, True]
+    texts = [r.content[0].text for r in results]
+    assert "GET /pokemon/missingno returned HTTP 404: Not Found" in texts[0]
+    assert "GET /pokemon/boom failed: connection refused" in texts[1]
+    assert "Field required" in texts[2]
+
+
+def test_big_and_non_json_responses(
+    pokemon_server: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(pokemon_server, "MAX_RESULT_CHARS", 50)
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if "sprites" in request.url.path:
+            return httpx.Response(200, content=b"\x89PNG", headers={"content-type": "image/png"})
+        return httpx.Response(200, json={"results": ["x" * 10] * 20})
+
+    set_transport(pokemon_server, handler)
+    _, results = run(pokemon_server, [("pokemon", {}), ("sprite", {"id": 1})])
+
+    full = json.dumps({"results": ["x" * 10] * 20})
+    assert results[0].content[0].text == (
+        f"{full[:50]}\n[Cut to 50 of {len(full)} characters. Narrow the request.]"
+    )
+    assert results[1].content[0].text.startswith("[The response is image/png, not JSON]")
+
+
+def test_api_keys_come_from_the_environment(
+    server_module: Callable[[ToolSet, ApiSpec], ModuleType], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    keyed = toolset(POKEMON).model_copy(
+        update={"auth": AuthScheme(type=AuthType.API_KEY, location="query", name="key")}
+    )
+    module = server_module(keyed, SPEC)
+    requests: list[httpx.Request] = []
+    set_transport(module, echo(requests))
+
+    monkeypatch.delenv("POKEAPI_API_KEY", raising=False)
+    _, missing = run(module, [("pokemon", {"name": "ditto"})])
+    assert missing[0].is_error
+    assert "set POKEAPI_API_KEY" in missing[0].content[0].text
+
+    monkeypatch.setenv("POKEAPI_API_KEY", "secret")
+    _, ok = run(module, [("pokemon", {"name": "ditto"})])
+    assert not ok[0].is_error
+    assert requests[0].url.params["key"] == "secret"
+
+
+@pytest.mark.parametrize(
+    ("parameter", "expected"),
+    [
+        (arg("q", required=True), "str"),
+        (arg("n", "integer"), "int | None"),
+        (arg("ids", "array", items_type="integer"), "list[int] | None"),
+        (arg("unit", enum=["c", "f"], required=True), "Literal['c', 'f']"),
+        (arg("on", "boolean"), "bool | None"),
+        (arg("extra", "object"), "dict[str, Any] | None"),
+    ],
+)
+def test_python_types(parameter: ToolParameter, expected: str) -> None:
+    assert python_type(parameter) == expected
+
+
+# --- the command -----------------------------------------------------------------------
+
+
+def test_generate_command(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    tools = tmp_path / "tools.json"
+    spec = SPECS / "frankfurter.json"
+    tools.write_text((REPLAY / "frankfurter" / "tools.json").read_text("utf-8"))
+    out = tmp_path / "server"
+
+    assert main(["generate", str(tools), "--spec", str(spec), "--out", str(out)]) == 1
+    assert "nothing to generate" in capsys.readouterr().err
+
+    assert main(["approve", str(tools), "--all", "--except", "currencies"]) == 0
+    assert main(["generate", str(tools), "--spec", str(spec), "--out", str(out)]) == 0
+    printed = capsys.readouterr().out
+    assert "Frankfurter: generated 3 tools" in printed
+    assert "(1 skipped, 1 endpoints excluded, 2 unreachable)" in printed
+    assert "skipped currencies: not approved" in printed
+    assert sorted(p.name for p in out.iterdir()) == [
+        "README.md",
+        "generation_report.json",
+        "pyproject.toml",
+        "server.py",
+    ]
+
+    tools.write_text('{"api": "x"}')
+    assert main(["generate", str(tools), "--spec", str(spec), "--out", str(out)]) == 1
+    assert "is not a valid tools.json" in capsys.readouterr().err
