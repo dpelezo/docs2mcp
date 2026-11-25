@@ -12,12 +12,13 @@ from docs2mcp.extract.merge import (
     merge_endpoints,
     normalize_path,
     outside_base,
+    repair_cited_values,
     route_key,
     to_endpoint,
     to_parameter,
 )
 from docs2mcp.extract.wire import WireAuth, WireEndpoint, WireParameter
-from docs2mcp.spec import AuthType, Endpoint, Parameter, ParamLocation
+from docs2mcp.spec import AuthType, Endpoint, Parameter, ParamLocation, ParamType
 from tests.unit.fakes import NO_AUTH, chunk, endpoint, param
 
 BASE = "https://pokeapi.co/api/v2"
@@ -199,6 +200,133 @@ def test_merge_endpoints_combines_duplicates_and_makes_ids_unique() -> None:
     assert merges == ["GET /pokemon/{name}: merged a duplicate from another chunk"]
     assert not any("merged a duplicate" in n for n in notes)
     assert any("renamed id to 'get_pokemon_2'" in n for n in notes)
+
+
+def test_operations_sharing_a_route_keep_only_common_requirements() -> None:
+    """#36: GET /postcodes?q= and GET /postcodes?lon=&lat= are one route, two operations."""
+    notes: list[str] = []
+    search = to_endpoint(
+        endpoint("query_postcodes", "/postcodes", param("q", required=True), param("limit")),
+        BASE,
+        CHUNKS,
+        notes,
+    )
+    reverse = to_endpoint(
+        endpoint(
+            "reverse_geocode",
+            "/postcodes",
+            param("lon", type="number", required=True),
+            param("lat", type="number", required=True),
+            param("limit"),
+            summary="Returns the nearest postcodes to a coordinate.",
+            description="Results include a distance.",
+        ),
+        BASE,
+        CHUNKS,
+        notes,
+    )
+    merges: list[str] = []
+    (merged,) = merge_endpoints([search, reverse], notes, merges)
+
+    assert [(p.name, p.required) for p in merged.parameters] == [
+        ("q", False),
+        ("limit", False),
+        ("lon", False),
+        ("lat", False),
+    ]
+    assert merged.summary == search.summary
+    assert merged.description == (
+        "Also: Returns the nearest postcodes to a coordinate. Results include a distance."
+    )
+    assert notes == [
+        "GET /postcodes: ['q', 'lon', 'lat'] made optional, because not every operation "
+        "merged on this route requires them"
+    ]
+
+
+def test_a_parameter_every_copy_requires_stays_required() -> None:
+    notes: list[str] = []
+    copies = [
+        to_endpoint(
+            endpoint("lookup", "/lookup", param("code", required=True), summary=summary),
+            BASE,
+            CHUNKS,
+            notes,
+        )
+        for summary in ("Look up a code.", "Find one code.")
+    ]
+    (merged,) = merge_endpoints(copies, notes, [])
+    assert merged.parameters[0].required
+    assert notes == []
+
+
+def _endpoint_with(*params: Parameter, description: str = "") -> Endpoint:
+    return Endpoint(
+        id="books",
+        method="GET",
+        path="/api/books",
+        summary="Book data.",
+        description=description,
+        parameters=list(params),
+    )
+
+
+def test_values_the_docs_cite_are_added_to_the_enum() -> None:
+    """#36: Open Library says "Pass jscmd=details" but listed only viewapi and data."""
+    notes: list[str] = []
+    jscmd = Parameter(
+        name="jscmd", location=ParamLocation.QUERY, type=ParamType.STRING, enum=["viewapi", "data"]
+    )
+    (fixed,) = repair_cited_values(
+        [_endpoint_with(jscmd, description="Pass jscmd=details, or jscmd=data for stability.")],
+        notes,
+    )
+    assert fixed.parameters[0].enum == ["viewapi", "data", "details"]
+    assert notes == [
+        "GET /api/books: parameter 'jscmd': added ['details'] to its allowed values, "
+        "as the docs cite them"
+    ]
+
+
+def test_cited_values_need_the_exact_parameter_name() -> None:
+    notes: list[str] = []
+    fmt = Parameter(
+        name="format", location=ParamLocation.QUERY, type=ParamType.STRING, enum=["json"]
+    )
+    endpoints = [_endpoint_with(fmt, description="Set output_format=xml or format=json.")]
+    assert repair_cited_values(endpoints, notes) == endpoints
+    assert notes == []
+
+
+@pytest.mark.parametrize(
+    ("type_", "default", "becomes_array"),
+    [
+        (ParamType.NUMBER, 52.52, True),
+        (ParamType.INTEGER, None, True),
+        (ParamType.BOOLEAN, None, True),
+        (ParamType.STRING, None, False),
+    ],
+)
+def test_comma_separated_scalars_become_arrays(
+    type_: ParamType, default: object, becomes_array: bool
+) -> None:
+    """#36: Open-Meteo latitude is a number "Multiple values can be comma separated"."""
+    notes: list[str] = []
+    latitude = Parameter(
+        name="latitude",
+        location=ParamLocation.QUERY,
+        type=type_,
+        default=default,
+        description="WGS84 latitude. Multiple values can be comma-separated.",
+    )
+    (fixed,) = repair_cited_values([_endpoint_with(latitude)], notes)
+    param = fixed.parameters[0]
+    if becomes_array:
+        assert (param.type, param.items_type, param.default) == (ParamType.ARRAY, type_, None)
+        assert len(notes) == 1
+    else:
+        assert param == latitude
+        assert notes == []
 
 
 def test_choose_auth() -> None:

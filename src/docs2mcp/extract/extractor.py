@@ -14,6 +14,7 @@ from docs2mcp.extract.merge import (
     expand_resource_templates,
     merge_endpoints,
     outside_base,
+    repair_cited_values,
     route_key,
     to_endpoint,
 )
@@ -151,6 +152,7 @@ class Extractor:
         endpoints = expand_resource_templates(endpoints, list(templates.values()), report.expanded)
         merged = merge_endpoints(endpoints, notes, report.merged)
         merged = apply_shared_parameters(merged, shares, chosen_base, report.shared_parameters)
+        merged = repair_cited_values(merged, notes)
         report.repairs = notes
         if not merged:
             msg = "no valid endpoints were extracted; see the report"
