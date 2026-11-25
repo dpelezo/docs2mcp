@@ -18,7 +18,7 @@ from docs2mcp.extract.merge import (
     to_parameter,
 )
 from docs2mcp.extract.wire import WireAuth, WireEndpoint, WireParameter
-from docs2mcp.spec import AuthType, Endpoint, Parameter, ParamLocation, ParamType
+from docs2mcp.spec import AuthType, Endpoint, HttpMethod, Parameter, ParamLocation, ParamType
 from tests.unit.fakes import NO_AUTH, chunk, endpoint, param
 
 BASE = "https://pokeapi.co/api/v2"
@@ -263,7 +263,7 @@ def test_a_parameter_every_copy_requires_stays_required() -> None:
 def _endpoint_with(*params: Parameter, description: str = "") -> Endpoint:
     return Endpoint(
         id="books",
-        method="GET",
+        method=HttpMethod.GET,
         path="/api/books",
         summary="Book data.",
         description=description,
@@ -308,7 +308,7 @@ def test_cited_values_need_the_exact_parameter_name() -> None:
     ],
 )
 def test_comma_separated_scalars_become_arrays(
-    type_: ParamType, default: object, becomes_array: bool
+    type_: ParamType, default: float | None, becomes_array: bool
 ) -> None:
     """#36: Open-Meteo latitude is a number "Multiple values can be comma separated"."""
     notes: list[str] = []
