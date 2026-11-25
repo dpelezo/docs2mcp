@@ -40,13 +40,13 @@
       "method": "POST",
       "path": "/postcodes",
       "summary": "Retrieves data for up to 100 postcodes in a single request.",
-      "description": "Send a JSON body with a postcodes array and Content-Type application/json. Postcodes that are not found have a null result.",
+      "description": "Send a JSON body with a postcodes array and Content-Type application/json. Postcodes that are not found have a null result. Also: Returns the nearest postcodes for up to 100 coordinate pairs in one request. Send a JSON body with a geolocations array. Results are sorted nearest first; invalid geolocations return a null result.",
       "parameters": [
         {
           "name": "postcodes",
           "location": "body",
           "type": "array",
-          "required": true,
+          "required": false,
           "description": "Array of up to 100 postcodes to look up.",
           "items_type": "string"
         },
@@ -61,7 +61,7 @@
           "name": "geolocations",
           "location": "body",
           "type": "array",
-          "required": true,
+          "required": false,
           "description": "Array of geolocation objects with longitude and latitude, maximum 100.",
           "items_type": "object"
         },
@@ -105,13 +105,13 @@
       "method": "GET",
       "path": "/postcodes",
       "summary": "Returns postcodes matching a search query string.",
-      "description": "Each result includes a distance field in meters from the given coordinates.",
+      "description": "Also: Returns the nearest postcodes to a longitude and latitude pair. Each result includes a distance field in meters from the given coordinates.",
       "parameters": [
         {
           "name": "q",
           "location": "query",
           "type": "string",
-          "required": true,
+          "required": false,
           "description": "The search query string."
         },
         {
@@ -133,14 +133,14 @@
           "name": "lon",
           "location": "query",
           "type": "number",
-          "required": true,
+          "required": false,
           "description": "Longitude, a WGS84 value between -180 and 180."
         },
         {
           "name": "lat",
           "location": "query",
           "type": "number",
-          "required": true,
+          "required": false,
           "description": "Latitude, a WGS84 value between -90 and 90."
         },
         {

@@ -10,7 +10,10 @@ Safe fixes:
 - a path placeholder with no matching parameter gets a required string parameter;
 - a required parameter with a default becomes optional;
 - a default outside its allowed values is dropped;
-- duplicate endpoints are merged, and repeated operation names get a suffix.
+- duplicate endpoints are merged, and repeated operation names get a suffix; a
+  parameter stays required only if every merged copy requires it;
+- a value the docs cite as `name=value` is added to that parameter's enum, and a
+  numeric or boolean parameter described as comma-separated becomes an array.
 
 Endpoints that Claude reports as served from a different base URL (another host,
 or another API version) are out of scope for this spec and are dropped with a
@@ -354,33 +357,34 @@ def expand_resource_templates(
 def merge_endpoints(
     endpoints: Iterable[Endpoint], notes: list[str], merges: list[str]
 ) -> list[Endpoint]:
-    """Merge duplicates (same method and route) and make ids unique.
+    """Merge endpoints on the same method and route, and make ids unique.
 
-    Merges are expected when a route is documented in several chunks, so they
-    go to `merges`, not to the repair `notes`.
+    Merges are expected when a route is documented in several chunks, so they go to
+    `merges`, not to the repair `notes`. One route can also serve several operations,
+    such as `GET /postcodes?q=` and `GET /postcodes?lon=&lat=`. So a parameter stays
+    required only if every merged copy requires it. When that relaxes a flag, the
+    copies are different operations, so the other copies' summaries are added to the
+    description; otherwise the longest description wins. Relaxed flags are repairs,
+    so they go to `notes` (#36).
     """
-    by_route: dict[tuple[str, str], Endpoint] = {}
+    groups: dict[tuple[str, str], list[Endpoint]] = {}
     for endpoint in endpoints:
-        key = _route_key(endpoint)
-        existing = by_route.get(key)
-        if existing is None:
-            by_route[key] = endpoint
-            continue
-        known = {(p.location, p.name) for p in existing.parameters}
-        extra = [
-            p
-            for p in endpoint.parameters
-            if p.location is not ParamLocation.PATH and (p.location, p.name) not in known
-        ]
-        description = max(existing.description, endpoint.description, key=len)
-        by_route[key] = existing.model_copy(
-            update={"parameters": [*existing.parameters, *extra], "description": description}
-        )
-        merges.append(f"{existing.method} {existing.path}: merged a duplicate from another chunk")
+        groups.setdefault(_route_key(endpoint), []).append(endpoint)
+
+    merged: list[Endpoint] = []
+    for copies in groups.values():
+        first = copies[0]
+        if len(copies) > 1:
+            first = _merge_copies(copies, notes)
+            merges.extend(
+                f"{first.method} {first.path}: merged a duplicate from another chunk"
+                for _ in copies[1:]
+            )
+        merged.append(first)
 
     unique: list[Endpoint] = []
     used: set[str] = set()
-    for original in by_route.values():
+    for original in merged:
         new_id, n = original.id, 2
         while new_id in used:
             new_id, n = f"{original.id}_{n}", n + 1
@@ -391,6 +395,107 @@ def merge_endpoints(
         used.add(new_id)
         unique.append(endpoint)
     return unique
+
+
+def _merge_copies(copies: Sequence[Endpoint], notes: list[str]) -> Endpoint:
+    first = copies[0]
+    parameters: list[Parameter] = []
+    seen: set[tuple[ParamLocation, str]] = set()
+    for copy in copies:
+        for param in copy.parameters:
+            key = (param.location, param.name)
+            if key in seen or (param.location is ParamLocation.PATH and copy is not first):
+                continue
+            seen.add(key)
+            parameters.append(param)
+
+    relaxed: list[str] = []
+    for index, param in enumerate(parameters):
+        if param.location is ParamLocation.PATH or not param.required:
+            continue
+        if not all(_requires(copy, param) for copy in copies):
+            parameters[index] = param.model_copy(update={"required": False})
+            relaxed.append(param.name)
+    if relaxed:
+        notes.append(
+            f"{first.method} {first.path}: {relaxed} made optional, because not every "
+            "operation merged on this route requires them"
+        )
+    description = (
+        _merged_description(copies)
+        if relaxed
+        else max((copy.description for copy in copies), key=len)
+    )
+    return first.model_copy(update={"parameters": parameters, "description": description})
+
+
+def _requires(endpoint: Endpoint, param: Parameter) -> bool:
+    return any(
+        p.location is param.location and p.name == param.name and p.required
+        for p in endpoint.parameters
+    )
+
+
+def _merged_description(copies: Sequence[Endpoint]) -> str:
+    """Every operation's text, for copies that are different operations on one route."""
+    first = copies[0]
+    parts = [first.description.strip()]
+    for copy in copies[1:]:
+        if copy.summary != first.summary:
+            parts.append(f"Also: {copy.summary} {copy.description}".strip())
+    return " ".join(part for part in parts if part)
+
+
+def repair_cited_values(endpoints: Sequence[Endpoint], notes: list[str]) -> list[Endpoint]:
+    """Make each endpoint's text agree with its parameter enums and types (#36).
+
+    - A value the docs cite as `name=value` for a string enum parameter is added to
+      its enum when missing (`jscmd=details` with an enum of viewapi and data).
+    - A number, integer or boolean parameter described as taking comma-separated
+      values becomes an array of that type, and loses a scalar default.
+    """
+    repaired: list[Endpoint] = []
+    for endpoint in endpoints:
+        text = " ".join(
+            [endpoint.summary, endpoint.description, *(p.description for p in endpoint.parameters)]
+        )
+        parameters: list[Parameter] = []
+        for param in endpoint.parameters:
+            parameters.append(_repair_parameter(endpoint, param, text, notes))
+        repaired.append(
+            endpoint
+            if parameters == endpoint.parameters
+            else endpoint.model_copy(update={"parameters": parameters})
+        )
+    return repaired
+
+
+_SCALARS = (ParamType.NUMBER, ParamType.INTEGER, ParamType.BOOLEAN)
+_COMMA_SEPARATED = re.compile(r"comma[\s-]*separated", re.IGNORECASE)
+
+
+def _repair_parameter(
+    endpoint: Endpoint, param: Parameter, text: str, notes: list[str]
+) -> Parameter:
+    where = f"{endpoint.method} {endpoint.path}: parameter '{param.name}'"
+    if param.enum is not None and param.type is ParamType.STRING:
+        cited = re.findall(rf"(?<![\w-]){re.escape(param.name)}=([A-Za-z0-9_-]+)", text)
+        missing = [v for v in dict.fromkeys(cited) if v not in param.enum]
+        if missing:
+            notes.append(f"{where}: added {missing} to its allowed values, as the docs cite them")
+            param = param.model_copy(update={"enum": [*param.enum, *missing]})
+    if param.type in _SCALARS and _COMMA_SEPARATED.search(param.description):
+        notes.append(
+            f"{where}: {param.type} described as comma-separated, so it is now an array of "
+            f"{param.type}"
+        )
+        update: dict[str, object] = {"type": ParamType.ARRAY, "items_type": param.type}
+        if param.default is not None and not isinstance(param.default, list):
+            update["default"] = None
+        if param.enum is not None:
+            update["enum"] = None
+        param = param.model_copy(update=update)
+    return param
 
 
 def choose_auth(candidates: Iterable[WireAuth], notes: list[str]) -> AuthScheme:

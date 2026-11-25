@@ -14,7 +14,7 @@
     "recall": 0.8889,
     "precision": 1.0
   },
-  "required_mismatches": 4,
+  "required_mismatches": 1,
   "missing_endpoints": [],
   "extra_endpoints": [],
   "matched": [
@@ -46,11 +46,7 @@
         "query:longitude"
       ],
       "extra": [],
-      "required_mismatches": [
-        "query:lat",
-        "query:lon",
-        "query:q"
-      ]
+      "required_mismatches": []
     },
     {
       "route": "POST /postcodes",
