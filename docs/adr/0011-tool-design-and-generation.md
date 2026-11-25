@@ -55,7 +55,7 @@ As in extraction, validation errors go back to Claude for another try, and code 
   - a single-module server built on `MCPServer`, with one typed function per tool (parameters with descriptions, so the SDK's JSON Schema carries them);
   - a `pyproject.toml` pinning `mcp` 2.x and `httpx`;
   - a README.
-- **At run time,** each tool picks its route, builds the request with `httpx`, and returns the JSON response, cut to a size limit with a note when it is too long. HTTP and network errors come back as tool errors that say what went wrong (status and message), not as exceptions.
+- **At run time,** each tool picks its route, builds the request with `httpx`, and returns the JSON response within a size limit. A response over the limit first loses the second half of its biggest lists and nested objects, repeatedly, keeping every top-level key. Only if that is not enough is the text cut. A note says what was left out (amended 2026-11-25, #58: cutting the text alone hid PokéAPI's `stats` and `types`, which come after 300,000 characters of `moves`). HTTP and network errors come back as tool errors that say what went wrong (status and message), not as exceptions.
 - **The server** runs over streamable HTTP (`mcp.run("streamable-http")`), and also over stdio for local clients.
 
 ### Checks on every generated server

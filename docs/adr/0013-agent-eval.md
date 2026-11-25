@@ -19,7 +19,7 @@ Each condition is a generated MCP server for an API. The agent, its prompt and t
 | **B. docs2mcp direct** | one tool per endpoint, from the spec docs2mcp extracted (`design --direct`) | all six eval APIs |
 | **C. docs2mcp task-shaped** | the reviewed task design (ADR 0012) | all six eval APIs |
 
-Condition A uses docs2mcp's own converter (`src/docs2mcp/openapi.py`), not another project's generator: it feeds the same direct design and server template as B, so response handling and the 20,000-character limit are the same in every condition and only the tools differ (decided 2026-11-24).
+Condition A uses docs2mcp's own converter (`src/docs2mcp/openapi.py`), not another project's generator: it feeds the same direct design and server template as B, so response handling and the 20,000-character limit (with list shortening, #58) are the same in every condition and only the tools differ (decided 2026-11-24).
 
 - **A vs C** is the headline: docs2mcp against the conversion other generators do.
 - **B vs C** isolates what grouping and LLM-written descriptions add, on the same extracted spec.

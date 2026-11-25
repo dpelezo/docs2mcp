@@ -339,24 +339,82 @@ def test_errors_come_back_as_tool_errors(pokemon_server: ModuleType) -> None:
     assert "Field required" in texts[2]
 
 
-def test_big_and_non_json_responses(
+def test_non_json_responses_say_what_they_are(pokemon_server: ModuleType) -> None:
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, content=b"\x89PNG", headers={"content-type": "image/png"})
+
+    set_transport(pokemon_server, handler)
+    _, results = run(pokemon_server, [("sprite", {"id": 1})])
+    assert results[0].content[0].text.startswith("[The response is image/png, not JSON]")
+
+
+def _respond(module: ModuleType, payload: Any) -> str:
+    set_transport(module, lambda _request: httpx.Response(200, json=payload))
+    _, results = run(module, [("pokemon", {})])
+    assert not results[0].is_error
+    return results[0].content[0].text
+
+
+def test_long_lists_are_halved_so_later_fields_still_show(
+    pokemon_server: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(pokemon_server, "MAX_RESULT_CHARS", 2_000)
+    move = {"move": {"name": "tackle"}, "version_group_details": [{"level": n} for n in range(40)]}
+    pokemon = {
+        "abilities": [{"name": "volt-absorb"}],
+        "moves": [move] * 60,
+        "name": "jolteon",
+        "stats": [{"base_stat": 130, "stat": {"name": "speed"}}],
+        "types": [{"type": {"name": "electric"}}],
+    }
+    text = _respond(pokemon_server, pokemon)
+
+    body, note = text.rsplit("\n", 1)
+    shown = json.loads(body)
+    assert len(body) <= 2_000
+    assert shown["stats"] == pokemon["stats"]
+    assert shown["types"] == pokemon["types"]
+    assert shown["name"] == "jolteon"
+    assert 0 < len(shown["moves"]) < 60
+    assert shown["moves"][0]["move"] == {"name": "tackle"}
+    full = len(json.dumps(pokemon, ensure_ascii=False))
+    assert note.startswith(f"[Shortened to fit 2,000 of {full:,} characters")
+    assert "(moves: " in note
+    assert "items not shown" in note
+    assert note.endswith("Narrow the request to see more.]")
+
+
+def test_a_top_level_list_is_shortened_too(
     pokemon_server: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(pokemon_server, "MAX_RESULT_CHARS", 50)
+    body, note = _respond(pokemon_server, ["x" * 10] * 20).rsplit("\n", 1)
+    assert json.loads(body) == ["x" * 10] * 2
+    assert "(the response: 18 items not shown)" in note
 
-    def handler(request: httpx.Request) -> httpx.Response:
-        if "sprites" in request.url.path:
-            return httpx.Response(200, content=b"\x89PNG", headers={"content-type": "image/png"})
-        return httpx.Response(200, json={"results": ["x" * 10] * 20})
 
-    set_transport(pokemon_server, handler)
-    _, results = run(pokemon_server, [("pokemon", {}), ("sprite", {"id": 1})])
+def test_big_nested_objects_lose_their_last_keys_but_the_top_level_keeps_all(
+    pokemon_server: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(pokemon_server, "MAX_RESULT_CHARS", 400)
+    sprites = {f"front_{n}": "https://example.dev/" + "s" * 40 for n in range(8)}
+    form = {"name": "jolteon", "sprites": sprites, "types": ["electric"], "z": "end"}
+    body, note = _respond(pokemon_server, form).rsplit("\n", 1)
+    shown = json.loads(body)
+    assert list(shown) == ["name", "sprites", "types", "z"]
+    assert list(shown["sprites"]) == ["front_0", "front_1", "front_2", "front_3"]
+    assert "(sprites: 4 keys not shown)" in note
 
-    full = json.dumps({"results": ["x" * 10] * 20})
-    assert results[0].content[0].text == (
+
+def test_small_responses_are_untouched_and_unlistable_ones_are_cut(
+    pokemon_server: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    assert _respond(pokemon_server, {"results": [1, 2, 3]}) == '{"results": [1, 2, 3]}'
+    monkeypatch.setattr(pokemon_server, "MAX_RESULT_CHARS", 50)
+    full = json.dumps({"description": "y" * 100, "results": ["x"]})
+    assert _respond(pokemon_server, {"description": "y" * 100, "results": ["x"]}) == (
         f"{full[:50]}\n[Cut to 50 of {len(full)} characters. Narrow the request.]"
     )
-    assert results[1].content[0].text.startswith("[The response is image/png, not JSON]")
 
 
 def test_api_keys_come_from_the_environment(
