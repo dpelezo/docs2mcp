@@ -1,9 +1,9 @@
 """The tool set: what a generated MCP server exposes, and how each tool calls the API.
 
-`design` writes a `ToolSet` to `tools.json`, a person reviews it, and `generate`
-renders a server from it once it is approved. Each tool has one or more routes; a
-call takes the first route whose required arguments are all present, and makes
-exactly one API request (ADR 0011).
+`design` writes a `ToolSet` to `tools.json`, a person reviews it and approves tools
+one by one, and `generate` renders a server from the approved, valid ones. Each
+tool has one or more routes; a call takes the first route whose required arguments
+are all present, and makes exactly one API request (ADR 0011).
 
 The models here check what can be checked from the file alone. Checks against
 the API spec (coverage, buildable requests, types) are in `validate.py`.
@@ -87,6 +87,13 @@ class Tool(_Model):
     description: str = Field(min_length=1, max_length=MAX_TOOL_DESCRIPTION)
     parameters: list[ToolParameter] = Field(default_factory=list[ToolParameter])
     routes: list[Route] = Field(min_length=1)
+    approved: bool = Field(
+        default=False,
+        description="Set to true by a person after review; generate skips unapproved tools.",
+    )
+    note: str | None = Field(
+        default=None, min_length=1, description="The reviewer's note, such as why it waits."
+    )
 
     @model_validator(mode="after")
     def _check(self) -> Self:
@@ -130,9 +137,6 @@ class ToolSet(_Model):
     )
     tools: list[Tool] = Field(min_length=1)
     excluded: list[ExcludedEndpoint] = Field(default_factory=list[ExcludedEndpoint])
-    approved: bool = Field(
-        default=False, description="Set to true by a person after review; generate refuses false."
-    )
 
     @model_validator(mode="after")
     def _check(self) -> Self:
@@ -141,6 +145,10 @@ class ToolSet(_Model):
             msg = "tool names must be unique"
             raise ValueError(msg)
         return self
+
+    @property
+    def approved_tools(self) -> list[Tool]:
+        return [t for t in self.tools if t.approved]
 
 
 def json_schema() -> str:

@@ -186,8 +186,10 @@ def test_the_model_rejects_inconsistent_tool_sets(make: Any, message: str) -> No
         make()
 
 
-def test_approved_defaults_to_false() -> None:
-    assert toolset(POKEMON).approved is False
+def test_tools_start_unapproved() -> None:
+    assert toolset(POKEMON).approved_tools == []
+    assert POKEMON.approved is False
+    assert POKEMON.note is None
 
 
 def test_committed_schema_file_is_up_to_date() -> None:
@@ -420,7 +422,7 @@ def test_safe_name(raw: str, name: str) -> None:
 def test_direct_design_makes_one_valid_tool_per_endpoint() -> None:
     design = direct_design(SPEC)
     assert design.design == "direct"
-    assert not design.approved
+    assert design.approved_tools == []
     assert [t.name for t in design.tools] == ["get_pokemon", "list_pokemon", "get_sprite"]
     assert design.tools[2].routes == [
         Route(endpoint="get_sprite", arguments={"id": "id", "size": "size"})
@@ -487,10 +489,10 @@ def test_design_and_check_tools_commands(
     )
 
     assert main(["check-tools", str(out), "--spec", str(spec_path)]) == 0
-    assert "valid, not approved yet" in capsys.readouterr().out
+    assert "valid, 0 of 9 tools approved" in capsys.readouterr().out
 
     data = json.loads(out.read_text())
-    data["approved"] = True
+    data["tools"][0]["approved"] = True
     data["excluded"] = [{"endpoint": data["tools"][0]["routes"][0]["endpoint"], "reason": "test"}]
     out.write_text(json.dumps(data))
     assert main(["check-tools", str(out), "--spec", str(spec_path)]) == 1

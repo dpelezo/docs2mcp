@@ -105,7 +105,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "provider_rates",
@@ -211,7 +212,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "currencies",
@@ -254,7 +256,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     },
     {
       "name": "providers",
@@ -286,7 +289,8 @@
           "constants": {},
           "omitted": {}
         }
-      ]
+      ],
+      "approved": false
     }
   ],
   "excluded": [
@@ -294,6 +298,5 @@
       "endpoint": "get_rates_csv",
       "reason": "Returns CSV text rather than JSON; exchange_rates returns the same rates as JSON."
     }
-  ],
-  "approved": false
+  ]
 }

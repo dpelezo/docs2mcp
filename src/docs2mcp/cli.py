@@ -19,7 +19,9 @@ from docs2mcp.design import (
     RecordingDesignModel,
     ReplayDesignModel,
     ToolSet,
+    UnknownToolError,
     direct_design,
+    set_approval,
     validate_toolset,
 )
 from docs2mcp.design import json_schema as tools_json_schema
@@ -119,8 +121,9 @@ def build_parser() -> argparse.ArgumentParser:
         "design",
         help="design the MCP tools for an API spec",
         description=(
-            "Write tools.json from spec.json for a person to review. generate only accepts it "
-            "once its approved field is true. Rules: docs/adr/0011-tool-design-and-generation.md."
+            "Write tools.json from spec.json for a person to review. Approve tools with "
+            "docs2mcp approve; generate builds only approved, valid tools. "
+            "Rules: docs/adr/0011-tool-design-and-generation.md."
         ),
     )
     design_cmd.add_argument("spec", type=Path, help="spec.json written by docs2mcp extract")
@@ -148,6 +151,26 @@ def build_parser() -> argparse.ArgumentParser:
     check_cmd.add_argument(
         "--spec", type=Path, required=True, help="the spec.json it was designed from"
     )
+    approve_cmd = commands.add_parser(
+        "approve",
+        help="approve or revoke tools in tools.json after review",
+        description="generate builds only approved tools. Repeat names or comma-separate them.",
+    )
+    approve_cmd.add_argument("tools", type=Path, help="tools.json to change in place")
+    approve_cmd.add_argument("--all", action="store_true", help="every tool")
+    approve_cmd.add_argument(
+        "--tool", action="append", default=[], help="a tool to change; repeat or comma-separate"
+    )
+    approve_cmd.add_argument(
+        "--except",
+        dest="except_",
+        action="append",
+        default=[],
+        help="with --all: tools to leave unchanged",
+    )
+    approve_cmd.add_argument("--revoke", action="store_true", help="set approved to false")
+    approve_cmd.add_argument("--note", help="the reviewer's note, stored on each changed tool")
+
     measure_cmd = commands.add_parser(
         "measure",
         help="measure a tools.json for the design eval",
@@ -349,7 +372,45 @@ def _run_design(args: argparse.Namespace) -> int:
                 f"{len(repairs.added_arguments)} arguments, dropped {len(repairs.dropped_tools)} "
                 f"tools and added {len(repairs.added_direct)} direct tools. See {report_path}."
             )
-    print(f'Wrote {args.out}. Review it, set "approved": true, then run docs2mcp generate.')
+    print(f"Wrote {args.out}. Review it, approve tools with docs2mcp approve, then generate.")
+    return 0
+
+
+def _approval(toolset: ToolSet) -> str:
+    return f"{len(toolset.approved_tools)} of {len(toolset.tools)} tools approved"
+
+
+def _run_approve(args: argparse.Namespace) -> int:
+    try:
+        toolset = ToolSet.model_validate_json(args.tools.read_text(encoding="utf-8"))
+    except ValidationError as error:
+        print(f"{args.tools} is not a valid tools.json:\n{error}", file=sys.stderr)
+        return 1
+    names = [n.strip() for value in args.tool for n in value.split(",") if n.strip()]
+    excepted = [n.strip() for value in args.except_ for n in value.split(",") if n.strip()]
+    if args.all == bool(names):
+        print("Give either --all or --tool.", file=sys.stderr)
+        return 2
+    if excepted and not args.all:
+        print("--except only works with --all.", file=sys.stderr)
+        return 2
+    try:
+        result = set_approval(
+            toolset,
+            names=names,
+            every=args.all,
+            except_=excepted,
+            approve=not args.revoke,
+            note=args.note,
+        )
+    except (UnknownToolError, ValidationError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    args.tools.write_text(
+        result.toolset.model_dump_json(indent=2, exclude_none=True) + "\n", encoding="utf-8"
+    )
+    verb = "Revoked" if args.revoke else "Approved"
+    print(f"{verb} {len(result.changed)} tools; {_approval(result.toolset)}.")
     return 0
 
 
@@ -364,8 +425,7 @@ def _run_check_tools(args: argparse.Namespace) -> int:
     if errors:
         print("\n".join([f"{len(errors)} problems in {args.tools}:", *(f"- {e}" for e in errors)]))
         return 1
-    status = "approved" if toolset.approved else "not approved yet"
-    print(f"{_summary(toolset, spec)}: valid, {status}")
+    print(f"{_summary(toolset, spec)}: valid, {_approval(toolset)}")
     return 0
 
 
@@ -392,6 +452,7 @@ _COMMANDS: dict[str, Callable[[argparse.Namespace], int]] = {
     "score": _run_score,
     "design": _run_design,
     "check-tools": _run_check_tools,
+    "approve": _run_approve,
     "measure": _run_measure,
 }
 
