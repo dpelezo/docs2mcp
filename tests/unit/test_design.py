@@ -20,7 +20,8 @@ from docs2mcp.design import (
     validate_toolset,
 )
 from docs2mcp.design.toolset import MAX_PARAMETER_DESCRIPTION, MAX_TOOL_DESCRIPTION
-from docs2mcp.spec import ApiSpec
+from docs2mcp.design.validate import matches_type
+from docs2mcp.spec import ApiSpec, ParamType
 
 ROOT = Path(__file__).parents[2]
 SPECS = ROOT / "tests" / "fixtures" / "specs"
@@ -351,6 +352,38 @@ def test_constants_must_be_in_the_endpoint_enum() -> None:
     )
     (error,) = errors_for(POKEMON, sprite, excluded=[])
     assert "constant size='XL' is not in the endpoint's enum" in error
+
+
+@pytest.mark.parametrize(
+    ("value", "ok"),
+    [("M", True), (["M"], False), (None, False), (1, False)],
+)
+def test_constants_must_have_the_parameter_type(value: Any, ok: bool) -> None:
+    sprite = Tool(
+        name="sprite",
+        description="d",
+        parameters=[arg("id", "integer", required=True)],
+        routes=[Route(endpoint="get_sprite", arguments={"id": "id"}, constants={"size": value})],
+    )
+    errors = errors_for(POKEMON, sprite, excluded=[])
+    assert (errors == []) is ok, errors
+    if not ok:
+        assert "is not a JSON string, which endpoint parameter 'size' expects" in errors[0]
+
+
+@pytest.mark.parametrize(
+    ("type_", "good", "bad"),
+    [
+        ("integer", 3, True),
+        ("number", 2.5, "2.5"),
+        ("boolean", False, 0),
+        ("array", [], "[]"),
+        ("object", {}, []),
+    ],
+)
+def test_constant_type_rules(type_: str, good: Any, bad: Any) -> None:
+    assert matches_type(good, ParamType(type_))
+    assert not matches_type(bad, ParamType(type_))
 
 
 def test_a_route_that_can_never_be_chosen_is_an_error() -> None:
