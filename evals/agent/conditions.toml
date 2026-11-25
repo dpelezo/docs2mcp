@@ -1,0 +1,39 @@
+# What each agent eval condition is built from (ADR 0013). Read by
+# scripts/build_eval_servers.py, which writes servers/eval/<condition>/<api>/.
+#
+# A: the committed design from the API's own OpenAPI file (#48).
+# B: the direct design of `spec`, one tool per endpoint.
+# C: the task-shaped design in `task_design`, made from the same `spec` with
+#    `docs2mcp design --model claude-haiku-5-5` (decided 2026-11-24).
+# B and C approve every valid tool as generated: no hand review or edits.
+#
+# `spec` and `task_design` are on the owner's machine (specs/ and tools/ are
+# git-ignored; three of the APIs have AGPL docs). `spec` is the fix36 run: the
+# extraction after the #36 repair.
+
+[api.pokeapi]
+spec = "specs/pokeapi/fix36/spec.json"
+task_design = "tools/pokeapi/eval/tools.json"
+openapi = "evals/agent/conditions/openapi/pokeapi"
+
+[api.frankfurter]
+spec = "specs/frankfurter/fix36/spec.json"
+task_design = "tools/frankfurter/eval/tools.json"
+openapi = "evals/agent/conditions/openapi/frankfurter"
+
+[api.postcodes_io]
+spec = "specs/postcodes_io/fix36/spec.json"
+task_design = "tools/postcodes_io/eval/tools.json"
+openapi = "evals/agent/conditions/openapi/postcodes_io"
+
+[api.open_library]
+spec = "specs/open_library/fix36/spec.json"
+task_design = "tools/open_library/eval/tools.json"
+
+[api.open_meteo]
+spec = "specs/open_meteo/fix36/spec.json"
+task_design = "tools/open_meteo/eval/tools.json"
+
+[api.open_meteo_geocoding]
+spec = "specs/open_meteo_geocoding/fix36/spec.json"
+task_design = "tools/open_meteo_geocoding/eval/tools.json"

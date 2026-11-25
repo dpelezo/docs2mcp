@@ -2,7 +2,7 @@
 
 Do agents finish more tasks with docs2mcp's task-shaped tools than with a direct conversion? This eval answers that. The plan and its reasons are in [ADR 0013](../../docs/adr/0013-agent-eval.md).
 
-**Status:** the task format, the scorer (#46), the 100 tasks (#47), the condition A designs (#48) and recorded responses (#49) are in place. The runner (#50) and the results (#51) come next.
+**Status:** the task format, the scorer (#46), the 100 tasks (#47), the condition A designs (#48), recorded responses (#49) and the runner (#50) are in place. The results (#51) come next.
 
 ## Task files
 
@@ -86,6 +86,35 @@ uv run docs2mcp generate evals/agent/conditions/openapi/postcodes_io/tools.json 
 ```
 
 The Postcodes.io gaps take away the direct route for some tasks in condition A: 009 (needs `radius`), 010 (autocomplete), 013 and 019 (place search) and 016 (nearest outcodes). 015 and 017 need one lookup per postcode instead of a bulk request. That is part of what the eval measures: documentation can say more than the official file.
+
+## Running it
+
+1. **Make condition C's designs** (Haiku, a few cents per API). The task design is made from the same extracted spec as condition B:
+
+   ```bash
+   for id in pokeapi frankfurter postcodes_io open_library open_meteo open_meteo_geocoding; do
+     uv run docs2mcp design specs/$id/fix36/spec.json --model claude-haiku-5-5 \
+       --out tools/$id/eval/tools.json --record tools/$id/eval/recordings
+   done
+   ```
+
+2. **Build the servers** listed in [`conditions.toml`](conditions.toml). This writes `servers/eval/<A|B|C>/<api>/`, plus `manifest.json` with the SHA-256 of every input. B and C approve every valid tool as generated, with no hand edits.
+
+   ```bash
+   uv run python -m scripts.build_eval_servers
+   ```
+
+3. **Run the agent.** Start with the pilot: 10 tasks in every condition, 26 runs, about $0.10 on Haiku. Then do the full run with 3 repeats.
+
+   ```bash
+   uv run python -m scripts.agent_eval --pilot --out runs/pilot
+   uv run python -m scripts.agent_eval --repeats 3 --out runs/full
+   ```
+
+`scripts/agent_eval.py` is a LangGraph graph with two nodes. `model` calls Claude with the server's tools plus `submit_answer`. `tools` calls the MCP server and stops when an answer is submitted or after 12 model calls. Every condition gets the same system prompt (`docs2mcp.evals.agent.SYSTEM_PROMPT`) and the same limits.
+- **Output:** each run appends a line to `runs/<name>/results.jsonl` as it finishes, so a stopped run resumes where it left off. At the end it writes `summary.md` and `metrics.json`.
+- **Tracing:** with Langfuse keys set, each task is one trace, with a span per model call and per tool call.
+- **Invalid tool calls** are calls the server rejected for their arguments, either a schema validation error or an HTTP 4xx from the API. A "not recorded" error in replay mode is counted separately, because it is a problem with the run, not the tools.
 
 ## Recorded responses
 

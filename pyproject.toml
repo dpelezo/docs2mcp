@@ -46,6 +46,11 @@ dev = [
     "ruff>=0.17.6",
     "types-pyyaml>=6.0.12",
 ]
+# The agent eval runner (ADR 0013, #50). Installed by default for development and CI.
+eval = [
+    "langchain-anthropic>=1.7.12,<2",
+    "langgraph>=1.2.24,<2",
+]
 
 # --- Lint and format -------------------------------------------------------
 
@@ -105,6 +110,10 @@ addopts = [
     "--cov=docs2mcp",
     "--cov-report=term-missing",
 ]  # the 80% coverage floor applies to unit tests only: see `just test` and CI
+filterwarnings = [
+    # langsmith (pulled in by langchain-core) calls an asyncio function deprecated in 3.14
+    "ignore:'asyncio.iscoroutinefunction' is deprecated:DeprecationWarning:langsmith",
+]
 markers = [
     "unit: fast tests with no network access (everything under tests/unit)",
     "integration: tests against real services (everything under tests/integration)",
@@ -113,3 +122,6 @@ markers = [
 [tool.coverage.run]
 branch = true
 source = ["src/docs2mcp"]
+
+[tool.uv]
+default-groups = ["dev", "eval"]
