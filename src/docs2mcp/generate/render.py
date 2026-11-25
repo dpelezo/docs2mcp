@@ -9,12 +9,12 @@ import json
 import re
 import unicodedata
 from dataclasses import dataclass
-from importlib import metadata
 from pathlib import Path
 from typing import Any
 
 from jinja2 import Environment, PackageLoader, StrictUndefined
 
+from docs2mcp import __version__
 from docs2mcp.design import Tool, ToolParameter
 from docs2mcp.generate.plan import GenerationPlan
 from docs2mcp.generate.pycode import block, literal, string
@@ -213,7 +213,7 @@ def render(plan: GenerationPlan) -> RenderedServer:
         "unreachable": plan.unreachable,
         "endpoints": plan.endpoints,
         "max_result_chars": MAX_RESULT_CHARS,
-        "version": metadata.version("docs2mcp"),
+        "version": __version__,
     }
     files = {name: environment.get_template(f"{name}.j2").render(context) for name in FILES}
     return RenderedServer(files)

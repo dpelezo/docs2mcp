@@ -2,4 +2,7 @@
 
 from importlib.metadata import version
 
-__version__ = version("docs2mcp")
+DISTRIBUTION = "docs2mcp-cli"
+"""The name on PyPI. `docs2mcp` there is an unrelated project; the import name stays docs2mcp."""
+
+__version__ = version(DISTRIBUTION)
