@@ -57,6 +57,10 @@ The pilots and the full run turned up four problems in what docs2mcp generates o
 - **Two code versions:** 622 runs used commit `bbb81b8`. The 218 runs retried after a rate limit and a credit stop (`errored.jsonl`) used `12c4762`, which only adds `--retry-errors`. The retried runs used 2 concurrent tasks instead of 4.
 - **Cost:** $2.62 in model calls for the 840 scored runs.
 
+## Demo data
+
+`scripts/export_demo.py` writes `web/data/demo.json`, everything the playground shows: each condition's tool list for PokéAPI, Frankfurter and Postcodes.io, exactly as an agent sees it over MCP, and every task's outcomes from the committed run. Open Library and Open-Meteo appear only as results, because their docs are AGPL. A unit test fails if the committed file is out of date.
+
 ## Task files
 
 Tasks are hand-written TOML, one file per API, in `tasks/<api>.toml`. The schema is [`docs/tasks.schema.json`](../../docs/tasks.schema.json), generated from `src/docs2mcp/evals/tasks.py`.

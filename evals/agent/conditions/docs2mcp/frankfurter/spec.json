@@ -1,0 +1,297 @@
+{
+  "spec_version": "1",
+  "name": "Frankfurter",
+  "base_url": "https://api.frankfurter.dev/v2",
+  "description": "",
+  "docs_url": "https://frankfurter.dev/",
+  "auth": {
+    "type": "none"
+  },
+  "endpoints": [
+    {
+      "id": "get_rates",
+      "method": "GET",
+      "path": "/rates",
+      "summary": "Fetch the latest exchange rates, optionally for a date or time series.",
+      "description": "Use from and to for a time series, and group to downsample it.",
+      "parameters": [
+        {
+          "name": "base",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Base currency code."
+        },
+        {
+          "name": "quotes",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated target currency codes."
+        },
+        {
+          "name": "date",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Rates for a specific date."
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Start date of a time series."
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "End date of a time series."
+        },
+        {
+          "name": "group",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Downsample a time series.",
+          "enum": [
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "providers",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Restrict rates to specific providers or datasets."
+        },
+        {
+          "name": "expand",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Show which providers contributed to each blended rate.",
+          "enum": [
+            "providers"
+          ]
+        }
+      ],
+      "source_url": "https://frankfurter.dev/#rates"
+    },
+    {
+      "id": "get_rate",
+      "method": "GET",
+      "path": "/rate/{base}/{quote}",
+      "summary": "Get the rate for a single currency pair.",
+      "description": "Optionally add date or providers.",
+      "parameters": [
+        {
+          "name": "base",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Base currency code."
+        },
+        {
+          "name": "quote",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Quote currency code."
+        },
+        {
+          "name": "date",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Rate for a specific date."
+        },
+        {
+          "name": "providers",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Restrict the rate to specific providers."
+        }
+      ],
+      "source_url": "https://frankfurter.dev/#rate"
+    },
+    {
+      "id": "get_currencies",
+      "method": "GET",
+      "path": "/currencies",
+      "summary": "Get available currencies with provider coverage.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "scope",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Use all to include legacy currencies.",
+          "enum": [
+            "all"
+          ]
+        }
+      ],
+      "source_url": "https://frankfurter.dev/#rate"
+    },
+    {
+      "id": "get_currency",
+      "method": "GET",
+      "path": "/currency/{code}",
+      "summary": "Get details and provider coverage for a single currency.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "code",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Currency code, e.g. eur."
+        }
+      ],
+      "source_url": "https://frankfurter.dev/#currency"
+    },
+    {
+      "id": "list_providers",
+      "method": "GET",
+      "path": "/providers",
+      "summary": "List the providers behind the API.",
+      "description": "",
+      "parameters": [],
+      "source_url": "https://frankfurter.dev/#currency"
+    },
+    {
+      "id": "get_provider",
+      "method": "GET",
+      "path": "/providers/{key}",
+      "summary": "Get details for a single provider and its datasets.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "key",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Provider key, e.g. ecb."
+        }
+      ],
+      "source_url": "https://frankfurter.dev/#currency"
+    },
+    {
+      "id": "get_provider_rates",
+      "method": "GET",
+      "path": "/providers/{key}/rates",
+      "summary": "Query rates directly from a specific provider.",
+      "description": "Combine with date, date ranges (from and to), or grouping.",
+      "parameters": [
+        {
+          "name": "key",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Provider key, e.g. ecb."
+        },
+        {
+          "name": "date",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Rates for a specific date."
+        },
+        {
+          "name": "base",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Base currency code."
+        },
+        {
+          "name": "quotes",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated target currency codes."
+        },
+        {
+          "name": "from",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Start date of a time series."
+        },
+        {
+          "name": "to",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "End date of a time series."
+        },
+        {
+          "name": "group",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Downsample a time series.",
+          "enum": [
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "providers",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Restrict rates to specific providers or datasets."
+        },
+        {
+          "name": "expand",
+          "location": "query",
+          "type": "string",
+          "required": false,
+          "description": "Show which providers contributed to each blended rate.",
+          "enum": [
+            "providers"
+          ]
+        }
+      ],
+      "source_url": "https://frankfurter.dev/#rates-by-provider"
+    },
+    {
+      "id": "get_provider_rate",
+      "method": "GET",
+      "path": "/providers/{key}/rate/{base}/{quote}",
+      "summary": "Fetch a single currency pair from a specific provider.",
+      "description": "",
+      "parameters": [
+        {
+          "name": "key",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Provider key, e.g. ecb."
+        },
+        {
+          "name": "base",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Base currency code."
+        },
+        {
+          "name": "quote",
+          "location": "path",
+          "type": "string",
+          "required": true,
+          "description": "Quote currency code."
+        }
+      ],
+      "source_url": "https://frankfurter.dev/#rates-by-provider"
+    }
+  ]
+}

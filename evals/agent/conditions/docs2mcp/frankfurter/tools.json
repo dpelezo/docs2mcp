@@ -1,0 +1,297 @@
+{
+  "toolset_version": "1",
+  "api": "Frankfurter",
+  "base_url": "https://api.frankfurter.dev/v2",
+  "auth": {
+    "type": "none"
+  },
+  "design": "task",
+  "tools": [
+    {
+      "name": "exchange_rates",
+      "description": "Get exchange rates blended across providers. Returns the latest rates, rates for one date, or a time series between from and to, optionally downsampled with group. Pass base and quote together to get a single currency pair; omit quote to get rates for quotes or all currencies.",
+      "parameters": [
+        {
+          "name": "base",
+          "type": "string",
+          "required": false,
+          "description": "Base currency code, e.g. EUR. Required with quote to get a single pair."
+        },
+        {
+          "name": "quote",
+          "type": "string",
+          "required": false,
+          "description": "Target currency code for a single pair, e.g. USD. Pass together with base."
+        },
+        {
+          "name": "quotes",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated target currency codes, e.g. USD,JPY. Used when quote is not given."
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "required": false,
+          "description": "A specific date in YYYY-MM-DD format for historical rates."
+        },
+        {
+          "name": "from_",
+          "type": "string",
+          "required": false,
+          "description": "Start date of a time series in YYYY-MM-DD format."
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "description": "End date of a time series in YYYY-MM-DD format."
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "required": false,
+          "description": "Downsample a time series to weekly or monthly rates.",
+          "enum": [
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "providers",
+          "type": "string",
+          "required": false,
+          "description": "Restrict rates to specific providers or datasets."
+        },
+        {
+          "name": "expand",
+          "type": "string",
+          "required": false,
+          "description": "Set to providers to show which providers contributed to each blended rate.",
+          "enum": [
+            "providers"
+          ]
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_rate",
+          "requires": [
+            "base",
+            "quote"
+          ],
+          "arguments": {
+            "base": "base",
+            "quote": "quote",
+            "date": "date",
+            "providers": "providers"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "get_rates",
+          "requires": [],
+          "arguments": {
+            "base": "base",
+            "quotes": "quotes",
+            "date": "date",
+            "from_": "from",
+            "to": "to",
+            "group": "group",
+            "providers": "providers",
+            "expand": "expand"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "provider_exchange_rates",
+      "description": "Query exchange rates directly from one provider, such as ecb, instead of the blended rates. Returns a single pair when base and quote are given, otherwise rates for quotes or all currencies, for one date or a time series between from and to. Use providers, group or expand as described for exchange_rates.",
+      "parameters": [
+        {
+          "name": "provider",
+          "type": "string",
+          "required": true,
+          "description": "Provider key, e.g. ecb. Use the providers tool to find keys."
+        },
+        {
+          "name": "base",
+          "type": "string",
+          "required": false,
+          "description": "Base currency code, e.g. EUR. Pass together with quote to get a single pair."
+        },
+        {
+          "name": "quote",
+          "type": "string",
+          "required": false,
+          "description": "Target currency code for a single pair, e.g. USD. Pass together with base."
+        },
+        {
+          "name": "quotes",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated target currency codes, e.g. USD,JPY. Used when quote is not given."
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "required": false,
+          "description": "A specific date in YYYY-MM-DD format for historical rates."
+        },
+        {
+          "name": "from_",
+          "type": "string",
+          "required": false,
+          "description": "Start date of a time series in YYYY-MM-DD format."
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "description": "End date of a time series in YYYY-MM-DD format."
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "required": false,
+          "description": "Downsample a time series to weekly or monthly rates.",
+          "enum": [
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "providers",
+          "type": "string",
+          "required": false,
+          "description": "Restrict rates to specific providers or datasets."
+        },
+        {
+          "name": "expand",
+          "type": "string",
+          "required": false,
+          "description": "Set to providers to show which providers contributed to each blended rate.",
+          "enum": [
+            "providers"
+          ]
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_provider_rate",
+          "requires": [
+            "base",
+            "quote"
+          ],
+          "arguments": {
+            "provider": "key",
+            "base": "base",
+            "quote": "quote"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "get_provider_rates",
+          "requires": [],
+          "arguments": {
+            "provider": "key",
+            "base": "base",
+            "quotes": "quotes",
+            "date": "date",
+            "from_": "from",
+            "to": "to",
+            "group": "group",
+            "providers": "providers",
+            "expand": "expand"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "currencies",
+      "description": "Get currency information. With code, returns details and provider coverage for one currency. Without code, lists available currencies with provider coverage; set scope to all to include legacy currencies.",
+      "parameters": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": false,
+          "description": "Currency code, e.g. eur. Omit to list all currencies."
+        },
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Set to all to include legacy currencies in the list. Used only when code is not given.",
+          "enum": [
+            "all"
+          ]
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_currency",
+          "requires": [
+            "code"
+          ],
+          "arguments": {
+            "code": "code"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "get_currencies",
+          "requires": [],
+          "arguments": {
+            "scope": "scope"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "providers",
+      "description": "Get information about the providers behind the API. Without provider, lists all providers. With provider, returns details and datasets for one provider, such as ecb. Use the returned keys with provider_exchange_rates.",
+      "parameters": [
+        {
+          "name": "provider",
+          "type": "string",
+          "required": false,
+          "description": "Provider key, e.g. ecb. Omit to list all providers."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_provider",
+          "requires": [
+            "provider"
+          ],
+          "arguments": {
+            "provider": "key"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_providers",
+          "requires": [],
+          "arguments": {},
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    }
+  ],
+  "excluded": []
+}
