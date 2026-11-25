@@ -151,9 +151,12 @@ def build_graph(
                 replies.append(ToolMessage("Answer recorded.", tool_call_id=call_id))
                 continue
             with tracer.start_as_current_span(f"tool {call['name']}") as span:
-                result = await session.call_tool(call["name"], dict(call["args"]))
-                text = _text(result)
-                outcome = classify(bool(result.is_error), text)
+                try:
+                    result = await session.call_tool(call["name"], dict(call["args"]))
+                    is_error, text = bool(result.is_error), _text(result)
+                except Exception as exc:  # noqa: BLE001 - a host shows the agent the failure
+                    is_error, text = True, f"Tool call failed in the client: {exc}"[:2000]
+                outcome = classify(is_error, text)
                 set_attributes(span, {"docs2mcp.tool.outcome": outcome.value})
             recorder.calls.append(
                 ToolCall(
@@ -161,7 +164,7 @@ def build_graph(
                 )
             )
             recorder.results.append(text)
-            status = "error" if result.is_error else "success"
+            status = "error" if is_error else "success"
             replies.append(ToolMessage(text, tool_call_id=call_id, status=status))
         return {"messages": replies, "answer": answer}
 
@@ -359,9 +362,10 @@ async def run_plan(
     results: Path,
     done: set[tuple[str, str, str, int]],
 ) -> None:
+    repeats = args.condition_repeats.get(item.condition, args.repeats)
     pending = [
         (task, repeat)
-        for repeat in range(1, args.repeats + 1)
+        for repeat in range(1, repeats + 1)
         for task in item.tasks
         if (item.condition, item.api, task.id, repeat) not in done
     ]
@@ -421,6 +425,18 @@ def write_summary(out: Path) -> str:
     return table
 
 
+def _repeats(text: str) -> dict[str, int]:
+    """'D=1,A=2' as {'D': 1, 'A': 2}."""
+    pairs: dict[str, int] = {}
+    for part in filter(None, text.split(",")):
+        condition, _, count = part.partition("=")
+        if condition not in ("A", "B", "C", "D") or not count.isdigit() or int(count) < 1:
+            msg = f"expected CONDITION=COUNT such as D=1, got {part!r}"
+            raise argparse.ArgumentTypeError(msg)
+        pairs[condition] = int(count)
+    return pairs
+
+
 def parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the agent eval (ADR 0013).")
     parser.add_argument("--conditions", default="A,B,C,D", help="comma-separated, default A,B,C,D")
@@ -428,6 +444,13 @@ def parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--tasks", help="comma-separated task ids (default: all)")
     parser.add_argument("--pilot", action="store_true", help="only the 10 pilot tasks")
     parser.add_argument("--repeats", type=int, default=1)
+    parser.add_argument(
+        "--condition-repeats",
+        type=_repeats,
+        default={},
+        metavar="D=1,...",
+        help="repeats for some conditions, overriding --repeats (e.g. D=1)",
+    )
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
     parser.add_argument("--concurrency", type=int, default=4, help="tasks at once per server")
@@ -463,6 +486,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "commit": _git_commit(),
         "model": args.model,
         "repeats": args.repeats,
+        "condition_repeats": args.condition_repeats,
         "max_steps": args.max_steps,
         "mode": args.mode,
         "runs": [f"{p.condition}/{p.api}: {len(p.tasks)} tasks" for p in plans],
