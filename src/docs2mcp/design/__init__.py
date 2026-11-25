@@ -19,7 +19,7 @@ from docs2mcp.design.toolset import (
     ToolSet,
     json_schema,
 )
-from docs2mcp.design.validate import tool_errors, validate_toolset
+from docs2mcp.design.validate import route_notes, tool_errors, validate_toolset
 from docs2mcp.design.wire import WireDesign
 
 __all__ = [
@@ -45,6 +45,7 @@ __all__ = [
     "direct_tool",
     "json_schema",
     "repair",
+    "route_notes",
     "safe_name",
     "set_approval",
     "tool_errors",

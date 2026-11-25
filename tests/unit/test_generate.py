@@ -310,6 +310,115 @@ def test_route_choice_and_request_building(pokemon_server: ModuleType) -> None:
     assert requests[0].headers["user-agent"].startswith("docs2mcp-generated-server/")
 
 
+PROVIDER_RATES = Tool(
+    name="provider_exchange_rates",
+    description="Rates from one provider: one pair, or a series.",
+    parameters=[
+        arg("provider", required=True),
+        arg("base"),
+        arg("quote"),
+        arg("quotes"),
+        arg("date"),
+    ],
+    routes=[
+        Route(
+            endpoint="get_provider_rate",
+            requires=["base", "quote"],
+            arguments={"provider": "provider", "base": "base", "quote": "quote"},
+        ),
+        Route(
+            endpoint="get_provider_rates",
+            arguments={"provider": "provider", "base": "base", "quotes": "quotes", "date": "date"},
+            omitted=dict.fromkeys(
+                ("from", "to", "group", "providers", "expand"), "not in this test"
+            ),
+        ),
+    ],
+    approved=True,
+)
+
+
+ITEMS = ApiSpec.model_validate(
+    {
+        "name": "Items",
+        "base_url": "https://items.example.dev",
+        "endpoints": [
+            {
+                "id": "get_item",
+                "method": "GET",
+                "path": "/items/{id}",
+                "summary": "One item.",
+                "parameters": [
+                    {"name": "id", "location": "path", "type": "string", "required": True}
+                ],
+            },
+            {
+                "id": "list_items",
+                "method": "GET",
+                "path": "/items",
+                "summary": "Items, filtered.",
+                "parameters": [
+                    {"name": "id", "location": "query", "type": "string"},
+                    {"name": "page", "location": "query", "type": "integer"},
+                ],
+            },
+        ],
+    }
+)
+ITEM = Tool(
+    name="items",
+    description="One item, or a page of items.",
+    parameters=[arg("id"), arg("page", "integer")],
+    routes=[
+        Route(endpoint="get_item", requires=["id"], arguments={"id": "id"}),
+        Route(endpoint="list_items", arguments={"id": "id", "page": "page"}),
+    ],
+    approved=True,
+)
+
+
+def test_the_route_that_takes_every_argument_wins(
+    server_module: Callable[[ToolSet, ApiSpec], ModuleType],
+) -> None:
+    tools = ToolSet(
+        api="Items",
+        base_url="https://items.example.dev",  # pyright: ignore[reportArgumentType]
+        design="task",
+        tools=[ITEM],
+    )
+    module = server_module(tools, ITEMS)
+    requests: list[httpx.Request] = []
+    set_transport(module, echo(requests))
+    _, results = run(module, [("items", {"id": "a1"}), ("items", {"id": "a1", "page": 2})])
+    # Before, the second call went to the first route as well, and lost its page.
+    assert [str(r.url) for r in requests] == [
+        "https://items.example.dev/items/a1",
+        "https://items.example.dev/items?id=a1&page=2",
+    ]
+    assert [r.content[0].text for r in results] == ['{"ok": true}', '{"ok": true}']
+
+
+def test_an_argument_no_matching_route_takes_is_named_not_dropped_silently(
+    server_module: Callable[[ToolSet, ApiSpec], ModuleType],
+) -> None:
+    tools = ToolSet(
+        api="Frankfurter",
+        base_url="https://api.frankfurter.dev/v2",  # pyright: ignore[reportArgumentType]
+        design="task",
+        tools=[PROVIDER_RATES],
+    )
+    module = server_module(tools, load_spec("frankfurter"))
+    requests: list[httpx.Request] = []
+    set_transport(module, echo(requests, {"rate": 1.0945}))
+    pair = {"provider": "ecb", "base": "EUR", "quote": "USD"}
+    _, results = run(module, [("provider_exchange_rates", {**pair, "date": "2024-01-15"})])
+    # Pilot 2, condition C: the pair route takes no date, the series route no quote.
+    assert str(requests[0].url) == "https://api.frankfurter.dev/v2/providers/ecb/rate/EUR/USD"
+    assert results[0].content[0].text == (
+        '{"rate": 1.0945}\n[Not used by GET /providers/{provider}/rate/{base}/{quote}: date.]'
+    )
+
+
 def test_schema_types_enums_and_required(pokemon_server: ModuleType) -> None:
     listed, _ = run(pokemon_server, [])
     sprite = next(t for t in listed if t.name == "sprite")
