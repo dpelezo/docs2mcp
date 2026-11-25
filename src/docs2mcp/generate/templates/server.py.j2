@@ -77,18 +77,25 @@ def _auth(headers: dict[str, str], query: dict[str, str]) -> None:
 {% endif %}
 
 
-def _choose(tool: str, given: dict[str, Any]) -> Route:
-    for route in ROUTES[tool]:
-        if all(name in given for name in route["requires"]):
-            return route
-    options = " or ".join(", ".join(r["requires"]) or "nothing" for r in ROUTES[tool])
-    raise ToolError(f"{tool} needs one of these argument sets: {options}")
+def _choose(tool: str, given: dict[str, Any]) -> tuple[Route, list[str]]:
+    """The route for these arguments, and any given argument it cannot take.
+
+    Of the routes whose required arguments are all given, the first that takes
+    every given argument wins; failing that, the one that takes the most.
+    """
+    usable = [r for r in ROUTES[tool] if all(name in given for name in r["requires"])]
+    if not usable:
+        options = " or ".join(", ".join(r["requires"]) or "nothing" for r in ROUTES[tool])
+        raise ToolError(f"{tool} needs one of these argument sets: {options}")
+    unused = [[name for name in given if name not in r["arguments"]] for r in usable]
+    best = min(range(len(usable)), key=lambda index: len(unused[index]))
+    return usable[best], unused[best]
 
 
 def call(tool: str, arguments: dict[str, Any]) -> str:
     """Take the first route whose required arguments are given, call it, and return JSON text."""
     given = {name: value for name, value in arguments.items() if value is not None}
-    route = _choose(tool, given)
+    route, unused = _choose(tool, given)
     path = route["path"]
     query: dict[str, str] = {}
     headers: dict[str, str] = {"User-Agent": USER_AGENT, "Accept": "application/json"}
@@ -123,11 +130,13 @@ def call(tool: str, arguments: dict[str, Any]) -> str:
             f"{route['method']} {path} returned HTTP {response.status_code}: {response.text[:500]}"
         )
     try:
-        value = response.json()
+        text = _fit(response.json())
     except ValueError:
         kind = response.headers.get("content-type", "unknown")
-        return _cut(f"[The response is {kind}, not JSON]\n{response.text}")
-    return _fit(value)
+        text = _cut(f"[The response is {kind}, not JSON]\n{response.text}")
+    if unused:
+        text += f"\n[Not used by {route['method']} {route['path']}: {', '.join(unused)}.]"
+    return text
 
 
 def _cut(text: str) -> str:

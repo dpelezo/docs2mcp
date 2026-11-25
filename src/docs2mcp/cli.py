@@ -22,6 +22,7 @@ from docs2mcp.design import (
     ToolSet,
     UnknownToolError,
     direct_design,
+    route_notes,
     set_approval,
     validate_toolset,
 )
@@ -502,6 +503,10 @@ def _run_check_tools(args: argparse.Namespace) -> int:
         print("\n".join([f"{len(errors)} problems in {args.tools}:", *(f"- {e}" for e in errors)]))
         return 1
     print(f"{_summary(toolset, spec)}: valid, {_approval(toolset)}")
+    notes = route_notes(toolset)
+    if notes:
+        print("Arguments some routes cannot take (the server names them when it drops one):")
+        print("\n".join(f"- {note}" for note in notes))
     return 0
 
 

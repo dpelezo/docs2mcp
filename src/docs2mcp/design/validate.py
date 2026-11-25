@@ -45,6 +45,32 @@ def _validate(toolset: ToolSet, spec: ApiSpec) -> list[str]:
     return errors
 
 
+def route_notes(toolset: ToolSet) -> list[str]:
+    """Arguments a route would leave out: not errors, but worth a reviewer's look (#63).
+
+    A route's argument is at risk when it is given along with just that route's
+    required arguments and no route can take all of them. The generated server
+    then picks the closest route and names the argument it left out.
+    """
+    notes: list[str] = []
+    for tool in toolset.tools:
+        for route in tool.routes:
+            lost = [p.name for p in tool.parameters if _left_out(tool, route, p.name)]
+            if lost:
+                notes.append(
+                    f"{tool.name}: with {', '.join(route.requires) or 'no arguments'} given, "
+                    f"'{route.endpoint}' is chosen and cannot take {', '.join(lost)}"
+                )
+    return notes
+
+
+def _left_out(tool: Tool, route: Route, name: str) -> bool:
+    if name in route.arguments:
+        return False
+    given = {*route.requires, name}
+    return not any(set(other.requires) <= given <= set(other.arguments) for other in tool.routes)
+
+
 def tool_errors(tool: Tool, spec: ApiSpec) -> list[str]:
     """The problems inside one tool: its routes, types and arguments, not coverage."""
     return _check_tool(tool, {e.id: e for e in spec.endpoints})

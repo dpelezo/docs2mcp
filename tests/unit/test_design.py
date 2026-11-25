@@ -16,6 +16,7 @@ from docs2mcp.design import (
     ToolSet,
     direct_design,
     json_schema,
+    route_notes,
     safe_name,
     validate_toolset,
 )
@@ -506,3 +507,30 @@ def test_design_and_check_tools_commands(
 def test_schema_command_prints_the_tools_schema(capsys: pytest.CaptureFixture[str]) -> None:
     assert main(["schema", "--tools"]) == 0
     assert json.loads(capsys.readouterr().out)["title"] == "ToolSet"
+
+
+def test_check_tools_lists_arguments_a_route_cannot_take(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    replay = Path(__file__).parents[2] / "evals" / "design" / "replay" / "frankfurter"
+    toolset = ToolSet.model_validate_json((replay / "tools.json").read_text("utf-8"))
+    notes = route_notes(toolset)
+    assert notes == [
+        "exchange_rates: with base, quote given, 'get_rate' is chosen and cannot take quotes, "
+        "from_, to, group, expand",
+        "exchange_rates: with no arguments given, 'get_rates' is chosen and cannot take quote",
+        "provider_rates: with base, quote given, 'get_provider_rate' is chosen and cannot take "
+        "quotes, date, from_, to, group, providers, expand",
+        "provider_rates: with no arguments given, 'get_provider_rates' is chosen and cannot "
+        "take quote",
+        "currencies: with currency given, 'get_currency' is chosen and cannot take scope",
+    ]
+    single = [t for t in toolset.tools if len(t.routes) == 1]
+    assert all(route_notes(toolset.model_copy(update={"tools": [t]})) == [] for t in single)
+
+    out = tmp_path / "tools.json"
+    out.write_text(toolset.model_dump_json(), "utf-8")
+    assert main(["check-tools", str(out), "--spec", str(SPECS / "frankfurter.json")]) == 0
+    printed = capsys.readouterr().out
+    assert "Arguments some routes cannot take" in printed
+    assert notes[0] in printed
