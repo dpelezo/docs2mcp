@@ -36,3 +36,19 @@ jobs:
         run: uv run pytest -m unit --cov-fail-under=80
       - name: Audit workflow files (zizmor)
         run: uvx zizmor@1.33.1 --offline --format plain .github/workflows
+
+  conformance:
+    name: MCP conformance (generated server)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
+        with:
+          enable-cache: true
+      - name: Install (fails if uv.lock is out of date)
+        run: uv sync --locked
+      - name: Conformance suite, with the failures expected by design
+        run: ./scripts/conformance.sh
