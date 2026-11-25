@@ -1,0 +1,2537 @@
+{
+  "toolset_version": "1",
+  "api": "PokéAPI",
+  "base_url": "https://pokeapi.co/api/v2",
+  "auth": {
+    "type": "none"
+  },
+  "design": "task",
+  "tools": [
+    {
+      "name": "berry",
+      "description": "Returns a berry by its ID or name. Omit id_or_name to get a paginated list of berries instead; page through the list with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the berry. Leave out to list berries."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_berry",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_berry",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "berry_firmness",
+      "description": "Returns a berry firmness level by its ID or name. Omit id_or_name to get a paginated list of berry firmness levels instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the berry firmness level. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_berry_firmness",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_berry_firmness",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "berry_flavor",
+      "description": "Returns a berry flavor by its ID or name. Omit id_or_name to get a paginated list of berry flavors instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the berry flavor. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_berry_flavor",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_berry_flavor",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "contest_type",
+      "description": "Returns a contest type by its ID or name. Omit id_or_name to get a paginated list of contest types instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the contest type. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_contest_type",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_contest_type",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "contest_effect",
+      "description": "Returns a contest effect by its ID. Omit id to get a paginated list of contest effects instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": false,
+          "description": "Integer ID of the contest effect. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_contest_effect",
+          "requires": [
+            "id"
+          ],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_contest_effect",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "super_contest_effect",
+      "description": "Returns a super contest effect by its ID. Omit id to get a paginated list of super contest effects instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": false,
+          "description": "Integer ID of the super contest effect. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_super_contest_effect",
+          "requires": [
+            "id"
+          ],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_super_contest_effect",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "currency",
+      "description": "Returns a currency by its ID or name. Omit id_or_name to get a paginated list of currencies instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the currency. Leave out to list currencies."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_currency",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_currency",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "encounter_method",
+      "description": "Returns an encounter method by its ID or name. Omit id_or_name to get a paginated list of encounter methods instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the encounter method. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_encounter_method",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_encounter_method",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "encounter_condition",
+      "description": "Returns an encounter condition by its ID or name. Omit id_or_name to get a paginated list of encounter conditions instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the encounter condition. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_encounter_condition",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_encounter_condition",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "encounter_condition_value",
+      "description": "Returns an encounter condition value by its ID or name. Omit id_or_name to get a paginated list of encounter condition values instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the encounter condition value. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_encounter_condition_value",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_encounter_condition_value",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "evolution_chain",
+      "description": "Returns an evolution chain, a family tree of a Pokémon line with evolution conditions, by its ID. Omit id to get a paginated list of evolution chains instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": false,
+          "description": "Integer identifier of the evolution chain. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_evolution_chain",
+          "requires": [
+            "id"
+          ],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_evolution_chain",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "evolution_trigger",
+      "description": "Returns an evolution trigger, the event or condition that causes evolution, by ID or name. Omit id_or_name to get a paginated list of evolution triggers instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the evolution trigger. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_evolution_trigger",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_evolution_trigger",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "evolution_variable",
+      "description": "Returns an evolution variable used in form-branching evolution condition expressions, by ID or name. Omit id_or_name to get a paginated list of evolution variables instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the evolution variable. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_evolution_variable",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_evolution_variable",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "generation",
+      "description": "Returns a generation, a grouping of Pokémon games with the Pokémon, moves and types it introduced, by ID or name. Omit id_or_name to get a paginated list of generations instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the generation. Leave out to list generations."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_generation",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_generation",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokedex",
+      "description": "Returns a Pokédex, a catalogue of the Pokémon in a given region, by ID or name. Omit id_or_name to get a paginated list of Pokédexes instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pokédex. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokedex",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pokedex",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "version",
+      "description": "Returns a version of the games, such as Red, Blue or Yellow, by ID or name. Omit id_or_name to get a paginated list of versions instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the version. Leave out to list versions."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_version",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_version",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "version_group",
+      "description": "Returns a version group, which categorises highly similar versions of the games, by ID or name. Omit id_or_name to get a paginated list of version groups instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the version group. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_version_group",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_version_group",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "item",
+      "description": "Returns an item by ID or name. An item is an object in the games that the player can pick up, keep in the bag and use. Omit id_or_name to get a paginated list of items instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the item. Leave out to list items."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_item",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_item",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "item_attribute",
+      "description": "Returns an item attribute by ID or name. Item attributes define particular aspects of items, such as usable in battle or consumable. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the item attribute. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_item_attribute",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_item_attribute",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "item_category",
+      "description": "Returns an item category by ID or name. Item categories determine where items are placed in the player's bag. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the item category. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_item_category",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_item_category",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "item_fling_effect",
+      "description": "Returns an item fling effect by ID or name. These are the various effects of the move Fling when used with different items. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the item fling effect. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_item_fling_effect",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_item_fling_effect",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "item_price",
+      "description": "Returns item prices by ID or name. Purchase and sell prices of items across version groups and currencies. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the item price entry. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_item_price",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_item_price",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "item_pocket",
+      "description": "Returns an item pocket by ID or name. Pockets within the player's bag are used for storing items by category. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the item pocket. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_item_pocket",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_item_pocket",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "location",
+      "description": "Returns a location by ID or name. Locations are places that can be visited within the games, such as cities or routes. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the location. Leave out to list locations."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_location",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_location",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "location_area",
+      "description": "Returns a location area by ID or name. Location areas are sections of locations, each with its own set of Pokémon encounters. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the location area. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_location_area",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_location_area",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pal_park_area",
+      "description": "Returns a Pal Park area by ID or name. Areas are used for grouping Pokémon encounters in Pal Park. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pal Park area. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pal_park_area",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pal_park_area",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "region",
+      "description": "Returns a region by ID or name. A region is an organized area of the Pokémon world, usually differing by the Pokémon species found in it. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the region. Leave out to list regions."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_region",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_region",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "machine",
+      "description": "Returns a machine by its integer ID. Machines represent items that teach moves to Pokémon, such as TMs and HMs. Omit id to get a paginated list of machines instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": false,
+          "description": "Integer ID of the machine. Leave out to list machines."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_machine",
+          "requires": [
+            "id"
+          ],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_machine",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "move",
+      "description": "Returns a move by ID or name. Omit id_or_name to get a paginated list of moves instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "Numeric ID or name of the move. Leave out to list moves."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_move",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_move",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "move_ailment",
+      "description": "Returns a move ailment by ID or name. Omit id_or_name to get a paginated list of move ailments instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "Numeric ID or name of the move ailment. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_move_ailment",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_move_ailment",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "move_battle_style",
+      "description": "Returns a move battle style by ID or name. Omit id_or_name to get a paginated list of move battle styles instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "Numeric ID or name of the move battle style. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_move_battle_style",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_move_battle_style",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "move_category",
+      "description": "Returns a move category by ID or name. Omit id_or_name to get a paginated list of move categories instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "Numeric ID or name of the move category. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_move_category",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_move_category",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "move_damage_class",
+      "description": "Returns a move damage class by ID or name. Omit id_or_name to get a paginated list of move damage classes instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "Numeric ID or name of the move damage class. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_move_damage_class",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_move_damage_class",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "move_learn_method",
+      "description": "Returns a move learn method by ID or name. Omit id_or_name to get a paginated list of move learn methods instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "Numeric ID or name of the move learn method. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_move_learn_method",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_move_learn_method",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "move_target",
+      "description": "Returns a move target by ID or name. Omit id_or_name to get a paginated list of move targets instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "Numeric ID or name of the move target. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_move_target",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_move_target",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "ability",
+      "description": "Returns an ability by ID or name. Omit id_or_name to get a paginated list of abilities instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "Numeric ID or name of the ability. Leave out to list abilities."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_ability",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_ability",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "characteristic",
+      "description": "Returns a characteristic by its numeric ID. Omit id to get a paginated list of characteristics instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": false,
+          "description": "Numeric integer ID of the characteristic. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_characteristic",
+          "requires": [
+            "id"
+          ],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_characteristic",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "egg_group",
+      "description": "Returns an egg group by its ID or name. Omit id_or_name to get a paginated list of egg groups instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the egg group. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_egg_group",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_egg_group",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "gender",
+      "description": "Returns a gender by its ID or name. Omit id_or_name to get a paginated list of genders instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the gender. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_gender",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_gender",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "growth_rate",
+      "description": "Returns a growth rate by its ID or name. Omit id_or_name to get a paginated list of growth rates instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the growth rate. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_growth_rate",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_growth_rate",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "nature",
+      "description": "Returns a nature by its ID or name. Omit id_or_name to get a paginated list of natures instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the nature. Leave out to list natures."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_nature",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_nature",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokeathlon_stat",
+      "description": "Returns a Pokeathlon stat by its ID or name. Omit id_or_name to get a paginated list of Pokeathlon stats instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pokeathlon stat. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokeathlon_stat",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pokeathlon_stat",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokemon",
+      "description": "Returns a Pokémon by its ID or name. Omit id_or_name to get a paginated list of Pokémon instead; page with limit and offset. For the places a Pokémon can be encountered, use pokemon_encounters.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pokémon. Leave out to list Pokémon."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokemon",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pokemon",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokemon_encounters",
+      "description": "Lists the location areas where a Pokémon can be encountered. Pass the Pokémon's ID or name.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": true,
+          "description": "ID or name of the Pokémon whose encounter location areas to list."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokemon_location_areas",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokemon_color",
+      "description": "Returns a Pokémon color used for sorting in a Pokédex, by ID or name. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pokémon color. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokemon_color",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pokemon_color",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokemon_form",
+      "description": "Returns a Pokémon form, a cosmetic variation of a Pokémon, by ID or name. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pokémon form. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokemon_form",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pokemon_form",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokemon_habitat",
+      "description": "Returns a Pokémon habitat, the terrain or area where Pokémon are found, by ID or name. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pokémon habitat. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokemon_habitat",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pokemon_habitat",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokemon_shape",
+      "description": "Returns a Pokémon shape used for sorting Pokémon in a Pokédex, by ID or name. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pokémon shape. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokemon_shape",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pokemon_shape",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "pokemon_species",
+      "description": "Returns a Pokémon species, the basis for one or more Pokémon varieties, by ID or name. Omit id_or_name to get a paginated list instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the Pokémon species. Leave out to list them."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_pokemon_species",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_pokemon_species",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "stat",
+      "description": "Returns a battle stat such as attack, with its affecting moves, natures and items, by ID or name. Omit id_or_name to get a paginated list of stats instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the stat. Leave out to list stats."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_stat",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_stat",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "type_",
+      "description": "Get a Pokémon type and its damage relations by ID or name. Each type lists which types it is super effective against, not very effective against, or ineffective against. Omit id_or_name to get a paginated list of types instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the type. Leave out to list types."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_type",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_type",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    },
+    {
+      "name": "language",
+      "description": "Get a translation language by ID or name. Languages are used for translations of API resource information. Omit id_or_name to get a paginated list of languages instead; page with limit and offset.",
+      "parameters": [
+        {
+          "name": "id_or_name",
+          "type": "string",
+          "required": false,
+          "description": "ID or name of the language. Leave out to list languages."
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of resources per page, default 20. Used only when listing.",
+          "default": 20
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "Offset into the list, used to move to the next page. Used only when listing."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_language",
+          "requires": [
+            "id_or_name"
+          ],
+          "arguments": {
+            "id_or_name": "id_or_name"
+          },
+          "constants": {},
+          "omitted": {}
+        },
+        {
+          "endpoint": "list_named_resources_language",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": false
+    }
+  ],
+  "excluded": []
+}

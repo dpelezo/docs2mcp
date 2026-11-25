@@ -7,23 +7,25 @@
 #    `docs2mcp design --model claude-haiku-5-5` (decided 2026-11-24).
 # B and C approve every valid tool as generated: no hand review or edits.
 #
-# `spec` and `task_design` are on the owner's machine (specs/ and tools/ are
-# git-ignored; three of the APIs have AGPL docs). `spec` is the fix36 run: the
-# extraction after the #36 repair.
+# `spec` is the fix36 run, the extraction after the #36 repair. For PokéAPI,
+# Frankfurter and Postcodes.io (permissively licensed docs) the spec and Haiku's
+# task design are committed in evals/agent/conditions/docs2mcp/ (#72), with the
+# SHA-256 the full run measured. The AGPL-documented APIs stay on the owner's
+# machine (specs/ and tools/ are git-ignored).
 
 [api.pokeapi]
-spec = "specs/pokeapi/fix36/spec.json"
-task_design = "tools/pokeapi/eval/tools.json"
+spec = "evals/agent/conditions/docs2mcp/pokeapi/spec.json"
+task_design = "evals/agent/conditions/docs2mcp/pokeapi/tools.json"
 openapi = "evals/agent/conditions/openapi/pokeapi"
 
 [api.frankfurter]
-spec = "specs/frankfurter/fix36/spec.json"
-task_design = "tools/frankfurter/eval/tools.json"
+spec = "evals/agent/conditions/docs2mcp/frankfurter/spec.json"
+task_design = "evals/agent/conditions/docs2mcp/frankfurter/tools.json"
 openapi = "evals/agent/conditions/openapi/frankfurter"
 
 [api.postcodes_io]
-spec = "specs/postcodes_io/fix36/spec.json"
-task_design = "tools/postcodes_io/eval/tools.json"
+spec = "evals/agent/conditions/docs2mcp/postcodes_io/spec.json"
+task_design = "evals/agent/conditions/docs2mcp/postcodes_io/tools.json"
 openapi = "evals/agent/conditions/openapi/postcodes_io"
 
 [api.open_library]
