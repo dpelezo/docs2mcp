@@ -130,7 +130,7 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="one tool per endpoint, with no LLM (default: Claude groups them into tasks)",
     )
-    design_cmd.add_argument("--model", help="Claude model (default: DOCS2MCP_MODEL)")
+    design_cmd.add_argument("--model", help="Claude model (default: DOCS2MCP_DESIGN_MODEL)")
     design_recording = design_cmd.add_mutually_exclusive_group()
     design_recording.add_argument(
         "--record", type=Path, help="save every model reply in this folder"
@@ -288,7 +288,7 @@ def _summary(toolset: ToolSet, spec: ApiSpec) -> str:
 
 
 def build_design_model(args: argparse.Namespace, settings: Settings) -> DesignModel:
-    model_name = args.model or settings.model
+    model_name = args.model or settings.design_model
     if args.replay:
         return ReplayDesignModel(args.replay, model_name)
     import anthropic  # noqa: PLC0415 - only needed for live calls
