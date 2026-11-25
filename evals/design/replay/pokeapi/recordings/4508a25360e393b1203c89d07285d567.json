@@ -1,0 +1,2742 @@
+{
+  "model": "claude-sonnet-5-5",
+  "input_tokens": 19161,
+  "output_tokens": 17660,
+  "cache_read_tokens": 3154,
+  "cache_write_tokens": 16003,
+  "output": {
+    "tools": [
+      {
+        "name": "berry",
+        "description": "Look up a berry by id or name, or list berries. Pass id_or_name to get one berry; omit it to get a paginated list (use limit and offset).",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the berry.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_berry",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_berry",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "berry_firmness",
+        "description": "Look up a berry firmness level by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the berry firmness.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_berry_firmness",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_berry_firmness",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "berry_flavor",
+        "description": "Look up a berry flavor by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the berry flavor.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_berry_flavor",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_berry_flavor",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "contest_type",
+        "description": "Look up a contest type by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the contest type.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_contest_type",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_contest_type",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "contest_effect",
+        "description": "Look up a contest effect by numeric id, or list them. Pass id for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id",
+            "description": "Numeric ID of the contest effect.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_contest_effect",
+            "requires": [
+              "id"
+            ],
+            "arguments": [
+              {
+                "argument": "id",
+                "parameter": "id"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_contest_effect",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "super_contest_effect",
+        "description": "Look up a super contest effect by numeric id, or list them. Pass id for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id",
+            "description": "Numeric ID of the super contest effect.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_super_contest_effect",
+            "requires": [
+              "id"
+            ],
+            "arguments": [
+              {
+                "argument": "id",
+                "parameter": "id"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_super_contest_effect",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "currency",
+        "description": "Look up a currency by id or name, or list currencies. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the currency.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_currency",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_currency",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "encounter_method",
+        "description": "Look up an encounter method (how Pokémon are met in the wild) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the encounter method.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_encounter_method",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_encounter_method",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "encounter_condition",
+        "description": "Look up an encounter condition by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the encounter condition.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_encounter_condition",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_encounter_condition",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "encounter_condition_value",
+        "description": "Look up an encounter condition value by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the encounter condition value.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_encounter_condition_value",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_encounter_condition_value",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "evolution_chain",
+        "description": "Get an evolution chain (family tree of a Pokémon line with evolution conditions) by numeric id, or list chains. Pass id for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id",
+            "description": "Numeric ID of the evolution chain.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_evolution_chain",
+            "requires": [
+              "id"
+            ],
+            "arguments": [
+              {
+                "argument": "id",
+                "parameter": "id"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_evolution_chain",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "evolution_trigger",
+        "description": "Look up an evolution trigger (event that causes evolution) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the evolution trigger.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_evolution_trigger",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_evolution_trigger",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "evolution_variable",
+        "description": "Look up an evolution variable (used in form-branching evolutions) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the evolution variable.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_evolution_variable",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_evolution_variable",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "generation",
+        "description": "Look up a generation (games plus the Pokémon, moves, abilities and types introduced) by id or name, or list generations. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the generation.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_generation",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_generation",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokedex",
+        "description": "Look up a Pokédex (Pokémon catalogued for a region) by id or name, or list Pokédexes. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the Pokédex.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokedex",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pokedex",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "game_version",
+        "description": "Look up a game version (e.g. Red, Blue, Yellow) by id or name, or list versions. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the version.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_version",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_version",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "version_group",
+        "description": "Look up a version group (similar game versions) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "ID or name of the version group.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_version_group",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_version_group",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "item",
+        "description": "Look up an item by id or name, or list items. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the item.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_item",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_item",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "item_attribute",
+        "description": "Look up an item attribute by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the item attribute.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_item_attribute",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_item_attribute",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "item_category",
+        "description": "Look up an item category by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the item category.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_item_category",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_item_category",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "item_fling_effect",
+        "description": "Look up an item fling effect by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the fling effect.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_item_fling_effect",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_item_fling_effect",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "item_price",
+        "description": "Get the purchase and sell prices of an item by id or name, or list item-price resources. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the item price.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_item_price",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_item_price",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "item_pocket",
+        "description": "Look up an item pocket by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the item pocket.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_item_pocket",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_item_pocket",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "description": "Look up a location by id or name, or list locations. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the location.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_location",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_location",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "location_area",
+        "description": "Look up a location area by id or name, or list location areas. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the location area.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_location_area",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_location_area",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pal_park_area",
+        "description": "Look up a Pal Park area by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the Pal Park area.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pal_park_area",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pal_park_area",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "region",
+        "description": "Look up a region by id or name, or list regions. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the region.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_region",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_region",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "machine",
+        "description": "Look up a machine (TM/HM) by numeric id, or list machines. Pass id for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id",
+            "description": "Numeric id of the machine.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_machine",
+            "requires": [
+              "id"
+            ],
+            "arguments": [
+              {
+                "argument": "id",
+                "parameter": "id"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_machine",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "move",
+        "description": "Look up a move (a Pokémon's battle skill) by id or name, or list moves. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the move.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_move",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_move",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "move_ailment",
+        "description": "Look up a move ailment (status condition) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the move ailment.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_move_ailment",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_move_ailment",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "move_battle_style",
+        "description": "Look up a move battle style (Battle Palace) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the move battle style.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_move_battle_style",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_move_battle_style",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "move_category",
+        "description": "Look up a move category (general grouping of move effects) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the move category.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_move_category",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_move_category",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "move_damage_class",
+        "description": "Look up a move damage class (physical, special, non-damaging) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the move damage class.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_move_damage_class",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_move_damage_class",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "move_learn_method",
+        "description": "Look up a move learn method (how Pokémon learn moves) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the move learn method.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_move_learn_method",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_move_learn_method",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "move_target",
+        "description": "Look up a move target (what a move can be directed at) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the move target.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_move_target",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_move_target",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "ability",
+        "description": "Look up an ability (passive Pokémon effect) by id or name, or list abilities. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the ability.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_ability",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_ability",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "characteristic",
+        "description": "Look up a characteristic (indicates which stat holds a Pokémon's highest IV) by numeric id, or list them. Pass id for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id",
+            "description": "Numeric id of the characteristic.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_characteristic",
+            "requires": [
+              "id"
+            ],
+            "arguments": [
+              {
+                "argument": "id",
+                "parameter": "id"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_characteristic",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "egg_group",
+        "description": "Look up an egg group (determines interbreeding) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "The egg group's id or name.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_egg_group",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_egg_group",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "gender",
+        "description": "Look up a gender by id or name (lists species that can be it or need it to evolve), or list genders. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "The gender's id or name.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_gender",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_gender",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "growth_rate",
+        "description": "Look up a growth rate (speed of gaining levels) by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "The growth rate's id or name.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_growth_rate",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_growth_rate",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "nature",
+        "description": "Look up a nature (influences stat growth) by id or name, or list natures. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "The nature's id or name.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_nature",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_nature",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokeathlon_stat",
+        "description": "Look up a Pokéathlon stat by id or name, or list them. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "The Pokéathlon stat's id or name.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokeathlon_stat",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pokeathlon_stat",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokemon",
+        "description": "Look up a Pokémon by id or name (stats, types, abilities, moves, sprites), or list Pokémon. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "The Pokémon's id or name, e.g. pikachu or 25.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokemon",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pokemon",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokemon_encounters",
+        "description": "List the location areas where a given Pokémon can be encountered.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the Pokémon.",
+            "required": true
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokemon_location_areas",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokemon_color",
+        "description": "Look up a Pokémon color (used for Pokédex sorting) by id or name, or list colors. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the Pokémon color.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokemon_color",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pokemon_color",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokemon_form",
+        "description": "Look up a Pokémon form (sprites, types, trigger conditions) by id or name, or list forms. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the Pokémon form.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokemon_form",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pokemon_form",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokemon_habitat",
+        "description": "Look up a Pokémon habitat and its species by id or name, or list habitats. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the Pokémon habitat.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokemon_habitat",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pokemon_habitat",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokemon_shape",
+        "description": "Look up a Pokémon shape (used for Pokédex sorting) by id or name, or list shapes. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the Pokémon shape.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokemon_shape",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pokemon_shape",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokemon_species",
+        "description": "Look up a Pokémon species (shared attributes of its varieties, e.g. flavor text, evolution chain, egg groups) by id or name, or list species. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the Pokémon species.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_pokemon_species",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_pokemon_species",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "stat",
+        "description": "Look up a battle stat and the moves, natures and items affecting it by id or name, or list stats. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "Numeric id or name of the stat.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_stat",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_stat",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "pokemon_type",
+        "description": "Look up an elemental type with its damage relations, Pokémon and moves by id or name, or list types. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "The numeric id or name of the type, e.g. fire.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_type",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_type",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "language",
+        "description": "Look up a language used for translations by id or name, or list languages. Pass id_or_name for one; omit it for a paginated list.",
+        "arguments": [
+          {
+            "name": "id_or_name",
+            "description": "The numeric id or name of the language.",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of results per page.",
+            "required": false
+          },
+          {
+            "name": "offset",
+            "description": "Index of the first result, for paging.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_language",
+            "requires": [
+              "id_or_name"
+            ],
+            "arguments": [
+              {
+                "argument": "id_or_name",
+                "parameter": "id_or_name"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_resources_language",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "limit",
+                "parameter": "limit"
+              },
+              {
+                "argument": "offset",
+                "parameter": "offset"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      }
+    ],
+    "excluded": []
+  }
+}

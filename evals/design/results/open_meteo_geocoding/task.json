@@ -1,0 +1,97 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/task-shaped-design (ADR 0012)",
+    "model": "claude-sonnet-5-5",
+    "design": "docs2mcp design (task-shaped), run 1 of 3",
+    "input": "specs/open_meteo_geocoding/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_meteo_geocoding.json)",
+    "calls": 1,
+    "input_tokens": 3747,
+    "output_tokens": 690,
+    "cache_read_tokens": 3154,
+    "cache_write_tokens": 589,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "repeats": {
+      "claude-sonnet-5-5": {
+        "runs": 3,
+        "tools": [
+          1,
+          1,
+          1
+        ],
+        "parameters_exposed": [
+          7,
+          7,
+          7
+        ],
+        "tool_list_tokens": [
+          358,
+          360,
+          368
+        ],
+        "tool_list_tokens_min": 358,
+        "tool_list_tokens_mean": 362,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      },
+      "claude-haiku-5-5": {
+        "runs": 3,
+        "tools": [
+          1,
+          1,
+          1
+        ],
+        "parameters_exposed": [
+          6,
+          6,
+          6
+        ],
+        "tool_list_tokens": [
+          304,
+          332,
+          309
+        ],
+        "tool_list_tokens_min": 304,
+        "tool_list_tokens_mean": 315,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      }
+    }
+  },
+  "api": "Open-Meteo Geocoding API",
+  "design": "task",
+  "valid": true,
+  "endpoints": 2,
+  "covered": 2,
+  "excluded": 0,
+  "tools": 1,
+  "routes": 2,
+  "tool_list_tokens": 358,
+  "description_tokens": 242,
+  "parameters_exposed": 7,
+  "parameters_total": 7,
+  "unexposed": [],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "location_lookup",
+      "routes": 2,
+      "arguments": 7,
+      "tokens": 358
+    }
+  ],
+  "max_routes_per_tool": 2
+}

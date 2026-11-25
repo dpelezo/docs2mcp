@@ -1,0 +1,160 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/task-shaped-design (ADR 0012)",
+    "model": "claude-sonnet-5-5",
+    "design": "docs2mcp design (task-shaped), run 1 of 3",
+    "input": "tests/fixtures/specs/postcodes_io.json (committed)",
+    "calls": 1,
+    "input_tokens": 6209,
+    "output_tokens": 4709,
+    "cache_read_tokens": 3154,
+    "cache_write_tokens": 3051,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "repeats": {
+      "claude-sonnet-5-5": {
+        "runs": 3,
+        "tools": [
+          11,
+          11,
+          11
+        ],
+        "parameters_exposed": [
+          32,
+          32,
+          32
+        ],
+        "tool_list_tokens": [
+          1488,
+          1486,
+          1502
+        ],
+        "tool_list_tokens_min": 1486,
+        "tool_list_tokens_mean": 1492,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      },
+      "claude-haiku-5-5": {
+        "runs": 3,
+        "tools": [
+          12,
+          10,
+          12
+        ],
+        "parameters_exposed": [
+          29,
+          32,
+          29
+        ],
+        "tool_list_tokens": [
+          1585,
+          1583,
+          1671
+        ],
+        "tool_list_tokens_min": 1583,
+        "tool_list_tokens_mean": 1613,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      }
+    }
+  },
+  "api": "Postcodes.io",
+  "design": "task",
+  "valid": true,
+  "endpoints": 14,
+  "covered": 14,
+  "excluded": 0,
+  "tools": 11,
+  "routes": 14,
+  "tool_list_tokens": 1488,
+  "description_tokens": 806,
+  "parameters_exposed": 32,
+  "parameters_total": 34,
+  "unexposed": [
+    "query_postcodes.query",
+    "query_places.query"
+  ],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "postcode_lookup",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 99
+    },
+    {
+      "name": "bulk_postcode_lookup",
+      "routes": 1,
+      "arguments": 6,
+      "tokens": 273
+    },
+    {
+      "name": "postcode_search",
+      "routes": 1,
+      "arguments": 6,
+      "tokens": 218
+    },
+    {
+      "name": "nearest_postcodes",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 133
+    },
+    {
+      "name": "postcode_autocomplete",
+      "routes": 1,
+      "arguments": 2,
+      "tokens": 97
+    },
+    {
+      "name": "random_postcode",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 75
+    },
+    {
+      "name": "outcode_lookup",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 77
+    },
+    {
+      "name": "nearest_outcodes",
+      "routes": 2,
+      "arguments": 5,
+      "tokens": 193
+    },
+    {
+      "name": "places",
+      "routes": 3,
+      "arguments": 3,
+      "tokens": 152
+    },
+    {
+      "name": "terminated_postcode_lookup",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 81
+    },
+    {
+      "name": "scottish_postcode_lookup",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 92
+    }
+  ],
+  "max_routes_per_tool": 3
+}

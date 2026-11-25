@@ -1,0 +1,343 @@
+{
+  "model": "claude-sonnet-5-5",
+  "input_tokens": 4991,
+  "output_tokens": 2741,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 4987,
+  "output": {
+    "tools": [
+      {
+        "name": "exchange_rates",
+        "description": "Get currency exchange rates (blended across providers). With base and quote it returns the rate for one pair (optional date). Without quote it returns rates for a base: latest by default, a historical day with date, or a time series with start_date/end_date (downsample with group). Use quotes to filter targets, expand=providers for per-provider rates.",
+        "arguments": [
+          {
+            "name": "base",
+            "description": "Base currency code, e.g. EUR.",
+            "required": false
+          },
+          {
+            "name": "quote",
+            "description": "Quote currency code for a single pair, e.g. USD. When given, returns one pair's rate (use base too).",
+            "required": false
+          },
+          {
+            "name": "quotes",
+            "description": "Comma-separated target currency codes, e.g. USD,GBP. Used when quote is not given.",
+            "required": false
+          },
+          {
+            "name": "date",
+            "description": "Date of a historical rate, YYYY-MM-DD.",
+            "required": false
+          },
+          {
+            "name": "start_date",
+            "description": "Start date of a time series, YYYY-MM-DD. Not used with quote.",
+            "required": false
+          },
+          {
+            "name": "end_date",
+            "description": "End date of a time series, YYYY-MM-DD. Not used with quote.",
+            "required": false
+          },
+          {
+            "name": "group",
+            "description": "Downsample a time series: week or month.",
+            "required": false
+          },
+          {
+            "name": "providers",
+            "description": "Restrict rates to a provider or dataset key, e.g. ecb.",
+            "required": false
+          },
+          {
+            "name": "expand",
+            "description": "Set to providers to add per-provider rates to each row. Not used with quote.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_rate",
+            "requires": [
+              "base",
+              "quote"
+            ],
+            "arguments": [
+              {
+                "argument": "base",
+                "parameter": "base"
+              },
+              {
+                "argument": "quote",
+                "parameter": "quote"
+              },
+              {
+                "argument": "date",
+                "parameter": "date"
+              },
+              {
+                "argument": "providers",
+                "parameter": "providers"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "get_rates",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "base",
+                "parameter": "base"
+              },
+              {
+                "argument": "quotes",
+                "parameter": "quotes"
+              },
+              {
+                "argument": "date",
+                "parameter": "date"
+              },
+              {
+                "argument": "start_date",
+                "parameter": "from"
+              },
+              {
+                "argument": "end_date",
+                "parameter": "to"
+              },
+              {
+                "argument": "group",
+                "parameter": "group"
+              },
+              {
+                "argument": "providers",
+                "parameter": "providers"
+              },
+              {
+                "argument": "expand",
+                "parameter": "expand"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "provider_rates",
+        "description": "Get rates directly from one specific provider (e.g. ecb). With base and quote it returns a single pair's rate. Otherwise it returns rates for the provider, with optional date, a time series (start_date/end_date), grouping, base and quotes filters.",
+        "arguments": [
+          {
+            "name": "provider",
+            "description": "Provider key, e.g. ecb.",
+            "required": true
+          },
+          {
+            "name": "base",
+            "description": "Base currency code, e.g. EUR.",
+            "required": false
+          },
+          {
+            "name": "quote",
+            "description": "Quote currency code for a single pair, e.g. USD. Use together with base.",
+            "required": false
+          },
+          {
+            "name": "quotes",
+            "description": "Comma-separated target currency codes, e.g. USD,GBP. Used when quote is not given.",
+            "required": false
+          },
+          {
+            "name": "date",
+            "description": "Date of the rate, YYYY-MM-DD. Not used with quote.",
+            "required": false
+          },
+          {
+            "name": "start_date",
+            "description": "Start date of a time series, YYYY-MM-DD.",
+            "required": false
+          },
+          {
+            "name": "end_date",
+            "description": "End date of a time series, YYYY-MM-DD.",
+            "required": false
+          },
+          {
+            "name": "group",
+            "description": "Downsample a time series: week or month.",
+            "required": false
+          },
+          {
+            "name": "providers",
+            "description": "Restrict rates to a provider or dataset key, e.g. ecb.",
+            "required": false
+          },
+          {
+            "name": "expand",
+            "description": "Set to providers to add per-provider rates to each row.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_provider_rate",
+            "requires": [
+              "provider",
+              "base",
+              "quote"
+            ],
+            "arguments": [
+              {
+                "argument": "provider",
+                "parameter": "provider"
+              },
+              {
+                "argument": "base",
+                "parameter": "base"
+              },
+              {
+                "argument": "quote",
+                "parameter": "quote"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "get_provider_rates",
+            "requires": [
+              "provider"
+            ],
+            "arguments": [
+              {
+                "argument": "provider",
+                "parameter": "provider"
+              },
+              {
+                "argument": "base",
+                "parameter": "base"
+              },
+              {
+                "argument": "quotes",
+                "parameter": "quotes"
+              },
+              {
+                "argument": "date",
+                "parameter": "date"
+              },
+              {
+                "argument": "start_date",
+                "parameter": "from"
+              },
+              {
+                "argument": "end_date",
+                "parameter": "to"
+              },
+              {
+                "argument": "group",
+                "parameter": "group"
+              },
+              {
+                "argument": "providers",
+                "parameter": "providers"
+              },
+              {
+                "argument": "expand",
+                "parameter": "expand"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "currencies",
+        "description": "Look up currencies and their provider coverage. With currency it returns details for that one currency; without it, lists all available currencies (scope=all includes legacy currencies).",
+        "arguments": [
+          {
+            "name": "currency",
+            "description": "Currency code, e.g. EUR. Omit to list all currencies.",
+            "required": false
+          },
+          {
+            "name": "scope",
+            "description": "Set to all to include legacy currencies when listing.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_currency",
+            "requires": [
+              "currency"
+            ],
+            "arguments": [
+              {
+                "argument": "currency",
+                "parameter": "currency"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_currencies",
+            "requires": [],
+            "arguments": [
+              {
+                "argument": "scope",
+                "parameter": "scope"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      },
+      {
+        "name": "providers",
+        "description": "Look up the data providers behind the API. With provider it returns details including its datasets; without it, lists all providers.",
+        "arguments": [
+          {
+            "name": "provider",
+            "description": "Provider key, e.g. ecb. Omit to list all providers.",
+            "required": false
+          }
+        ],
+        "routes": [
+          {
+            "endpoint": "get_provider",
+            "requires": [
+              "provider"
+            ],
+            "arguments": [
+              {
+                "argument": "provider",
+                "parameter": "provider"
+              }
+            ],
+            "constants": [],
+            "omitted": []
+          },
+          {
+            "endpoint": "list_providers",
+            "requires": [],
+            "arguments": [],
+            "constants": [],
+            "omitted": []
+          }
+        ]
+      }
+    ],
+    "excluded": [
+      {
+        "endpoint": "get_rates_csv",
+        "reason": "Non-JSON CSV response with no parameters; duplicates the rates data available as JSON."
+      }
+    ]
+  }
+}

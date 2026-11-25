@@ -1,0 +1,151 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/task-shaped-design (ADR 0012)",
+    "model": "claude-sonnet-5-5",
+    "design": "docs2mcp design (task-shaped), run 1 of 3",
+    "input": "specs/open_library/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_library.json)",
+    "calls": 1,
+    "input_tokens": 5167,
+    "output_tokens": 3062,
+    "cache_read_tokens": 3154,
+    "cache_write_tokens": 2009,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "repeats": {
+      "claude-sonnet-5-5": {
+        "runs": 3,
+        "tools": [
+          10,
+          10,
+          10
+        ],
+        "parameters_exposed": [
+          22,
+          22,
+          22
+        ],
+        "tool_list_tokens": [
+          1143,
+          1117,
+          1170
+        ],
+        "tool_list_tokens_min": 1117,
+        "tool_list_tokens_mean": 1143,
+        "calls": [
+          1,
+          2,
+          2
+        ],
+        "repairs": 0
+      },
+      "claude-haiku-5-5": {
+        "runs": 3,
+        "tools": [
+          10,
+          10,
+          10
+        ],
+        "parameters_exposed": [
+          21,
+          21,
+          21
+        ],
+        "tool_list_tokens": [
+          1251,
+          1399,
+          1192
+        ],
+        "tool_list_tokens_min": 1192,
+        "tool_list_tokens_mean": 1281,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      }
+    }
+  },
+  "api": "Open Library",
+  "design": "task",
+  "valid": true,
+  "endpoints": 11,
+  "covered": 11,
+  "excluded": 0,
+  "tools": 10,
+  "routes": 11,
+  "tool_list_tokens": 1143,
+  "description_tokens": 632,
+  "parameters_exposed": 22,
+  "parameters_total": 22,
+  "unexposed": [],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "search_books",
+      "routes": 1,
+      "arguments": 7,
+      "tokens": 269
+    },
+    {
+      "name": "search_authors",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 85
+    },
+    {
+      "name": "work",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 73
+    },
+    {
+      "name": "work_editions",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 73
+    },
+    {
+      "name": "work_bookshelves",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 68
+    },
+    {
+      "name": "work_ratings",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 60
+    },
+    {
+      "name": "edition",
+      "routes": 2,
+      "arguments": 2,
+      "tokens": 96
+    },
+    {
+      "name": "books_by_bibkeys",
+      "routes": 1,
+      "arguments": 4,
+      "tokens": 226
+    },
+    {
+      "name": "author",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 75
+    },
+    {
+      "name": "author_works",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 121
+    }
+  ],
+  "max_routes_per_tool": 2
+}

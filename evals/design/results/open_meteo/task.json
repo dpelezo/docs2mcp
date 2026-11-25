@@ -1,0 +1,99 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/task-shaped-design (ADR 0012)",
+    "model": "claude-sonnet-5-5",
+    "design": "docs2mcp design (task-shaped), run 1 of 3",
+    "input": "specs/open_meteo/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_meteo.json)",
+    "calls": 1,
+    "input_tokens": 4771,
+    "output_tokens": 1949,
+    "cache_read_tokens": 3154,
+    "cache_write_tokens": 1613,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "repeats": {
+      "claude-sonnet-5-5": {
+        "runs": 3,
+        "tools": [
+          1,
+          1,
+          1
+        ],
+        "parameters_exposed": [
+          25,
+          26,
+          26
+        ],
+        "tool_list_tokens": [
+          948,
+          900,
+          961
+        ],
+        "tool_list_tokens_min": 900,
+        "tool_list_tokens_mean": 936,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      },
+      "claude-haiku-5-5": {
+        "runs": 3,
+        "tools": [
+          1,
+          1,
+          1
+        ],
+        "parameters_exposed": [
+          25,
+          25,
+          25
+        ],
+        "tool_list_tokens": [
+          996,
+          1009,
+          1004
+        ],
+        "tool_list_tokens_min": 996,
+        "tool_list_tokens_mean": 1003,
+        "calls": [
+          1,
+          1,
+          2
+        ],
+        "repairs": 0
+      }
+    }
+  },
+  "api": "Open-Meteo Weather Forecast API",
+  "design": "task",
+  "valid": true,
+  "endpoints": 1,
+  "covered": 1,
+  "excluded": 0,
+  "tools": 1,
+  "routes": 1,
+  "tool_list_tokens": 948,
+  "description_tokens": 516,
+  "parameters_exposed": 25,
+  "parameters_total": 26,
+  "unexposed": [
+    "get_forecast.apikey"
+  ],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "weather_forecast",
+      "routes": 1,
+      "arguments": 25,
+      "tokens": 947
+    }
+  ],
+  "max_routes_per_tool": 1
+}

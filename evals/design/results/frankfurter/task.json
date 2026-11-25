@@ -1,0 +1,115 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/task-shaped-design (ADR 0012)",
+    "model": "claude-sonnet-5-5",
+    "design": "docs2mcp design (task-shaped), run 1 of 3",
+    "input": "tests/fixtures/specs/frankfurter.json (committed)",
+    "calls": 1,
+    "input_tokens": 4991,
+    "output_tokens": 2741,
+    "cache_read_tokens": 0,
+    "cache_write_tokens": 4987,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "repeats": {
+      "claude-sonnet-5-5": {
+        "runs": 3,
+        "tools": [
+          4,
+          4,
+          4
+        ],
+        "parameters_exposed": [
+          27,
+          27,
+          27
+        ],
+        "tool_list_tokens": [
+          890,
+          758,
+          723
+        ],
+        "tool_list_tokens_min": 723,
+        "tool_list_tokens_mean": 790,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      },
+      "claude-haiku-5-5": {
+        "runs": 3,
+        "tools": [
+          4,
+          4,
+          4
+        ],
+        "parameters_exposed": [
+          26,
+          27,
+          27
+        ],
+        "tool_list_tokens": [
+          908,
+          977,
+          1027
+        ],
+        "tool_list_tokens_min": 908,
+        "tool_list_tokens_mean": 971,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      }
+    }
+  },
+  "api": "Frankfurter",
+  "design": "task",
+  "valid": true,
+  "endpoints": 9,
+  "covered": 8,
+  "excluded": 1,
+  "tools": 4,
+  "routes": 8,
+  "tool_list_tokens": 890,
+  "description_tokens": 534,
+  "parameters_exposed": 27,
+  "parameters_total": 27,
+  "unexposed": [],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "exchange_rates",
+      "routes": 2,
+      "arguments": 9,
+      "tokens": 357
+    },
+    {
+      "name": "provider_rates",
+      "routes": 2,
+      "arguments": 10,
+      "tokens": 334
+    },
+    {
+      "name": "currencies",
+      "routes": 2,
+      "arguments": 2,
+      "tokens": 121
+    },
+    {
+      "name": "providers",
+      "routes": 2,
+      "arguments": 1,
+      "tokens": 79
+    }
+  ],
+  "max_routes_per_tool": 2
+}
