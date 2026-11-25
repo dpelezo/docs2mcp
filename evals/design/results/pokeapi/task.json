@@ -1,0 +1,403 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/task-shaped-design (ADR 0012)",
+    "model": "claude-sonnet-5-5",
+    "design": "docs2mcp design (task-shaped), run 1 of 3",
+    "input": "tests/fixtures/specs/pokeapi.json (committed)",
+    "calls": 1,
+    "input_tokens": 19161,
+    "output_tokens": 17660,
+    "cache_read_tokens": 3154,
+    "cache_write_tokens": 16003,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "repeats": {
+      "claude-sonnet-5-5": {
+        "runs": 3,
+        "tools": [
+          52,
+          52,
+          52
+        ],
+        "parameters_exposed": [
+          154,
+          154,
+          154
+        ],
+        "tool_list_tokens": [
+          6023,
+          6539,
+          7288
+        ],
+        "tool_list_tokens_min": 6023,
+        "tool_list_tokens_mean": 6617,
+        "calls": [
+          1,
+          1,
+          1
+        ],
+        "repairs": 0
+      },
+      "claude-haiku-5-5": {
+        "runs": 3,
+        "tools": [
+          52,
+          52,
+          52
+        ],
+        "parameters_exposed": [
+          154,
+          154,
+          154
+        ],
+        "tool_list_tokens": [
+          8128,
+          6975,
+          8102
+        ],
+        "tool_list_tokens_min": 6975,
+        "tool_list_tokens_mean": 7735,
+        "calls": [
+          2,
+          1,
+          1
+        ],
+        "repairs": 0
+      }
+    }
+  },
+  "api": "PokéAPI",
+  "design": "task",
+  "valid": true,
+  "endpoints": 103,
+  "covered": 103,
+  "excluded": 0,
+  "tools": 52,
+  "routes": 103,
+  "tool_list_tokens": 6023,
+  "description_tokens": 3030,
+  "parameters_exposed": 154,
+  "parameters_total": 154,
+  "unexposed": [],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "berry",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 114
+    },
+    {
+      "name": "berry_firmness",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 113
+    },
+    {
+      "name": "berry_flavor",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 110
+    },
+    {
+      "name": "contest_type",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 110
+    },
+    {
+      "name": "contest_effect",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 108
+    },
+    {
+      "name": "super_contest_effect",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 112
+    },
+    {
+      "name": "currency",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 109
+    },
+    {
+      "name": "encounter_method",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 122
+    },
+    {
+      "name": "encounter_condition",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 116
+    },
+    {
+      "name": "encounter_condition_value",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 120
+    },
+    {
+      "name": "evolution_chain",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 123
+    },
+    {
+      "name": "evolution_trigger",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 122
+    },
+    {
+      "name": "evolution_variable",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 124
+    },
+    {
+      "name": "generation",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 126
+    },
+    {
+      "name": "pokedex",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 116
+    },
+    {
+      "name": "game_version",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 116
+    },
+    {
+      "name": "version_group",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 117
+    },
+    {
+      "name": "item",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 107
+    },
+    {
+      "name": "item_attribute",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 114
+    },
+    {
+      "name": "item_category",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 113
+    },
+    {
+      "name": "item_fling_effect",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 115
+    },
+    {
+      "name": "item_price",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 120
+    },
+    {
+      "name": "item_pocket",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 112
+    },
+    {
+      "name": "location",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 110
+    },
+    {
+      "name": "location_area",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 115
+    },
+    {
+      "name": "pal_park_area",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 113
+    },
+    {
+      "name": "region",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 108
+    },
+    {
+      "name": "machine",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 106
+    },
+    {
+      "name": "move",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 113
+    },
+    {
+      "name": "move_ailment",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 117
+    },
+    {
+      "name": "move_battle_style",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 120
+    },
+    {
+      "name": "move_category",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 122
+    },
+    {
+      "name": "move_damage_class",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 124
+    },
+    {
+      "name": "move_learn_method",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 122
+    },
+    {
+      "name": "move_target",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 120
+    },
+    {
+      "name": "ability",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 116
+    },
+    {
+      "name": "characteristic",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 121
+    },
+    {
+      "name": "egg_group",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 115
+    },
+    {
+      "name": "gender",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 119
+    },
+    {
+      "name": "growth_rate",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 116
+    },
+    {
+      "name": "nature",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 112
+    },
+    {
+      "name": "pokeathlon_stat",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 112
+    },
+    {
+      "name": "pokemon",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 122
+    },
+    {
+      "name": "pokemon_encounters",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 67
+    },
+    {
+      "name": "pokemon_color",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 120
+    },
+    {
+      "name": "pokemon_form",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 122
+    },
+    {
+      "name": "pokemon_habitat",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 119
+    },
+    {
+      "name": "pokemon_shape",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 120
+    },
+    {
+      "name": "pokemon_species",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 136
+    },
+    {
+      "name": "stat",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 120
+    },
+    {
+      "name": "pokemon_type",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 126
+    },
+    {
+      "name": "language",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 117
+    }
+  ],
+  "max_routes_per_tool": 2
+}

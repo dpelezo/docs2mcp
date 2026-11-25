@@ -41,7 +41,7 @@ The result is always valid. Each added argument, dropped tool and added direct t
 - **One call per API,** with the whole spec as one compact JSON line per endpoint. PokéAPI, the largest, is about 11,000 tokens.
 - **Prompt caching:** the system prompt and the spec message are both cached, so a retry reads them from the cache.
 - **Output cap:** `DOCS2MCP_DESIGN_MAX_OUTPUT_TOKENS` (32,000), with a long request timeout.
-- **Model:** the default is `DOCS2MCP_MODEL` (`claude-haiku-5-5`), the same as extraction. One extra run per API with `claude-sonnet-5-5` shows whether a larger model designs better.
+- **Model:** `DOCS2MCP_DESIGN_MODEL`, by default `claude-sonnet-5-5`. Extraction stays on `claude-haiku-5-5`. Both were run three times on the same specs (`evals/design/README.md`). On the tuned APIs, Sonnet's tool lists were smaller (9,707 to 10,842 estimated tokens against 10,876 to 12,113) and it exposed more parameters (245 or 246 of 248, against 240 to 244). It also did better on held-out Open Library. Designing all six APIs costs about $0.40 with Sonnet and about $0.04 with Haiku. Design runs once per API and a person reviews the result, so the difference does not matter.
 - **Record and replay:** same as extraction, with the same request keys and the same file format. Recordings for the three APIs whose docs are committed are replayed in CI.
 
 ### Every parameter is handled
