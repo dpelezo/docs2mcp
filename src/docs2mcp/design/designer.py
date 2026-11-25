@@ -8,6 +8,7 @@ from docs2mcp.design.prompt import SYSTEM, feedback_message, spec_message
 from docs2mcp.design.toolset import ToolSet
 from docs2mcp.extract.model import Turn
 from docs2mcp.spec import ApiSpec
+from docs2mcp.tracing import model_call, record_usage, set_attributes, tracer
 
 
 @dataclass
@@ -55,12 +56,35 @@ class Designer:
         self.max_retries = max_retries
 
     def run(self, spec: ApiSpec) -> tuple[ToolSet, DesignReport]:
+        with tracer.start_as_current_span("design") as span:
+            span.set_attribute("docs2mcp.endpoints", len(spec.endpoints))
+            toolset, report = self._run(spec)
+            set_attributes(
+                span,
+                {
+                    "docs2mcp.tools": len(toolset.tools),
+                    "docs2mcp.model_calls": report.calls,
+                    "docs2mcp.added_direct": len(report.repairs.added_direct),
+                    "gen_ai.usage.input_tokens": report.input_tokens,
+                    "gen_ai.usage.output_tokens": report.output_tokens,
+                },
+            )
+            return toolset, report
+
+    def _run(self, spec: ApiSpec) -> tuple[ToolSet, DesignReport]:
         report = DesignReport(model=self.model.name)
         turns = [Turn("user", spec_message(spec))]
         conversion = Conversion()
         for attempt in range(self.max_retries + 1):
-            reply = self.model.design(SYSTEM, turns)
-            conversion = convert(reply.design, spec)
+            with model_call("design", self.model.name, SYSTEM, turns) as call:
+                reply = self.model.design(SYSTEM, turns)
+                record_usage(call, reply, reply.design)
+            with tracer.start_as_current_span("design.validate") as check:
+                conversion = convert(reply.design, spec)
+                set_attributes(
+                    check,
+                    {"docs2mcp.attempt": attempt, "docs2mcp.problems": len(conversion.errors)},
+                )
             report.attempts.append(
                 Attempt(
                     input_tokens=reply.input_tokens,
@@ -81,5 +105,14 @@ class Designer:
         report.notes = conversion.notes
         if not conversion.errors:
             return toolset_from(spec, conversion.tools, conversion.excluded), report
-        toolset, report.repairs = repair(conversion, spec)
+        with tracer.start_as_current_span("design.repair") as fix:
+            toolset, report.repairs = repair(conversion, spec)
+            set_attributes(
+                fix,
+                {
+                    "docs2mcp.added_arguments": len(report.repairs.added_arguments),
+                    "docs2mcp.dropped_tools": len(report.repairs.dropped_tools),
+                    "docs2mcp.added_direct": len(report.repairs.added_direct),
+                },
+            )
         return toolset, report

@@ -113,6 +113,25 @@ uv run docs2mcp measure tools/frankfurter.json --spec specs/frankfurter/spec.jso
 
 This counts tools, routes, covered and excluded endpoints, and the estimated tokens an agent loads to see the tools. A person also reviews each design against a pass/fail [checklist](evals/design/checklist.md). Baseline and rules: [evals/design](evals/design/README.md).
 
+### Trace a run
+
+Tracing is off by default. Turn it on by setting either:
+- Langfuse keys (`LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY`, plus `LANGFUSE_HOST` for a US or self-hosted instance);
+- or any OpenTelemetry collector (`OTEL_EXPORTER_OTLP_ENDPOINT`).
+
+```bash
+export LANGFUSE_PUBLIC_KEY=pk-lf-... LANGFUSE_SECRET_KEY=sk-lf-...
+uv run docs2mcp extract ingest/frankfurter --out specs/frankfurter/spec.json
+```
+
+Each command is one trace. It has spans for:
+- each page fetch, including cache hits and HTTP status;
+- each extraction batch;
+- each model call, using the OpenTelemetry GenAI attributes (model and input, output and cached tokens), which Langfuse shows as generations;
+- each validation step and design repair, and generation.
+
+Prompts and model replies stay out of traces unless `DOCS2MCP_TRACE_CONTENT=true`, so documentation text is not sent anywhere by default.
+
 ## How this repo is built
 
 I build with AI coding agents and review everything they produce. The working rules every agent follows are in [`AGENTS.md`](AGENTS.md): run the baseline before changing code, keep unit tests off the network, never change an eval task in the same pull request as the code it measures, and report what was and was not verified. Changes to anything the eval measures follow the [eval-driven change](.claude/skills/eval-driven-change/SKILL.md) procedure, which agents load as a skill: name the failing case, re-run every API on the same inputs, and show before/after numbers.

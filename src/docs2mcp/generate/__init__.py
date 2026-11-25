@@ -9,6 +9,7 @@ from docs2mcp.design import ToolSet
 from docs2mcp.generate.plan import GenerationPlan, SkippedTool, plan_generation
 from docs2mcp.generate.render import FILES, MAX_RESULT_CHARS, RenderedServer, render, write
 from docs2mcp.spec import ApiSpec
+from docs2mcp.tracing import set_attributes, tracer
 
 __all__ = [
     "FILES",
@@ -31,7 +32,20 @@ class NothingToGenerateError(ValueError):
 
 def generate(toolset: ToolSet, spec: ApiSpec, out: Path) -> GenerationPlan:
     """Write server.py, pyproject.toml, README.md and generation_report.json into `out`."""
-    plan = plan_generation(toolset, spec)
+    with tracer.start_as_current_span("generate") as span:
+        plan = plan_generation(toolset, spec)
+        set_attributes(
+            span,
+            {
+                "docs2mcp.tools": len(plan.tools),
+                "docs2mcp.skipped": len(plan.skipped),
+                "docs2mcp.unreachable": len(plan.unreachable),
+            },
+        )
+        return _write(plan, out)
+
+
+def _write(plan: GenerationPlan, out: Path) -> GenerationPlan:
     if not plan.tools:
         reasons = "; ".join(f"{s.name}: {s.reason}" for s in plan.skipped[:5])
         msg = f"no tool is both approved and valid, so there is nothing to generate ({reasons})"

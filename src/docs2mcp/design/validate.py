@@ -7,9 +7,17 @@ tool set is safe to generate from.
 
 from docs2mcp.design.toolset import Route, Tool, ToolParameter, ToolSet
 from docs2mcp.spec import ApiSpec, Endpoint, Parameter, ParamType
+from docs2mcp.tracing import tracer
 
 
 def validate_toolset(toolset: ToolSet, spec: ApiSpec) -> list[str]:
+    with tracer.start_as_current_span("validate_toolset") as span:
+        errors = _validate(toolset, spec)
+        span.set_attribute("docs2mcp.problems", len(errors))
+        return errors
+
+
+def _validate(toolset: ToolSet, spec: ApiSpec) -> list[str]:
     errors: list[str] = []
     endpoints = {e.id: e for e in spec.endpoints}
 

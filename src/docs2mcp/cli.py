@@ -45,6 +45,7 @@ from docs2mcp.extract import (
 from docs2mcp.generate import NothingToGenerateError, generate
 from docs2mcp.ingest import ingest, read_chunks, read_pages
 from docs2mcp.spec import ApiSpec, json_schema
+from docs2mcp.tracing import setup_tracing, tracer
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -507,4 +508,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     if run is None:
         parser.print_help()
         return 0
-    return run(args)
+    provider = setup_tracing(get_settings())
+    try:
+        with tracer.start_as_current_span(f"docs2mcp {args.command}") as span:
+            code = run(args)
+            span.set_attribute("process.exit.code", code)
+            return code
+    finally:
+        if provider is not None:
+            provider.shutdown()  # flush the spans before the process exits
