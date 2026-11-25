@@ -29,6 +29,7 @@ dependencies = [
 ]
 
 [project.urls]
+Demo = "https://docs2mcp.vercel.app"
 Repository = "https://github.com/dpelezo/docs2mcp"
 Changelog = "https://github.com/dpelezo/docs2mcp/blob/main/CHANGELOG.md"
 Results = "https://github.com/dpelezo/docs2mcp/blob/main/evals/agent/README.md"
