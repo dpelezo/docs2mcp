@@ -1,0 +1,229 @@
+{
+  "$defs": {
+    "Contains": {
+      "additionalProperties": false,
+      "properties": {
+        "rule": {
+          "const": "contains",
+          "title": "Rule",
+          "type": "string"
+        },
+        "value": {
+          "description": "Every string must appear.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Value",
+          "type": "array"
+        },
+        "case_sensitive": {
+          "default": false,
+          "title": "Case Sensitive",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rule",
+        "value"
+      ],
+      "title": "Contains",
+      "type": "object"
+    },
+    "Exact": {
+      "additionalProperties": false,
+      "properties": {
+        "rule": {
+          "const": "exact",
+          "title": "Rule",
+          "type": "string"
+        },
+        "value": {
+          "minLength": 1,
+          "title": "Value",
+          "type": "string"
+        },
+        "accept": {
+          "description": "Other answers that count.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Accept",
+          "type": "array"
+        },
+        "case_sensitive": {
+          "default": false,
+          "title": "Case Sensitive",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rule",
+        "value"
+      ],
+      "title": "Exact",
+      "type": "object"
+    },
+    "Number": {
+      "additionalProperties": false,
+      "properties": {
+        "rule": {
+          "const": "number",
+          "title": "Rule",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        },
+        "abs_tolerance": {
+          "default": 0.0,
+          "minimum": 0,
+          "title": "Abs Tolerance",
+          "type": "number"
+        },
+        "rel_tolerance": {
+          "default": 0.0,
+          "minimum": 0,
+          "title": "Rel Tolerance",
+          "type": "number"
+        }
+      },
+      "required": [
+        "rule",
+        "value"
+      ],
+      "title": "Number",
+      "type": "object"
+    },
+    "SetOf": {
+      "additionalProperties": false,
+      "properties": {
+        "rule": {
+          "const": "set",
+          "title": "Rule",
+          "type": "string"
+        },
+        "value": {
+          "description": "Exactly these items, in any order.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Value",
+          "type": "array"
+        },
+        "case_sensitive": {
+          "default": false,
+          "title": "Case Sensitive",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rule",
+        "value"
+      ],
+      "title": "SetOf",
+      "type": "object"
+    },
+    "Task": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z0-9_]+-\\d{3}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "level": {
+          "enum": [
+            "single",
+            "multi",
+            "complex"
+          ],
+          "title": "Level",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 10,
+          "title": "Question",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "How the expected answer was checked.",
+          "minLength": 1,
+          "title": "Evidence",
+          "type": "string"
+        },
+        "answer": {
+          "discriminator": {
+            "mapping": {
+              "contains": "#/$defs/Contains",
+              "exact": "#/$defs/Exact",
+              "number": "#/$defs/Number",
+              "set": "#/$defs/SetOf"
+            },
+            "propertyName": "rule"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Exact"
+            },
+            {
+              "$ref": "#/$defs/Number"
+            },
+            {
+              "$ref": "#/$defs/Contains"
+            },
+            {
+              "$ref": "#/$defs/SetOf"
+            }
+          ],
+          "title": "Answer"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "id",
+        "level",
+        "question",
+        "evidence",
+        "answer"
+      ],
+      "title": "Task",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "api": {
+      "pattern": "^[a-z0-9_]+$",
+      "title": "Api",
+      "type": "string"
+    },
+    "task": {
+      "items": {
+        "$ref": "#/$defs/Task"
+      },
+      "minItems": 1,
+      "title": "Task",
+      "type": "array"
+    }
+  },
+  "required": [
+    "api",
+    "task"
+  ],
+  "title": "TaskFile",
+  "type": "object"
+}
