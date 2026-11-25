@@ -10,7 +10,7 @@ ADR 0001 decided that docs2mcp groups endpoints into fewer, task-shaped tools, w
 | Question | Choice |
 |---|---|
 | Tool shape | Grouped tools, **one API call per tool call**. Multi-call chains wait for v2, and only if the eval shows they are needed. |
-| Approval | A **review file**: `docs2mcp design` writes `tools.json`, a person reviews it, and `docs2mcp generate` only runs on an approved file. No LangGraph in week 2; week 3's agent runner uses it. |
+| Approval | A **review file**: `docs2mcp design` writes `tools.json`, a person reviews it and approves tools one by one, and `docs2mcp generate` builds only approved, valid tools, reporting the rest (amended below). No LangGraph in week 2; week 3's agent runner uses it. |
 | Server framework | The official **MCP Python SDK 2.x** (`mcp`, `MCPServer`), streamable HTTP, speaking the stateless 2026-07-28 revision. A v2 server also answers 2025-11-25 clients from the same endpoint. |
 | Templates | **Jinja2**. |
 | Output | Generated **on demand** into a folder the user chooses. Nothing generated is committed yet. |
@@ -29,7 +29,7 @@ A strict Pydantic model, like `ApiSpec` (ADR 0002), published as JSON Schema:
   - one or more `routes`.
 - **Routes:** each names one endpoint of the spec, and says which tool arguments select it (`requires`), how arguments map to the endpoint's parameters, and which optional parameters it deliberately leaves out (`omitted`, each with a reason). A call takes the **first route whose required arguments are all present**. So `pokemon(name)` gets one Pokémon, and `pokemon()` lists them.
 - **Excluded endpoints**, each with a reason, such as "image host, not JSON".
-- **`approved`**: false until a person sets it. `generate` refuses an unapproved file.
+- **`approved`, on each tool:** false until a person sets it, with an optional `note`. `docs2mcp approve` sets it (`--all`, `--except`, `--tool`, `--revoke`). `generate` builds only the tools that are approved *and* valid. It skips every other tool with its reason ("not approved: <note>" or "invalid: <problem>"), and reports the endpoints that no generated tool reaches. The report goes in the output and in the generated README. *(Amended 2026-11-24, replacing a single flag for the whole file. The reviews failed individual tools, such as 4 of PokéAPI's 52, and an all-or-nothing flag held back the rest. A hand-written tools module that `generate` never overwrites is left for later.)*
 
 ### Validation in code
 
@@ -75,6 +75,6 @@ As in extraction, validation errors go back to Claude for another try, and code 
 
 ## Consequences
 
-- An agent can always reach every endpoint that was not excluded, and every exclusion is visible and reviewed.
+- An agent can reach every endpoint that was not excluded or skipped, and every exclusion and skipped tool is visible, with its reason.
 - One call per tool call keeps generated code simple and testable. Task-shaped value comes from grouping, naming, descriptions and argument design, not from orchestration. If the week 3 eval shows that agents lose on multi-step tasks, chained routes are the v2 change.
 - A server depends on its `tools.json`. When the docs change, the spec, the design and the server are regenerated, and the person approves the design again.
