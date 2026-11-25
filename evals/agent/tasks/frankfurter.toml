@@ -1,0 +1,170 @@
+api = "frankfurter"
+
+# Frankfurter blends rates from several providers by default, and a blend can
+# change when providers are added. Every task asks for European Central Bank
+# rates, so its answer does not drift.
+
+# single: one call
+
+[[task]]
+id = "frankfurter-001"
+level = "single"
+question = "What was the European Central Bank's EUR to USD exchange rate on 2024-01-15?"
+evidence = "GET https://api.frankfurter.dev/v2/rate/EUR/USD?date=2024-01-15&providers=ecb"
+answer = { rule = "number", value = 1.0945, abs_tolerance = 0.00005 }
+
+[[task]]
+id = "frankfurter-002"
+level = "single"
+question = "What is the name of the currency with the code ISK?"
+evidence = "GET https://api.frankfurter.dev/v2/currency/ISK"
+answer = { rule = "exact", value = "Icelandic Króna", accept = ["Icelandic Krona"] }
+
+[[task]]
+id = "frankfurter-003"
+level = "single"
+question = "Using European Central Bank rates, how many Japanese yen was 1 British pound worth on 2023-06-30?"
+evidence = "GET https://api.frankfurter.dev/v2/rate/GBP/JPY?date=2023-06-30&providers=ecb"
+answer = { rule = "number", value = 183.11, rel_tolerance = 0.0005 }
+
+[[task]]
+id = "frankfurter-004"
+level = "single"
+question = "Using European Central Bank rates, how many US dollars was 1 Swiss franc worth on 2024-03-01?"
+evidence = "GET https://api.frankfurter.dev/v2/rate/CHF/USD?date=2024-03-01&providers=ecb"
+answer = { rule = "number", value = 1.1285, rel_tolerance = 0.0005 }
+
+[[task]]
+id = "frankfurter-005"
+level = "single"
+question = "What was the European Central Bank's EUR to SEK rate on 2022-12-30?"
+evidence = "GET https://api.frankfurter.dev/v2/rate/EUR/SEK?date=2022-12-30&providers=ecb"
+answer = { rule = "number", value = 11.1218, abs_tolerance = 0.0005 }
+
+[[task]]
+id = "frankfurter-006"
+level = "single"
+question = "From what date does Frankfurter have European Central Bank rates?"
+evidence = "GET https://api.frankfurter.dev/v2/providers/ecb"
+answer = { rule = "exact", value = "1999-01-04" }
+
+[[task]]
+id = "frankfurter-007"
+level = "single"
+question = "Using European Central Bank rates, how many euros was 1 US dollar worth on 2020-03-16?"
+evidence = "GET https://api.frankfurter.dev/v2/rate/USD/EUR?date=2020-03-16&providers=ecb"
+answer = { rule = "number", value = 0.8963, rel_tolerance = 0.0005 }
+
+[[task]]
+id = "frankfurter-008"
+level = "single"
+question = "Using European Central Bank rates, how many euros was 1 Polish złoty worth on 2021-07-01?"
+evidence = "GET https://api.frankfurter.dev/v2/rate/PLN/EUR?date=2021-07-01&providers=ecb"
+answer = { rule = "number", value = 0.22142, rel_tolerance = 0.0005 }
+
+# multi: two calls, a date range or a conversion
+
+[[task]]
+id = "frankfurter-009"
+level = "multi"
+question = "Using European Central Bank rates, did the EUR to USD rate rise or fall between 2024-01-02 and 2024-01-31? Answer rose or fell."
+evidence = """
+GET https://api.frankfurter.dev/v2/rate/EUR/USD?date=2024-01-02&providers=ecb
+GET https://api.frankfurter.dev/v2/rate/EUR/USD?date=2024-01-31&providers=ecb
+"""
+answer = { rule = "exact", value = "fell" }
+
+[[task]]
+id = "frankfurter-010"
+level = "multi"
+question = "Convert 250 British pounds to euros at the European Central Bank rate on 2023-09-15."
+evidence = "GET https://api.frankfurter.dev/v2/rate/GBP/EUR?date=2023-09-15&providers=ecb"
+answer = { rule = "number", value = 291.1, rel_tolerance = 0.001 }
+
+[[task]]
+id = "frankfurter-011"
+level = "multi"
+question = "What was the highest European Central Bank EUR to USD rate from 2024-02-01 to 2024-02-07?"
+evidence = "GET https://api.frankfurter.dev/v2/rates?from=2024-02-01&to=2024-02-07&base=EUR&quotes=USD&providers=ecb"
+answer = { rule = "number", value = 1.0883, abs_tolerance = 0.00005 }
+
+[[task]]
+id = "frankfurter-012"
+level = "multi"
+question = "Using European Central Bank rates on 2024-05-15, which was worth more in US dollars: 1 British pound or 1 euro? Answer GBP or EUR."
+evidence = """
+GET https://api.frankfurter.dev/v2/rate/GBP/USD?date=2024-05-15&providers=ecb
+GET https://api.frankfurter.dev/v2/rate/EUR/USD?date=2024-05-15&providers=ecb
+"""
+answer = { rule = "exact", value = "GBP" }
+
+[[task]]
+id = "frankfurter-013"
+level = "multi"
+question = "What was the average European Central Bank EUR to CHF rate over the days it published rates from 2024-04-01 to 2024-04-05?"
+evidence = "GET https://api.frankfurter.dev/v2/rates?from=2024-04-01&to=2024-04-05&base=EUR&quotes=CHF&providers=ecb"
+answer = { rule = "number", value = 0.9799, abs_tolerance = 0.0005 }
+note = "2024-04-01 was Easter Monday, a TARGET holiday. The range response starts with the 2024-03-28 rate carried forward, which must not be counted. Mean of 2024-04-02 to 2024-04-05: 0.97990. Counting 2024-03-28 too gives 0.97924, outside the tolerance."
+
+[[task]]
+id = "frankfurter-014"
+level = "multi"
+question = "On how many days did the European Central Bank publish a EUR to USD rate in January 2024?"
+evidence = "GET https://api.frankfurter.dev/v2/rates?from=2024-01-01&to=2024-01-31&base=EUR&quotes=USD&providers=ecb"
+answer = { rule = "number", value = 22 }
+note = "The range response also starts with the 2023-12-29 rate carried forward. 23 rows, 22 in January."
+
+[[task]]
+id = "frankfurter-015"
+level = "multi"
+question = "Using European Central Bank rates, what was the lowest USD to JPY rate in March 2024?"
+evidence = "GET https://api.frankfurter.dev/v2/rates?from=2024-03-01&to=2024-03-31&base=USD&quotes=JPY&providers=ecb"
+answer = { rule = "number", value = 146.83, abs_tolerance = 0.005 }
+
+[[task]]
+id = "frankfurter-016"
+level = "multi"
+question = "Convert 1,000 Swiss francs to Swedish kronor at the European Central Bank rate on 2024-07-01."
+evidence = "GET https://api.frankfurter.dev/v2/rate/CHF/SEK?date=2024-07-01&providers=ecb"
+answer = { rule = "number", value = 11732.4, rel_tolerance = 0.001 }
+
+# complex: several steps, or an unusual parameter
+
+[[task]]
+id = "frankfurter-017"
+level = "complex"
+question = "Using European Central Bank rates, which of USD, GBP and JPY lost the most value against the euro from 2024-03-01 to 2024-03-28? Answer with the currency code."
+evidence = """
+GET https://api.frankfurter.dev/v2/rates?date=2024-03-01&base=EUR&quotes=USD,GBP,JPY&providers=ecb
+GET https://api.frankfurter.dev/v2/rates?date=2024-03-28&base=EUR&quotes=USD,GBP,JPY&providers=ecb
+"""
+answer = { rule = "exact", value = "JPY" }
+note = "A currency loses value against the euro when the EUR rate for it rises. JPY 162.82 to 163.45 (+0.39%); GBP 0.85588 to 0.8551 (-0.09%); USD 1.0813 to 1.0811 (-0.02%)."
+
+[[task]]
+id = "frankfurter-018"
+level = "complex"
+question = "What is the last date for which Frankfurter has a European Central Bank rate for the Russian ruble?"
+evidence = """
+GET https://api.frankfurter.dev/v2/rates?from=2022-02-25&to=2022-03-08&base=EUR&quotes=RUB&providers=ecb
+"""
+answer = { rule = "exact", value = "2022-03-01", accept = ["1 March 2022", "March 1, 2022"] }
+note = "The ECB suspended its rouble rate from 2 March 2022."
+
+[[task]]
+id = "frankfurter-019"
+level = "complex"
+question = "What European Central Bank EUR to USD rate applies on Saturday 2024-03-30?"
+evidence = """
+GET https://api.frankfurter.dev/v2/rate/EUR/USD?date=2024-03-30&providers=ecb
+GET https://api.frankfurter.dev/v2/rate/EUR/USD?date=2024-03-28&providers=ecb
+"""
+answer = { rule = "number", value = 1.0811, abs_tolerance = 0.00005 }
+note = "The ECB publishes no rate at weekends or on Good Friday (2024-03-29), so the rate from 2024-03-28 applies."
+
+[[task]]
+id = "frankfurter-020"
+level = "complex"
+question = "Using monthly European Central Bank EUR to USD rates, which month of the first quarter of 2023 had the highest rate?"
+evidence = "GET https://api.frankfurter.dev/v2/rates?from=2023-01-01&to=2023-03-31&base=EUR&quotes=USD&group=month&providers=ecb"
+answer = { rule = "exact", value = "January", accept = ["Jan", "January 2023", "2023-01"] }

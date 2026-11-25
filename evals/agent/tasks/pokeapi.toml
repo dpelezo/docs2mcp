@@ -1,0 +1,185 @@
+api = "pokeapi"
+
+# single: one call
+
+[[task]]
+id = "pokeapi-001"
+level = "single"
+question = "What is Pikachu's base experience?"
+evidence = "GET https://pokeapi.co/api/v2/pokemon/pikachu"
+answer = { rule = "number", value = 112 }
+
+[[task]]
+id = "pokeapi-002"
+level = "single"
+question = "What are Bulbasaur's types?"
+evidence = "GET https://pokeapi.co/api/v2/pokemon/bulbasaur"
+answer = { rule = "set", value = ["grass", "poison"] }
+
+[[task]]
+id = "pokeapi-003"
+level = "single"
+question = "What is the base power of the move Thunderbolt?"
+evidence = "GET https://pokeapi.co/api/v2/move/thunderbolt"
+answer = { rule = "number", value = 90 }
+
+[[task]]
+id = "pokeapi-004"
+level = "single"
+question = "How many PP does the move Hydro Pump have?"
+evidence = "GET https://pokeapi.co/api/v2/move/hydro-pump"
+answer = { rule = "number", value = 5 }
+
+[[task]]
+id = "pokeapi-005"
+level = "single"
+question = "What is the capture rate of the Pokémon species Mewtwo?"
+evidence = "GET https://pokeapi.co/api/v2/pokemon-species/mewtwo"
+answer = { rule = "number", value = 3 }
+
+[[task]]
+id = "pokeapi-006"
+level = "single"
+question = "What is the firmness of the Cheri berry?"
+evidence = "GET https://pokeapi.co/api/v2/berry/cheri"
+answer = { rule = "exact", value = "soft" }
+
+[[task]]
+id = "pokeapi-007"
+level = "single"
+question = "What is Jolteon's base Speed stat?"
+evidence = "GET https://pokeapi.co/api/v2/pokemon/jolteon"
+answer = { rule = "number", value = 130 }
+
+[[task]]
+id = "pokeapi-008"
+level = "single"
+question = "What is Garchomp's base stat total (the sum of its six base stats)?"
+evidence = "GET https://pokeapi.co/api/v2/pokemon/garchomp"
+answer = { rule = "number", value = 600 }
+
+# multi: two or three calls
+
+[[task]]
+id = "pokeapi-009"
+level = "multi"
+question = "How much experience does a Dratini need in total to reach level 100?"
+evidence = """
+GET https://pokeapi.co/api/v2/pokemon-species/dratini
+GET https://pokeapi.co/api/v2/growth-rate/slow
+"""
+answer = { rule = "number", value = 1250000 }
+
+[[task]]
+id = "pokeapi-010"
+level = "multi"
+question = "Does the type of the move Earthquake deal double damage to Electric-type Pokémon? Answer yes or no."
+evidence = """
+GET https://pokeapi.co/api/v2/move/earthquake
+GET https://pokeapi.co/api/v2/type/ground
+"""
+answer = { rule = "exact", value = "yes" }
+
+[[task]]
+id = "pokeapi-011"
+level = "multi"
+question = "The Sitrus berry is also an item. What is that item's fling power?"
+evidence = """
+GET https://pokeapi.co/api/v2/berry/sitrus
+GET https://pokeapi.co/api/v2/item/sitrus-berry
+"""
+answer = { rule = "number", value = 10 }
+
+[[task]]
+id = "pokeapi-012"
+level = "multi"
+question = "What are the egg groups of the Pokémon that Pichu evolves into?"
+evidence = """
+GET https://pokeapi.co/api/v2/pokemon-species/pichu
+GET https://pokeapi.co/api/v2/evolution-chain/10
+GET https://pokeapi.co/api/v2/pokemon-species/pikachu
+"""
+answer = { rule = "set", value = ["ground", "fairy"] }
+
+[[task]]
+id = "pokeapi-013"
+level = "multi"
+question = "What is the main region of the generation that introduced Lucario?"
+evidence = """
+GET https://pokeapi.co/api/v2/pokemon-species/lucario
+GET https://pokeapi.co/api/v2/generation/generation-iv
+"""
+answer = { rule = "exact", value = "sinnoh" }
+
+[[task]]
+id = "pokeapi-014"
+level = "multi"
+question = "Which bag pocket holds the Master Ball?"
+evidence = """
+GET https://pokeapi.co/api/v2/item/master-ball
+GET https://pokeapi.co/api/v2/item-category/standard-balls
+"""
+answer = { rule = "exact", value = "pokeballs", accept = ["poke balls", "poké balls"] }
+
+[[task]]
+id = "pokeapi-015"
+level = "multi"
+question = "Which has the higher base Attack stat, Machamp or Gyarados?"
+evidence = """
+GET https://pokeapi.co/api/v2/pokemon/machamp
+GET https://pokeapi.co/api/v2/pokemon/gyarados
+"""
+answer = { rule = "exact", value = "machamp" }
+
+[[task]]
+id = "pokeapi-016"
+level = "multi"
+question = "What is the combined weight of Snorlax and Wailord, in the units PokéAPI uses (hectograms)?"
+evidence = """
+GET https://pokeapi.co/api/v2/pokemon/snorlax
+GET https://pokeapi.co/api/v2/pokemon/wailord
+"""
+answer = { rule = "number", value = 8580 }
+
+# complex: several steps
+
+[[task]]
+id = "pokeapi-017"
+level = "complex"
+question = "Considering both of Bulbasaur's types together, which attacking types deal double damage to it?"
+evidence = """
+GET https://pokeapi.co/api/v2/pokemon/bulbasaur
+GET https://pokeapi.co/api/v2/type/grass
+GET https://pokeapi.co/api/v2/type/poison
+"""
+answer = { rule = "set", value = ["fire", "ice", "flying", "psychic"] }
+note = "Grass is weak to fire, ice, poison, flying and bug; poison is weak to ground and psychic. Poison resists poison and bug, and grass resists ground, so those three cancel out."
+
+[[task]]
+id = "pokeapi-018"
+level = "complex"
+question = "What is the base Speed stat of the final evolution of the Pokémon with National Pokédex number 1?"
+evidence = """
+GET https://pokeapi.co/api/v2/pokemon-species/1
+GET https://pokeapi.co/api/v2/evolution-chain/1
+GET https://pokeapi.co/api/v2/pokemon/venusaur
+"""
+answer = { rule = "number", value = 80 }
+
+[[task]]
+id = "pokeapi-019"
+level = "complex"
+question = "Which region is the main region of the generation that introduced the type of the move Moonblast?"
+evidence = """
+GET https://pokeapi.co/api/v2/move/moonblast
+GET https://pokeapi.co/api/v2/type/fairy
+GET https://pokeapi.co/api/v2/generation/generation-vi
+"""
+answer = { rule = "exact", value = "kalos" }
+
+[[task]]
+id = "pokeapi-020"
+level = "complex"
+question = "In PokéAPI's paginated list of Pokémon, which Pokémon is 300th?"
+evidence = "GET https://pokeapi.co/api/v2/pokemon?offset=299&limit=1"
+answer = { rule = "exact", value = "skitty" }
