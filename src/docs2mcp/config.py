@@ -3,7 +3,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field, SecretStr
+from pydantic import AliasChoices, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -62,7 +62,8 @@ class Settings(BaseSettings):
         default=None, validation_alias="LANGFUSE_SECRET_KEY"
     )
     langfuse_host: str = Field(
-        default="https://cloud.langfuse.com", validation_alias="LANGFUSE_HOST"
+        default="https://cloud.langfuse.com",  # the EU region; US is https://us.cloud.langfuse.com
+        validation_alias=AliasChoices("LANGFUSE_BASE_URL", "LANGFUSE_HOST"),
     )
     trace_content: bool = Field(
         default=False, description="Add prompts and model replies to traces."

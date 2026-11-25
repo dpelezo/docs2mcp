@@ -73,9 +73,18 @@ def test_langfuse_keys_select_its_otlp_endpoint() -> None:
     )
     assert tracing.langfuse_target(keys) == (
         "https://us.cloud.langfuse.com/api/public/otel/v1/traces",
-        {"Authorization": "Basic " + base64.b64encode(b"pk-lf-1:sk-lf-2").decode()},
+        {
+            "Authorization": "Basic " + base64.b64encode(b"pk-lf-1:sk-lf-2").decode(),
+            "x-langfuse-ingestion-version": "4",
+        },
     )
     assert isinstance(tracing.exporter_for(keys, environ={}), OTLPSpanExporter)
+
+
+def test_langfuse_base_url_is_read_too(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LANGFUSE_HOST", raising=False)
+    monkeypatch.setenv("LANGFUSE_BASE_URL", "https://us.cloud.langfuse.com")
+    assert settings().langfuse_host == "https://us.cloud.langfuse.com"
 
 
 def test_a_public_key_alone_is_not_enough() -> None:
