@@ -6,7 +6,9 @@ Turn messy API documentation into a curated, task-shaped [MCP](https://modelcont
 ![Python 3.14](https://img.shields.io/badge/python-3.14-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-> **Status: in progress (week 1 of 4).** The spec models, `docs2mcp ingest`, `docs2mcp extract` and `docs2mcp score` work. Extraction is measured on all six eval APIs: every run produces a valid spec, finding 137 of 139 endpoints at 98% precision and 78% of their parameters at 99% precision ([details](evals/extraction/README.md)). Design, generation and the tool-use eval do not exist yet. The README will open with the eval numbers once they exist.
+> **Results (Claude Haiku, 840 runs):** on the three APIs with an official OpenAPI file, docs2mcp's task-shaped tools solved **98.3%** of tasks, against **95.0%** for tools converted from the OpenAPI file and **90.0%** for FastMCP's `from_openapi`, with **22% fewer tokens** than the conversion. Across all six APIs they were level with docs2mcp's own one-tool-per-endpoint design. [Details and limits](evals/agent/README.md#results-2026-11-25-claude-haiku-5-5).
+>
+> **Status: week 4 of 4.** Ingest, extract, design, approve, generate and the agent eval all work. The demo and the PyPI release (`docs2mcp-cli`) are in progress.
 
 ## Why
 
@@ -38,6 +40,17 @@ flowchart LR
 ## Results so far
 
 On the three APIs with an official OpenAPI file, an agent (Claude Haiku) using docs2mcp's task-shaped tools solved **98.3%** of tasks, against **95.0%** with tools converted from the OpenAPI file and **90.0%** with FastMCP's `from_openapi`. It used **22% fewer tokens** than the OpenAPI conversion and **63% fewer** than FastMCP, and on complex tasks it scored 100% against 83%. Across all six APIs, the task-shaped design was level with docs2mcp's own one-tool-per-endpoint design (94.7% against 95.7%): better on PokéAPI and worse on Open Library. The eval also found four real bugs, three of them now fixed. Details, failures and limits: [evals/agent](evals/agent/README.md#results-2026-11-25-claude-haiku-5-5).
+
+## Install
+
+The package is `docs2mcp-cli` on PyPI (`docs2mcp` there is an unrelated project). It needs Python 3.14.
+
+```bash
+uvx docs2mcp-cli --help                # run without installing
+uv tool install docs2mcp-cli           # or install the docs2mcp command
+```
+
+Extraction and design call Claude, so they need `ANTHROPIC_API_KEY`. Generating a server from a reviewed `tools.json` doesn't.
 
 ## Develop
 

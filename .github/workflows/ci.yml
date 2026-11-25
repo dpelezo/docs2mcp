@@ -52,3 +52,19 @@ jobs:
         run: uv sync --locked
       - name: Conformance suite, with the failures expected by design
         run: ./scripts/conformance.sh
+
+  package:
+    name: package (build, install, use)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
+        with:
+          enable-cache: true
+      - name: Build the wheel and sdist
+        run: uv build
+      - name: Install the wheel in a clean environment and use it
+        run: ./scripts/package_smoke.sh

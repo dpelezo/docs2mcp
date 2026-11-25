@@ -1,5 +1,5 @@
 [project]
-name = "docs2mcp"
+name = "docs2mcp-cli"
 version = "0.1.0"
 description = "Turn messy API docs into curated, task-shaped MCP servers, with an eval that measures whether agents do better."
 readme = "README.md"
@@ -9,7 +9,10 @@ authors = [{ name = "Domingos Pelezo", email = "dopelezo@gmail.com" }]
 requires-python = ">=3.14"
 keywords = ["mcp", "llm", "agents", "openapi", "evals"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Code Generators",
     "Programming Language :: Python :: 3.14",
     "Typing :: Typed",
 ]
@@ -27,13 +30,20 @@ dependencies = [
 
 [project.urls]
 Repository = "https://github.com/dpelezo/docs2mcp"
+Changelog = "https://github.com/dpelezo/docs2mcp/blob/main/CHANGELOG.md"
+Results = "https://github.com/dpelezo/docs2mcp/blob/main/evals/agent/README.md"
 
 [project.scripts]
 docs2mcp = "docs2mcp.cli:main"
+docs2mcp-cli = "docs2mcp.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.13.9,<0.14.0"]
 build-backend = "uv_build"
+
+[tool.uv.build-backend]
+# The distribution is docs2mcp-cli; the package you import is still docs2mcp.
+module-name = "docs2mcp"
 
 [dependency-groups]
 dev = [
