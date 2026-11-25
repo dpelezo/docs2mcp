@@ -1,0 +1,9 @@
+{
+  "api": "frankfurter",
+  "url": "https://raw.githubusercontent.com/lineofflight/frankfurter/main/lib/public/v2/openapi.json",
+  "version": "2.1.1",
+  "sha256": "928fe61a3b457dbd248dfb9fffa4f816f6bdee2d0207df26215d858d54d6ffb6",
+  "retrieved": "2026-11-25",
+  "endpoints": 9,
+  "skipped": []
+}

@@ -1,0 +1,3211 @@
+{
+  "toolset_version": "1",
+  "api": "PokéAPI",
+  "base_url": "https://pokeapi.co/api/v2",
+  "auth": {
+    "type": "none"
+  },
+  "design": "direct",
+  "tools": [
+    {
+      "name": "meta_retrieve",
+      "description": "Get API metadata Returns metadata about the current deployed version of the API, including the git commit hash, deploy date, and tag (if any).",
+      "parameters": [],
+      "routes": [
+        {
+          "endpoint": "meta_retrieve",
+          "requires": [],
+          "arguments": {},
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "ability_list",
+      "description": "List abilities Abilities provide passive effects for Pokémon in battle or in the overworld. Pokémon have multiple possible abilities but can have only one ability at a time. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Ability) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "ability_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "ability_retrieve",
+      "description": "Get ability Abilities provide passive effects for Pokémon in battle or in the overworld. Pokémon have multiple possible abilities but can have only one ability at a time. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Ability) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "ability_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "berry_list",
+      "description": "List berries Berries are small fruits that can provide HP and status condition restoration, stat enhancement, and even damage negation when eaten by Pokémon. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Berry) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "berry_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "berry_retrieve",
+      "description": "Get a berry Berries are small fruits that can provide HP and status condition restoration, stat enhancement, and even damage negation when eaten by Pokémon. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Berry) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "berry_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "berry_firmness_list",
+      "description": "List berry firmness Berries can be soft or hard. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Category:Berries_by_firmness) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "berry_firmness_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "berry_firmness_retrieve",
+      "description": "Get berry by firmness Berries can be soft or hard. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Category:Berries_by_firmness) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "berry_firmness_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "berry_flavor_list",
+      "description": "List berry flavors Flavors determine whether a Pokémon will benefit or suffer from eating a berry based on their **nature**. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Flavor) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "berry_flavor_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "berry_flavor_retrieve",
+      "description": "Get berries by flavor Flavors determine whether a Pokémon will benefit or suffer from eating a berry based on their **nature**. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Flavor) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "berry_flavor_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "characteristic_list",
+      "description": "List characteristics Characteristics indicate which stat contains a Pokémon's highest IV. A Pokémon's Characteristic is determined by the remainder of its highest IV divided by 5 (gene_modulo). Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Characteristic) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "characteristic_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "characteristic_retrieve",
+      "description": "Get characteristic Characteristics indicate which stat contains a Pokémon's highest IV. A Pokémon's Characteristic is determined by the remainder of its highest IV divided by 5 (gene_modulo). Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Characteristic) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "characteristic_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "contest_type_list",
+      "description": "List contest types Contest types are categories judges used to weigh a Pokémon's condition in Pokémon contests. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Contest_condition) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "contest_type_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "contest_type_retrieve",
+      "description": "Get contest type Contest types are categories judges used to weigh a Pokémon's condition in Pokémon contests. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Contest_condition) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "contest_type_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "contest_effect_list",
+      "description": "List contest effects Contest effects refer to the effects of moves when used in contests.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "contest_effect_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "contest_effect_retrieve",
+      "description": "Get contest effect Contest effects refer to the effects of moves when used in contests.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "contest_effect_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "egg_group_list",
+      "description": "List egg groups Egg Groups are categories which determine which Pokémon are able to interbreed. Pokémon may belong to either one or two Egg Groups. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Egg_Group) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "egg_group_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "egg_group_retrieve",
+      "description": "Get egg group Egg Groups are categories which determine which Pokémon are able to interbreed. Pokémon may belong to either one or two Egg Groups. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Egg_Group) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "egg_group_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "encounter_method_list",
+      "description": "List encounter methods Methods by which the player might can encounter Pokémon in the wild, e.g., walking in tall grass. Check out Bulbapedia for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "encounter_method_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "encounter_method_retrieve",
+      "description": "Get encounter method Methods by which the player might can encounter Pokémon in the wild, e.g., walking in tall grass. Check out Bulbapedia for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "encounter_method_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "encounter_condition_list",
+      "description": "List encounter conditions Conditions which affect what pokemon might appear in the wild, e.g., day or night.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "encounter_condition_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "encounter_condition_retrieve",
+      "description": "Get encounter condition Conditions which affect what pokemon might appear in the wild, e.g., day or night.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "encounter_condition_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "encounter_condition_value_list",
+      "description": "List encounter condition values Encounter condition values are the various states that an encounter condition can have, i.e., time of day can be either day or night.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "encounter_condition_value_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "encounter_condition_value_retrieve",
+      "description": "Get encounter condition value Encounter condition values are the various states that an encounter condition can have, i.e., time of day can be either day or night.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "encounter_condition_value_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "evolution_chain_list",
+      "description": "List evolution chains Evolution chains are essentially family trees. They start with the lowest stage within a family and detail evolution conditions for each as well as Pokémon they can evolve into up through the hierarchy.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "evolution_chain_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "evolution_chain_retrieve",
+      "description": "Get evolution chain Evolution chains are essentially family trees. They start with the lowest stage within a family and detail evolution conditions for each as well as Pokémon they can evolve into up through the hierarchy.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "evolution_chain_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "evolution_trigger_list",
+      "description": "List evolution triggers Evolution triggers are the events and conditions that cause a Pokémon to evolve. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Methods_of_evolution) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "evolution_trigger_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "evolution_trigger_retrieve",
+      "description": "Get evolution trigger Evolution triggers are the events and conditions that cause a Pokémon to evolve. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Methods_of_evolution) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "evolution_trigger_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "evolution_variable_list",
+      "description": "List evolution variables Evolution variables represent parameters (such as Encryption Constant and Personality Value) used in boolean expressions for form-branching evolutions. Check out [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Personality_value) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "evolution_variable_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "evolution_variable_retrieve",
+      "description": "Get evolution variable Evolution variables represent parameters (such as Encryption Constant and Personality Value) used in boolean expressions for form-branching evolutions. Check out [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Personality_value) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "evolution_variable_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "generation_list",
+      "description": "List genrations A generation is a grouping of the Pokémon games that separates them based on the Pokémon they include. In each generation, a new set of Pokémon, Moves, Abilities and Types that did not exist in the previous generation are released.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "generation_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "generation_retrieve",
+      "description": "Get genration A generation is a grouping of the Pokémon games that separates them based on the Pokémon they include. In each generation, a new set of Pokémon, Moves, Abilities and Types that did not exist in the previous generation are released.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "generation_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "gender_list",
+      "description": "List genders Genders were introduced in Generation II for the purposes of breeding Pokémon but can also result in visual differences or even different evolutionary lines. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Gender) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "gender_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "gender_retrieve",
+      "description": "Get gender Genders were introduced in Generation II for the purposes of breeding Pokémon but can also result in visual differences or even different evolutionary lines. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Gender) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "gender_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "growth_rate_list",
+      "description": "List growth rates Growth rates are the speed with which Pokémon gain levels through experience. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Experience) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "growth_rate_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "growth_rate_retrieve",
+      "description": "Get growth rate Growth rates are the speed with which Pokémon gain levels through experience. Check out [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Experience) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "growth_rate_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_list",
+      "description": "List items An item is an object in the games which the player can pick up, keep in their bag, and use in some manner. They have various uses, including healing, powering up, helping catch Pokémon, or to access a new area.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_retrieve",
+      "description": "Get item An item is an object in the games which the player can pick up, keep in their bag, and use in some manner. They have various uses, including healing, powering up, helping catch Pokémon, or to access a new area.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_category_list",
+      "description": "List item categories Item categories determine where items will be placed in the players bag.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_category_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_category_retrieve",
+      "description": "Get item category Item categories determine where items will be placed in the players bag.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_category_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_attribute_list",
+      "description": "List item attributes Item attributes define particular aspects of items, e.g.\"usable in battle\" or \"consumable\".",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_attribute_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_attribute_retrieve",
+      "description": "Get item attribute Item attributes define particular aspects of items, e.g.\"usable in battle\" or \"consumable\".",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_attribute_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_fling_effect_list",
+      "description": "List item fling effects The various effects of the move\"Fling\" when used with different items.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_fling_effect_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_fling_effect_retrieve",
+      "description": "Get item fling effect The various effects of the move\"Fling\" when used with different items.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_fling_effect_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_pocket_list",
+      "description": "List item pockets Pockets within the players bag used for storing items by category.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_pocket_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "item_pocket_retrieve",
+      "description": "Get item pocket Pockets within the players bag used for storing items by category.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "item_pocket_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "currency_list",
+      "description": "List currencies Currencies used to buy items.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "currency_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "currency_retrieve",
+      "description": "Get currency Currencies used to buy items.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "currency_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "language_list",
+      "description": "List languages Languages for translations of API resource information.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "language_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "language_retrieve",
+      "description": "Get language Languages for translations of API resource information.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "language_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "location_list",
+      "description": "List locations Locations that can be visited within the games. Locations make up sizable portions of regions, like cities or routes.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "location_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "location_retrieve",
+      "description": "Get location Locations that can be visited within the games. Locations make up sizable portions of regions, like cities or routes.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "location_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "location_area_list",
+      "description": "List location areas Location areas are sections of areas, such as floors in a building or cave. Each area has its own set of possible Pokémon encounters.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "location_area_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "location_area_retrieve",
+      "description": "Get location area Location areas are sections of areas, such as floors in a building or cave. Each area has its own set of possible Pokémon encounters.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "integer",
+          "required": true,
+          "description": "A unique integer value identifying this location area."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "location_area_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "machine_list",
+      "description": "List machines Machines are the representation of items that teach moves to Pokémon. They vary from version to version, so it is not certain that one specific TM or HM corresponds to a single Machine.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "machine_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "machine_retrieve",
+      "description": "Get machine Machines are the representation of items that teach moves to Pokémon. They vary from version to version, so it is not certain that one specific TM or HM corresponds to a single Machine.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "machine_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_list",
+      "description": "List moves Moves are the skills of Pokémon in battle. In battle, a Pokémon uses one move each turn. Some moves (including those learned by Hidden Machine) can be used outside of battle as well, usually for the purpose of removing obstacles or exploring new areas.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_retrieve",
+      "description": "Get move Moves are the skills of Pokémon in battle. In battle, a Pokémon uses one move each turn. Some moves (including those learned by Hidden Machine) can be used outside of battle as well, usually for the purpose of removing obstacles or exploring new areas.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_ailment_list",
+      "description": "List move meta ailments Move Ailments are status conditions caused by moves used during battle. See [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Status_condition) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_ailment_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_ailment_retrieve",
+      "description": "Get move meta ailment Move Ailments are status conditions caused by moves used during battle. See [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Status_condition) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_ailment_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_battle_style_list",
+      "description": "List move battle styles Styles of moves when used in the Battle Palace. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Battle_Frontier_(Generation_III)) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_battle_style_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_battle_style_retrieve",
+      "description": "Get move battle style Styles of moves when used in the Battle Palace. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Battle_Frontier_(Generation_III)) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_battle_style_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_category_list",
+      "description": "List move meta categories Very general categories that loosely group move effects.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_category_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_category_retrieve",
+      "description": "Get move meta category Very general categories that loosely group move effects.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_category_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_damage_class_list",
+      "description": "List move damage classes Damage classes moves can have, e.g. physical, special, or non-damaging.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_damage_class_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_damage_class_retrieve",
+      "description": "Get move damage class Damage classes moves can have, e.g. physical, special, or non-damaging.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_damage_class_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_learn_method_list",
+      "description": "List move learn methods Methods by which Pokémon can learn moves.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_learn_method_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_learn_method_retrieve",
+      "description": "Get move learn method Methods by which Pokémon can learn moves.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_learn_method_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_target_list",
+      "description": "List move targets Targets moves can be directed at during battle. Targets can be Pokémon, environments or even other moves.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_target_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "move_target_retrieve",
+      "description": "Get move target Targets moves can be directed at during battle. Targets can be Pokémon, environments or even other moves.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "move_target_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "nature_list",
+      "description": "List natures Natures influence how a Pokémon's stats grow. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Nature) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "nature_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "nature_retrieve",
+      "description": "Get nature Natures influence how a Pokémon's stats grow. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Nature) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "nature_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pal_park_area_list",
+      "description": "List pal park areas Areas used for grouping Pokémon encounters in Pal Park. They're like habitats that are specific to Pal Park.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pal_park_area_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pal_park_area_retrieve",
+      "description": "Get pal park area Areas used for grouping Pokémon encounters in Pal Park. They're like habitats that are specific to Pal Park.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pal_park_area_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokedex_list",
+      "description": "List pokedex A Pokédex is a handheld electronic encyclopedia device; one which is capable of recording and retaining information of the various Pokémon in a given region with the exception of the national dex and some smaller dexes related to portions of a region. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Pokedex) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokedex_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokedex_retrieve",
+      "description": "Get pokedex A Pokédex is a handheld electronic encyclopedia device; one which is capable of recording and retaining information of the various Pokémon in a given region with the exception of the national dex and some smaller dexes related to portions of a region. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Pokedex) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokedex_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_list",
+      "description": "List pokemon Pokémon are the creatures that inhabit the world of the Pokémon games. They can be caught using Pokéballs and trained by battling with other Pokémon. Each Pokémon belongs to a specific species but may take on a variant which makes it differ from other Pokémon of the same species, such as base stats, available abilities and typings. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_(species)) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_retrieve",
+      "description": "Get pokemon Pokémon are the creatures that inhabit the world of the Pokémon games. They can be caught using Pokéballs and trained by battling with other Pokémon. Each Pokémon belongs to a specific species but may take on a variant which makes it differ from other Pokémon of the same species, such as base stats, available abilities and typings. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_(species)) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_color_list",
+      "description": "List pokemon colors Colors used for sorting Pokémon in a Pokédex. The color listed in the Pokédex is usually the color most apparent or covering each Pokémon's body. No orange category exists; Pokémon that are primarily orange are listed as red or brown.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_color_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_color_retrieve",
+      "description": "Get pokemon color Colors used for sorting Pokémon in a Pokédex. The color listed in the Pokédex is usually the color most apparent or covering each Pokémon's body. No orange category exists; Pokémon that are primarily orange are listed as red or brown.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_color_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_form_list",
+      "description": "List pokemon forms Some Pokémon may appear in one of multiple, visually different forms. These differences are purely cosmetic. For variations within a Pokémon species, which do differ in more than just visuals, the 'Pokémon' entity is used to represent such a variety.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_form_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_form_retrieve",
+      "description": "Get pokemon form Some Pokémon may appear in one of multiple, visually different forms. These differences are purely cosmetic. For variations within a Pokémon species, which do differ in more than just visuals, the 'Pokémon' entity is used to represent such a variety.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_form_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_habitat_list",
+      "description": "List pokemom habitas Habitats are generally different terrain Pokémon can be found in but can also be areas designated for rare or legendary Pokémon.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_habitat_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_habitat_retrieve",
+      "description": "Get pokemom habita Habitats are generally different terrain Pokémon can be found in but can also be areas designated for rare or legendary Pokémon.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_habitat_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_shape_list",
+      "description": "List pokemon shapes Shapes used for sorting Pokémon in a Pokédex.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_shape_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_shape_retrieve",
+      "description": "Get pokemon shape Shapes used for sorting Pokémon in a Pokédex.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_shape_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_species_list",
+      "description": "List pokemon species A Pokémon Species forms the basis for at least one Pokémon. Attributes of a Pokémon species are shared across all varieties of Pokémon within the species. A good example is Wormadam; Wormadam is the species which can be found in three different varieties, Wormadam-Trash, Wormadam-Sandy and Wormadam-Plant.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_species_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_species_retrieve",
+      "description": "Get pokemon species A Pokémon Species forms the basis for at least one Pokémon. Attributes of a Pokémon species are shared across all varieties of Pokémon within the species. A good example is Wormadam; Wormadam is the species which can be found in three different varieties, Wormadam-Trash, Wormadam-Sandy and Wormadam-Plant.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_species_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokeathlon_stat_list",
+      "description": "List pokeathlon stats Pokeathlon Stats are different attributes of a Pokémon's performance in Pokéathlons. In Pokéathlons, competitions happen on different courses; one for each of the different Pokéathlon stats. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9athlon) for greater detail.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokeathlon_stat_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokeathlon_stat_retrieve",
+      "description": "Get pokeathlon stat Pokeathlon Stats are different attributes of a Pokémon's performance in Pokéathlons. In Pokéathlons, competitions happen on different courses; one for each of the different Pokéathlon stats. See [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9athlon) for greater detail.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokeathlon_stat_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "region_list",
+      "description": "List regions A region is an organized area of the Pokémon world. Most often, the main difference between regions is the species of Pokémon that can be encountered within them.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "region_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "region_retrieve",
+      "description": "Get region A region is an organized area of the Pokémon world. Most often, the main difference between regions is the species of Pokémon that can be encountered within them.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "region_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "stat_list",
+      "description": "List stats Stats determine certain aspects of battles. Each Pokémon has a value for each stat which grows as they gain levels and can be altered momentarily by effects in battles.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "stat_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "stat_retrieve",
+      "description": "Get stat Stats determine certain aspects of battles. Each Pokémon has a value for each stat which grows as they gain levels and can be altered momentarily by effects in battles.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "stat_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "super_contest_effect_list",
+      "description": "List super contest effects Super contest effects refer to the effects of moves when used in super contests.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "super_contest_effect_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "super_contest_effect_retrieve",
+      "description": "Get super contest effect Super contest effects refer to the effects of moves when used in super contests.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "super_contest_effect_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "type_list",
+      "description": "List types Types are properties for Pokémon and their moves. Each type has three properties: which types of Pokémon it is super effective against, which types of Pokémon it is not very effective against, and which types of Pokémon it is completely ineffective against.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "type_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "type_retrieve",
+      "description": "Get types Types are properties for Pokémon and their moves. Each type has three properties: which types of Pokémon it is super effective against, which types of Pokémon it is not very effective against, and which types of Pokémon it is completely ineffective against.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "type_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "version_list",
+      "description": "List versions Versions of the games, e.g., Red, Blue or Yellow.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "version_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "version_retrieve",
+      "description": "Get version Versions of the games, e.g., Red, Blue or Yellow.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "version_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "version_group_list",
+      "description": "List version groups Version groups categorize highly similar versions of the games.",
+      "parameters": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Number of results to return per page."
+        },
+        {
+          "name": "offset",
+          "type": "integer",
+          "required": false,
+          "description": "The initial index from which to return the results."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": false,
+          "description": "> Only available locally and not at [pokeapi.co](https://pokeapi.co/docs/v2) Case-insensitive query applied on the `name` property."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "version_group_list",
+          "requires": [],
+          "arguments": {
+            "limit": "limit",
+            "offset": "offset",
+            "q": "q"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "version_group_retrieve",
+      "description": "Get version group Version groups categorize highly similar versions of the games.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "This parameter can be a string or an integer."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "version_group_retrieve",
+          "requires": [],
+          "arguments": {
+            "id": "id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "pokemon_encounters_list",
+      "description": "Get pokemon encounter Handles Pokemon Encounters as a sub-resource.",
+      "parameters": [
+        {
+          "name": "pokemon_id",
+          "type": "integer",
+          "required": true,
+          "description": "A unique integer value identifying the Pokémon."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "pokemon_encounters_list",
+          "requires": [],
+          "arguments": {
+            "pokemon_id": "pokemon_id"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    }
+  ],
+  "excluded": []
+}

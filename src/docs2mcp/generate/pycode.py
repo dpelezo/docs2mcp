@@ -75,13 +75,17 @@ def block(value: Any, depth: int) -> str:
 def string(text: str, depth: int, used: int) -> str:
     """A string literal for a line that already has `used` characters before it.
 
-    One literal when it fits (with the trailing comma); otherwise parts of at most
-    the line length inside parentheses, each part ending at a space.
+    One literal when it fits (with the trailing comma). Otherwise the literal on
+    its own line inside parentheses when it fits there, as Ruff joins the parts
+    of a string that would fit; failing that, parts of at most the line length
+    inside parentheses, each part ending at a space.
     """
     whole = literal(text)
     if used + len(whole) + 1 <= LINE_LENGTH:
         return whole
     pad = _INDENT * (depth + 1)
+    if len(pad) + len(whole) <= LINE_LENGTH:
+        return f"(\n{pad}{whole}\n{_INDENT * depth})"
     room = LINE_LENGTH - len(pad) - 2  # the two quotes
     parts: list[str] = []
     current = ""

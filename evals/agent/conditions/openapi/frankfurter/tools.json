@@ -1,0 +1,409 @@
+{
+  "toolset_version": "1",
+  "api": "Frankfurter",
+  "base_url": "https://api.frankfurter.dev/v2",
+  "auth": {
+    "type": "none"
+  },
+  "design": "direct",
+  "tools": [
+    {
+      "name": "get_coverage",
+      "description": "Get queryable history coverage Returns the first and last eligible observation dates at which /rates with the same base, quotes and providers returns at least one record. Defaults to the EUR-based daily blended feed. Supplying providers selects their history, including non-daily observations. Null bounds mean no queryable pair. Bounds are request dates, not necessarily returned record dates: a carried quote can predate the bridge required to convert its base. Interior gaps are possible. Bounds do not extend beyond stored observation dates merely because carry-forward can answer later requests. With several quotes, at least one must be available. Only base, quotes and providers are accepted. Use start_date from this endpoint for a headline describing default rate history; provider and currency publication dates are not pair coverage.",
+      "parameters": [
+        {
+          "name": "base",
+          "type": "string",
+          "required": false,
+          "description": "Base currency (default: EUR)",
+          "default": "EUR"
+        },
+        {
+          "name": "quotes",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of quote currencies to include"
+        },
+        {
+          "name": "providers",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of data providers to include. A provider key selects its default datasets; a dataset key such as NBP.B selects that dataset alone (see `datasets` on `/providers`). A single provider includes its stored non-currency series. Selecting multiple providers blends only registered cur…"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_coverage",
+          "requires": [],
+          "arguments": {
+            "base": "base",
+            "quotes": "quotes",
+            "providers": "providers"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_rates",
+      "description": "Get exchange rates Returns exchange rates blended across providers. Without date params, returns the latest rates. Each record is a single currency pair. The response includes an identity record for the base currency (base equals quote, rate 1), subject to the quotes filter like any other record. Daily date ranges of any length are served, including full history. Limit: requests using `providers` or `expand=providers` recompute the blend per date, so at daily granularity they return 422 for ranges longer than 5 years. A single provider is exempt and serves any range. With `providers` naming 2 to 5 providers, a `quotes` list of at most 5 currencies lifts the cap; without `providers`, `expand=providers` ranges compute every currency regardless of `quotes`, so aggregate with `group=week` or `group=month`, add `providers`, or split the range into shorter requests.",
+      "parameters": [
+        {
+          "name": "date",
+          "type": "string",
+          "required": false,
+          "description": "Specific date (YYYY-MM-DD). Cannot be combined with from/to."
+        },
+        {
+          "name": "from_",
+          "type": "string",
+          "required": false,
+          "description": "Start of date range (YYYY-MM-DD)"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "description": "End of date range (YYYY-MM-DD). Defaults to today."
+        },
+        {
+          "name": "base",
+          "type": "string",
+          "required": false,
+          "description": "Base currency (default: EUR)",
+          "default": "EUR"
+        },
+        {
+          "name": "quotes",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of quote currencies to include"
+        },
+        {
+          "name": "providers",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of data providers to include. A provider key selects its default datasets; a dataset key such as NBP.B selects that dataset alone (see `datasets` on `/providers`). A single provider includes its stored non-currency series. Selecting multiple providers blends only registered cur…"
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "required": false,
+          "description": "Downsample rates by time period. Only applies to date ranges. Weekly buckets cover ISO weeks (Monday to Sunday), dated on Monday; monthly buckets cover calendar months, dated on the first of the month.",
+          "enum": [
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "expand",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of optional fields to include per record. Currently supports `providers`, which adds an array of `{ key, date, rate }` objects per record showing each provider's individual observation date and rate. Outliers excluded from the blend (and providers whose rate was overridden by a…",
+          "enum": [
+            "providers"
+          ]
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_rates",
+          "requires": [],
+          "arguments": {
+            "date": "date",
+            "from_": "from",
+            "to": "to",
+            "base": "base",
+            "quotes": "quotes",
+            "providers": "providers",
+            "group": "group",
+            "expand": "expand"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_rate",
+      "description": "Get a single exchange rate pair Returns the blended exchange rate for a single currency pair. Without a date param, returns the latest rate. A same-currency pair returns the identity rate of 1.",
+      "parameters": [
+        {
+          "name": "base",
+          "type": "string",
+          "required": true,
+          "description": "The path parameter 'base'."
+        },
+        {
+          "name": "quote",
+          "type": "string",
+          "required": true,
+          "description": "The path parameter 'quote'."
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "required": false,
+          "description": "Specific date (YYYY-MM-DD). Cannot be combined with from/to."
+        },
+        {
+          "name": "providers",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of data providers to include. A provider key selects its default datasets; a dataset key such as NBP.B selects that dataset alone (see `datasets` on `/providers`). A single provider includes its stored non-currency series. Selecting multiple providers blends only registered cur…"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_rate",
+          "requires": [],
+          "arguments": {
+            "base": "base",
+            "quote": "quote",
+            "date": "date",
+            "providers": "providers"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_provider",
+      "description": "Get a provider One entry from `/providers`, by key (case-insensitive).",
+      "parameters": [
+        {
+          "name": "provider",
+          "type": "string",
+          "required": true,
+          "description": "Provider key, case-insensitive. See `/providers` for the list."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_provider",
+          "requires": [],
+          "arguments": {
+            "provider": "provider"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_provider_rates",
+      "description": "Get a provider's exchange rates Returns one provider's rates as published, unblended. Identical to `/rates?providers={provider}`: same parameters, same records, same limits. Native-base records carry the provider's published digits; other bases are derived. Sending `providers` here returns 422. Unknown provider returns 404.",
+      "parameters": [
+        {
+          "name": "provider",
+          "type": "string",
+          "required": true,
+          "description": "Provider or dataset key, case-insensitive, such as ECB or NBP.B. See `/providers` for the list."
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "required": false,
+          "description": "Specific date (YYYY-MM-DD). Cannot be combined with from/to."
+        },
+        {
+          "name": "from_",
+          "type": "string",
+          "required": false,
+          "description": "Start of date range (YYYY-MM-DD)"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "description": "End of date range (YYYY-MM-DD). Defaults to today."
+        },
+        {
+          "name": "base",
+          "type": "string",
+          "required": false,
+          "description": "Base currency (default: EUR)",
+          "default": "EUR"
+        },
+        {
+          "name": "quotes",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of quote currencies to include"
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "required": false,
+          "description": "Downsample rates by time period. Only applies to date ranges. Weekly buckets cover ISO weeks (Monday to Sunday), dated on Monday; monthly buckets cover calendar months, dated on the first of the month.",
+          "enum": [
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "expand",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of optional fields to include per record. Currently supports `providers`, which adds an array of `{ key, date, rate }` objects per record showing each provider's individual observation date and rate. Outliers excluded from the blend (and providers whose rate was overridden by a…",
+          "enum": [
+            "providers"
+          ]
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_provider_rates",
+          "requires": [],
+          "arguments": {
+            "provider": "provider",
+            "date": "date",
+            "from_": "from",
+            "to": "to",
+            "base": "base",
+            "quotes": "quotes",
+            "group": "group",
+            "expand": "expand"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_provider_rate",
+      "description": "Get a single pair from a provider Returns one provider's rate for a single currency pair. Identical to `/rate/{base}/{quote}?providers={provider}`. The pair may be published directly or derived from the provider's own rates for both currencies. Returns 404 when the provider has no data for either currency on the date.",
+      "parameters": [
+        {
+          "name": "provider",
+          "type": "string",
+          "required": true,
+          "description": "Provider or dataset key, case-insensitive, such as ECB or NBP.B. See `/providers` for the list."
+        },
+        {
+          "name": "base",
+          "type": "string",
+          "required": true,
+          "description": "The path parameter 'base'."
+        },
+        {
+          "name": "quote",
+          "type": "string",
+          "required": true,
+          "description": "The path parameter 'quote'."
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "required": false,
+          "description": "Specific date (YYYY-MM-DD). Cannot be combined with from/to."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_provider_rate",
+          "requires": [],
+          "arguments": {
+            "provider": "provider",
+            "base": "base",
+            "quote": "quote",
+            "date": "date"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_currency",
+      "description": "Get a single currency Returns details for a single currency, including provider information or peg metadata.",
+      "parameters": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": true,
+          "description": "The path parameter 'code'."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_currency",
+          "requires": [],
+          "arguments": {
+            "code": "code"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_currencies",
+      "description": "Get available currencies Returns available currencies, precious metals and crypto assets with their names, types and publication date ranges. Without providers, the catalogue covers eligible daily sources plus pegged currencies; scope=all also includes historical currencies. With providers, it covers recognized currencies published by those sources, including period-only history. These dates do not guarantee a queryable base/quote pair; use /coverage with matching query filters. By default, only active currencies are included.",
+      "parameters": [
+        {
+          "name": "scope",
+          "type": "string",
+          "required": false,
+          "description": "Set to 'all' to include legacy currencies. Omit for the default list. Other values, including an empty string, return 422.",
+          "enum": [
+            "all"
+          ]
+        },
+        {
+          "name": "providers",
+          "type": "string",
+          "required": false,
+          "description": "Comma-separated list of data providers to include. A provider key selects its default datasets; a dataset key such as NBP.B selects that dataset alone (see `datasets` on `/providers`). A single provider includes its stored non-currency series. Selecting multiple providers blends only registered cur…"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_currencies",
+          "requires": [],
+          "arguments": {
+            "scope": "scope",
+            "providers": "providers"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_providers",
+      "description": "Get available data providers Returns available exchange rate data providers with their publication coverage. A provider start_date can predate the daily blend or the availability of a requested base or quote. Use /coverage for queryable history.",
+      "parameters": [],
+      "routes": [
+        {
+          "endpoint": "get_providers",
+          "requires": [],
+          "arguments": {},
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    }
+  ],
+  "excluded": []
+}

@@ -2,7 +2,7 @@
 
 Do agents finish more tasks with docs2mcp's task-shaped tools than with a direct conversion? This eval answers that. The plan and its reasons are in [ADR 0013](../../docs/adr/0013-agent-eval.md).
 
-**Status:** the task format, the scorer (#46) and the 100 tasks (#47) are in place. The condition A servers (#48), recorded responses (#49), the runner (#50) and the results (#51) come next.
+**Status:** the task format, the scorer (#46), the 100 tasks (#47) and the condition A designs (#48) are in place. Recorded responses (#49), the runner (#50) and the results (#51) come next.
 
 ## Task files
 
@@ -66,6 +66,26 @@ uv run python scripts/fetch_evidence.py evals/agent/tasks/*.toml --out evidence
 ```
 
 This sends every `GET` or `POST` line in each task's `evidence` and saves the response to `evidence/<api>/<task id>-<n>.json`. Re-run it to check whether an answer has drifted. `evidence/` is git-ignored, because some responses come from AGPL-licensed sites.
+
+## Condition A: the official OpenAPI files
+
+Condition A is what other generators make: one tool per operation in the API's own OpenAPI file, approved without review. `src/docs2mcp/openapi.py` converts the file into docs2mcp's spec, and the same direct design and server template as condition B build the server. So A and B differ only in where the spec came from, and A and C only in the tools.
+
+| API | Tools | Tool list (tokens) | What the official file leaves out |
+|---|---|---|---|
+| PokéAPI | 102 | ~12,400 | nothing the extraction reference has |
+| Frankfurter | 9 | ~2,300 | nothing the extraction reference has |
+| Postcodes.io | 11 | ~1,900 | 3 routes (autocomplete, outcode reverse geocoding, nearest outcodes), 12 parameters (such as `radius` and `limit` on nearest postcodes and `q` on places), and the bulk lookup's request body |
+
+The designs are committed in [`conditions/openapi/`](conditions/openapi/): `spec.json`, `tools.json`, and `source.json` with the file's URL, SHA-256 and every part that could not be converted. Rebuild them, and then a server, with:
+
+```bash
+uv run python -m scripts.openapi_condition
+uv run docs2mcp generate evals/agent/conditions/openapi/postcodes_io/tools.json \
+    --spec evals/agent/conditions/openapi/postcodes_io/spec.json --out servers/openapi/postcodes_io
+```
+
+The Postcodes.io gaps take away the direct route for some tasks in condition A: 009 (needs `radius`), 010 (autocomplete), 013 and 019 (place search) and 016 (nearest outcodes). 015 and 017 need one lookup per postcode instead of a bulk request. That is part of what the eval measures: documentation can say more than the official file.
 
 ## Checking task files
 
