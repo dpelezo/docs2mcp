@@ -95,7 +95,7 @@ uv run python scripts/try_server.py servers/frankfurter exchange_rates '{"base":
 
 `generate` writes one `server.py`, built on the official MCP Python SDK (`MCPServer`). It has one typed function per approved tool. Each call picks its route, makes one request with httpx, and returns the JSON, cut to 20,000 characters with a note. HTTP and network errors come back as tool errors.
 
-Next to the server are a `pyproject.toml`, a README listing every skipped tool, excluded endpoint and unreachable endpoint with its reason, and `generation_report.json`. `scripts/try_server.py` starts a server, lists its tools and makes one real call.
+Next to the server are a `pyproject.toml`, a README listing every skipped tool, excluded endpoint and unreachable endpoint with its reason, and `generation_report.json`. `scripts/try_server.py` starts a server, lists its tools and makes one real call. CI also runs every generated server through Ruff and strict Pyright, and runs the official MCP conformance suite against one of them (`just conformance`). The scenarios that don't apply to a tools-only server are listed in [`evals/conformance/baseline.yml`](evals/conformance/baseline.yml).
 
 ### Score an extraction
 

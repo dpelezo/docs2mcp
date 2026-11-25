@@ -42,5 +42,9 @@ record-replay *ids:
 references *ids:
     uv run python scripts/reference_from_openapi.py {{ids}}
 
+# Run the MCP conformance suite on a generated server (needs npx; no model calls)
+conformance:
+    ./scripts/conformance.sh
+
 # Everything CI runs; must pass before every commit
 check: lint typecheck test
