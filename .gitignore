@@ -35,3 +35,6 @@ coverage.xml
 
 # docs2mcp generate output (regenerate with `docs2mcp generate`)
 /servers/
+
+# Live API responses behind agent eval answers (scripts/fetch_evidence.py); some are AGPL
+/evidence/

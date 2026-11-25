@@ -1,0 +1,165 @@
+api = "postcodes_io"
+
+# single: one call
+
+[[task]]
+id = "postcodes_io-001"
+level = "single"
+question = "Which local authority district is the postcode SW1A 1AA in?"
+evidence = "GET https://api.postcodes.io/postcodes/SW1A1AA"
+answer = { rule = "exact", value = "Westminster", accept = ["City of Westminster"] }
+
+[[task]]
+id = "postcodes_io-002"
+level = "single"
+question = "Which country of the United Kingdom is the postcode CF10 1EP in?"
+evidence = "GET https://api.postcodes.io/postcodes/CF101EP"
+answer = { rule = "exact", value = "Wales" }
+
+[[task]]
+id = "postcodes_io-003"
+level = "single"
+question = "What is the latitude of the postcode EH1 1YZ?"
+evidence = "GET https://api.postcodes.io/postcodes/EH11YZ"
+answer = { rule = "number", value = 55.950328, abs_tolerance = 0.0005 }
+
+[[task]]
+id = "postcodes_io-004"
+level = "single"
+question = "Which parliamentary constituency is the postcode B1 1BB in?"
+evidence = "GET https://api.postcodes.io/postcodes/B11BB"
+answer = { rule = "exact", value = "Birmingham Ladywood" }
+
+[[task]]
+id = "postcodes_io-005"
+level = "single"
+question = "Which region of England is the postcode LS1 4AP in?"
+evidence = "GET https://api.postcodes.io/postcodes/LS14AP"
+answer = { rule = "exact", value = "Yorkshire and The Humber", accept = ["Yorkshire and the Humber"] }
+
+[[task]]
+id = "postcodes_io-006"
+level = "single"
+question = "Which local authority districts does the outcode BN1 cover?"
+evidence = "GET https://api.postcodes.io/outcodes/BN1"
+answer = { rule = "set", value = ["Brighton and Hove", "Lewes", "Mid Sussex"] }
+
+[[task]]
+id = "postcodes_io-007"
+level = "single"
+question = "The postcode AB1 0AA no longer exists. In what year was it terminated?"
+evidence = "GET https://api.postcodes.io/terminated_postcodes/AB10AA"
+answer = { rule = "number", value = 1996 }
+
+[[task]]
+id = "postcodes_io-008"
+level = "single"
+question = "Which Scottish Parliament constituency is the postcode EH99 1SP in?"
+evidence = "GET https://api.postcodes.io/scotland/postcodes/EH991SP"
+answer = { rule = "exact", value = "Edinburgh Central" }
+
+# multi: two calls, or the right options
+
+[[task]]
+id = "postcodes_io-009"
+level = "multi"
+question = "Apart from SW1A 1AA itself, which postcode is nearest to SW1A 1AA?"
+evidence = "GET https://api.postcodes.io/postcodes/SW1A1AA/nearest?radius=500&limit=5"
+answer = { rule = "exact", value = "SW1E 6LA", accept = ["SW1E6LA"] }
+note = "With the default 100 m radius, the only result is SW1A 1AA itself, so a wider radius is needed."
+
+[[task]]
+id = "postcodes_io-010"
+level = "multi"
+question = "List the first three postcode completions Postcodes.io suggests for the partial postcode 'SW1A 1'."
+evidence = "GET https://api.postcodes.io/postcodes/SW1A1/autocomplete?limit=3"
+answer = { rule = "set", value = ["SW1A 1AA", "SW1A 1AB", "SW1A 1AG"] }
+
+[[task]]
+id = "postcodes_io-011"
+level = "multi"
+question = "Which local authority district contains the point at latitude 51.5014, longitude -0.1419?"
+evidence = "GET https://api.postcodes.io/postcodes?lon=-0.1419&lat=51.5014&limit=1"
+answer = { rule = "exact", value = "Westminster", accept = ["City of Westminster"] }
+
+[[task]]
+id = "postcodes_io-012"
+level = "multi"
+question = "Are the postcodes OX1 2JD and CB2 1TN in the same region? Answer yes or no."
+evidence = """
+GET https://api.postcodes.io/postcodes/OX12JD
+GET https://api.postcodes.io/postcodes/CB21TN
+"""
+answer = { rule = "exact", value = "no" }
+
+[[task]]
+id = "postcodes_io-013"
+level = "multi"
+question = "Postcodes.io has place data from Ordnance Survey. In which county or unitary authority is the place called Ambleside?"
+evidence = "GET https://api.postcodes.io/places?q=ambleside"
+answer = { rule = "exact", value = "Westmorland and Furness" }
+note = "Cumbria was split into Cumberland and Westmorland and Furness in 2023. The place data uses the new name."
+
+[[task]]
+id = "postcodes_io-014"
+level = "multi"
+question = "How far apart, in kilometres in a straight line, are the postcodes SW1A 1AA and EH1 1YZ?"
+evidence = """
+GET https://api.postcodes.io/postcodes/SW1A1AA
+GET https://api.postcodes.io/postcodes/EH11YZ
+"""
+answer = { rule = "number", value = 533.8, rel_tolerance = 0.02 }
+note = "Great-circle distance from the two latitude and longitude pairs, 533.79 km with a 6371 km radius. 2% covers other ways of computing it."
+
+[[task]]
+id = "postcodes_io-015"
+level = "multi"
+question = "Which of these postcodes is in Scotland: G1 1XQ, NE1 1EE or CA1 1QS?"
+evidence = 'POST https://api.postcodes.io/postcodes {"postcodes": ["G1 1XQ", "NE1 1EE", "CA1 1QS"]}'
+answer = { rule = "exact", value = "G1 1XQ", accept = ["G11XQ"] }
+
+[[task]]
+id = "postcodes_io-016"
+level = "multi"
+question = "Apart from CB1 itself, which outcode is nearest to the outcode CB1?"
+evidence = "GET https://api.postcodes.io/outcodes/CB1/nearest"
+answer = { rule = "exact", value = "CB2" }
+
+# complex: several steps, a bulk request or an unusual parameter
+
+[[task]]
+id = "postcodes_io-017"
+level = "complex"
+question = "Look up the postcodes SW1A 1AA, M1 1AE, B1 1BB and LS1 4AP, and list the local authority district of each."
+evidence = 'POST https://api.postcodes.io/postcodes {"postcodes": ["SW1A 1AA", "M1 1AE", "B1 1BB", "LS1 4AP"]}'
+answer = { rule = "contains", value = ["Westminster", "Manchester", "Birmingham", "Leeds"] }
+
+[[task]]
+id = "postcodes_io-018"
+level = "complex"
+question = "The postcode AB1 0AA was terminated. Which current postcode is nearest to where it was?"
+evidence = """
+GET https://api.postcodes.io/terminated_postcodes/AB10AA
+GET https://api.postcodes.io/postcodes?lon=-2.242858&lat=57.101459&limit=1&radius=2000
+"""
+answer = { rule = "exact", value = "AB13 0DY", accept = ["AB130DY"] }
+note = "AB1 0AA's last coordinates are 57.101459, -2.242858."
+
+[[task]]
+id = "postcodes_io-019"
+level = "complex"
+question = "Find the town of Keswick in the Lake District, then give the postcode nearest to it."
+evidence = """
+GET https://api.postcodes.io/places?q=keswick
+GET https://api.postcodes.io/postcodes?lon=-3.138565&lat=54.601544&limit=1&radius=2000
+"""
+answer = { rule = "exact", value = "CA12 5DS", accept = ["CA125DS"] }
+note = "Three places are called Keswick. The town (local type Town, in Cumberland) is at 54.601544, -3.138565; the other two are villages in Norfolk."
+
+[[task]]
+id = "postcodes_io-020"
+level = "complex"
+question = "Is the outcode EC4V within 1,000 metres of the outcode EC1A? Answer yes or no."
+evidence = "GET https://api.postcodes.io/outcodes/EC1A/nearest?radius=1000&limit=99"
+answer = { rule = "exact", value = "yes" }
+note = "The response lists 20 outcodes, EC4V among them. Asking whether one is in range, not how many, stays correct even if the API caps the list."

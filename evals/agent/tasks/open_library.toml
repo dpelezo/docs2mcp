@@ -1,0 +1,172 @@
+api = "open_library"
+
+# Responses from Open Library are not committed (the site is AGPL-3.0). The
+# answers here are facts from its catalogue records.
+
+# single: one call
+
+[[task]]
+id = "open_library-001"
+level = "single"
+question = "Who wrote the book with ISBN 9780140328721?"
+evidence = "GET https://openlibrary.org/api/books?bibkeys=ISBN:9780140328721&jscmd=data&format=json"
+answer = { rule = "exact", value = "Roald Dahl" }
+
+[[task]]
+id = "open_library-002"
+level = "single"
+question = "What is the title of the Open Library edition OL7353617M?"
+evidence = "GET https://openlibrary.org/books/OL7353617M.json"
+answer = { rule = "exact", value = "Fantastic Mr. Fox", accept = ["Fantastic Mr Fox"] }
+
+[[task]]
+id = "open_library-003"
+level = "single"
+question = "Who is the author with the Open Library ID OL23919A?"
+evidence = "GET https://openlibrary.org/authors/OL23919A.json"
+answer = { rule = "exact", value = "J. K. Rowling", accept = ["J.K. Rowling", "JK Rowling"] }
+
+[[task]]
+id = "open_library-004"
+level = "single"
+question = "Who published the edition with ISBN 9780547928227?"
+evidence = "GET https://openlibrary.org/isbn/9780547928227.json"
+answer = { rule = "exact", value = "Mariner Books" }
+
+[[task]]
+id = "open_library-005"
+level = "single"
+question = "How many pages does the edition with ISBN 9780261103573 have, according to Open Library?"
+evidence = "GET https://openlibrary.org/isbn/9780261103573.json"
+answer = { rule = "number", value = 416 }
+
+[[task]]
+id = "open_library-006"
+level = "single"
+question = "According to Open Library search, in what year was Dune by Frank Herbert first published?"
+evidence = "GET https://openlibrary.org/search.json?title=dune&author=frank+herbert&limit=3"
+answer = { rule = "number", value = 1965 }
+
+[[task]]
+id = "open_library-007"
+level = "single"
+question = "In what year was the edition with ISBN 9780141439518 published, according to Open Library?"
+evidence = "GET https://openlibrary.org/isbn/9780141439518.json"
+answer = { rule = "number", value = 2003 }
+
+[[task]]
+id = "open_library-008"
+level = "single"
+question = "What is Jane Austen's Open Library author ID?"
+evidence = "GET https://openlibrary.org/search/authors.json?q=jane+austen"
+answer = { rule = "exact", value = "OL21594A" }
+
+# multi: two or three calls, or the right options
+
+[[task]]
+id = "open_library-009"
+level = "multi"
+question = "Who wrote the Open Library work OL45804W?"
+evidence = """
+GET https://openlibrary.org/works/OL45804W.json
+GET https://openlibrary.org/authors/OL34184A.json
+"""
+answer = { rule = "exact", value = "Roald Dahl" }
+
+[[task]]
+id = "open_library-010"
+level = "multi"
+question = "What is the Open Library author ID of the author of Things Fall Apart?"
+evidence = "GET https://openlibrary.org/search.json?title=things+fall+apart&limit=3"
+answer = { rule = "exact", value = "OL78910A" }
+
+[[task]]
+id = "open_library-011"
+level = "multi"
+question = "What birth date does Open Library record for the author of the book with ISBN 9780140328721?"
+evidence = """
+GET https://openlibrary.org/isbn/9780140328721.json
+GET https://openlibrary.org/authors/OL34184A.json
+"""
+answer = { rule = "contains", value = ["1916"] }
+
+[[task]]
+id = "open_library-012"
+level = "multi"
+question = "According to Open Library, which did Chinua Achebe publish first: Arrow of God or No Longer at Ease?"
+evidence = """
+GET https://openlibrary.org/search.json?title=arrow+of+god&author=achebe&limit=3
+GET https://openlibrary.org/search.json?title=no+longer+at+ease&author=achebe&limit=3
+"""
+answer = { rule = "exact", value = "No Longer at Ease" }
+
+[[task]]
+id = "open_library-013"
+level = "multi"
+question = "What is the title of the work that the edition with ISBN 9780547928227 belongs to?"
+evidence = """
+GET https://openlibrary.org/isbn/9780547928227.json
+GET https://openlibrary.org/works/OL27482W.json
+"""
+answer = { rule = "exact", value = "The Hobbit" }
+
+[[task]]
+id = "open_library-014"
+level = "multi"
+question = "What is the Open Library author ID of the author of the edition with ISBN 9780547928227?"
+evidence = """
+GET https://openlibrary.org/isbn/9780547928227.json
+GET https://openlibrary.org/works/OL27482W.json
+"""
+answer = { rule = "exact", value = "OL26320A" }
+note = "The edition record has no authors, so the author comes from its work."
+
+[[task]]
+id = "open_library-015"
+level = "multi"
+question = "According to Open Library, which was first published earlier: Dune by Frank Herbert or Foundation by Isaac Asimov?"
+evidence = """
+GET https://openlibrary.org/search.json?title=dune&author=frank+herbert&limit=3
+GET https://openlibrary.org/search.json?title=foundation&author=isaac+asimov&limit=3
+"""
+answer = { rule = "exact", value = "Foundation" }
+
+[[task]]
+id = "open_library-016"
+level = "multi"
+question = "What is the Open Library edition ID of the book with ISBN 9780261103573?"
+evidence = "GET https://openlibrary.org/api/books?bibkeys=ISBN:9780261103573&jscmd=details&format=json"
+answer = { rule = "exact", value = "OL32559371M" }
+
+# complex: several steps or an unusual parameter
+
+[[task]]
+id = "open_library-017"
+level = "complex"
+question = "Among Chinua Achebe's works on Open Library, which has the earliest first publication year?"
+evidence = """
+GET https://openlibrary.org/search/authors.json?q=chinua+achebe
+GET https://openlibrary.org/search.json?author=chinua+achebe&sort=old&limit=5
+"""
+answer = { rule = "exact", value = "Things Fall Apart" }
+
+[[task]]
+id = "open_library-018"
+level = "complex"
+question = "Give the Open Library work ID and the first publication year of The Left Hand of Darkness by Ursula K. Le Guin."
+evidence = "GET https://openlibrary.org/search.json?title=the+left+hand+of+darkness&author=le+guin&limit=3"
+answer = { rule = "contains", value = ["OL59800W", "1969"] }
+
+[[task]]
+id = "open_library-019"
+level = "complex"
+question = "Look up the ISBNs 9780140328721 and 9780547928227 in one request, and give the title of each."
+evidence = "GET https://openlibrary.org/api/books?bibkeys=ISBN:9780140328721,ISBN:9780547928227&jscmd=data&format=json"
+answer = { rule = "contains", value = ["Fox", "Hobbit"] }
+
+[[task]]
+id = "open_library-020"
+level = "complex"
+question = "Search Open Library for The Lord of the Rings by J.R.R. Tolkien. What is the Open Library work ID of the top result?"
+evidence = "GET https://openlibrary.org/search.json?title=the+lord+of+the+rings&author=tolkien&limit=3"
+answer = { rule = "exact", value = "OL27448W" }

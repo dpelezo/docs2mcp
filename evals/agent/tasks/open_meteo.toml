@@ -1,0 +1,95 @@
+api = "open_meteo"
+
+# Weather values change with every model run, so no task asks for one. These
+# tasks ask what Open-Meteo returns for given options: elevation, time zone,
+# units and how many values a request gives. Those answers are stable.
+
+# single: one call
+
+[[task]]
+id = "open_meteo-001"
+level = "single"
+question = "What elevation, in metres, does Open-Meteo use for a forecast at latitude 47.37, longitude 8.55 (Zurich)?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=47.37&longitude=8.55&hourly=temperature_2m&forecast_days=1"
+answer = { rule = "number", value = 429, abs_tolerance = 0.5 }
+
+[[task]]
+id = "open_meteo-002"
+level = "single"
+question = "Which time zone does Open-Meteo pick for latitude 35.68, longitude 139.69 when the time zone is set automatically?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=35.68&longitude=139.69&daily=temperature_2m_max&timezone=auto&forecast_days=1"
+answer = { rule = "exact", value = "Asia/Tokyo" }
+
+[[task]]
+id = "open_meteo-003"
+level = "single"
+question = "By default, in what unit does Open-Meteo report hourly wind speed at 10 metres?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=wind_speed_10m&forecast_days=1"
+answer = { rule = "exact", value = "km/h" }
+
+[[task]]
+id = "open_meteo-004"
+level = "single"
+question = "How many hourly temperature values does Open-Meteo return for a 2-day forecast for Berlin (latitude 52.52, longitude 13.41)?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&forecast_days=2"
+answer = { rule = "number", value = 48 }
+
+[[task]]
+id = "open_meteo-005"
+level = "single"
+question = "What UTC offset, in seconds, does Open-Meteo report for latitude 28.61, longitude 77.21 when the time zone is set automatically?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=28.61&longitude=77.21&daily=temperature_2m_max&timezone=auto&forecast_days=1"
+answer = { rule = "number", value = 19800 }
+
+# multi: the right options
+
+[[task]]
+id = "open_meteo-006"
+level = "multi"
+question = "How many 15-minute temperature values does Open-Meteo return for a 1-day forecast for Berlin (latitude 52.52, longitude 13.41)?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&minutely_15=temperature_2m&forecast_days=1"
+answer = { rule = "number", value = 96 }
+
+[[task]]
+id = "open_meteo-007"
+level = "multi"
+question = "If you ask Open-Meteo for Berlin's hourly temperature in Fahrenheit, what unit string does the response give?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&temperature_unit=fahrenheit&forecast_days=1"
+answer = { rule = "exact", value = "°F" }
+
+[[task]]
+id = "open_meteo-008"
+level = "multi"
+question = "How many hourly temperature values does Open-Meteo return for Berlin (latitude 52.52, longitude 13.41) if you ask for 1 past day and 1 forecast day?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&past_days=1&forecast_days=1"
+answer = { rule = "number", value = 48 }
+
+[[task]]
+id = "open_meteo-009"
+level = "multi"
+question = "If you ask Open-Meteo for Berlin's daily precipitation sum in inches, what unit string does the response give?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=precipitation_sum&precipitation_unit=inch&forecast_days=1"
+answer = { rule = "exact", value = "inch", accept = ["in", "inches"] }
+
+[[task]]
+id = "open_meteo-010"
+level = "multi"
+question = "What is the longest daily forecast Open-Meteo gives for Berlin (latitude 52.52, longitude 13.41)? Answer with the number of daily values it returns."
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=temperature_2m_max&forecast_days=16"
+answer = { rule = "number", value = 16 }
+
+# complex: an unusual parameter
+
+[[task]]
+id = "open_meteo-011"
+level = "complex"
+question = "If you give Open-Meteo your own elevation of 1000 metres for a forecast at Zurich (latitude 47.37, longitude 8.55), what elevation does the response report?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=47.37&longitude=8.55&elevation=1000&hourly=temperature_2m&forecast_days=1"
+answer = { rule = "number", value = 1000 }
+
+[[task]]
+id = "open_meteo-012"
+level = "complex"
+question = "How many hourly temperature values does Open-Meteo return for Berlin (latitude 52.52, longitude 13.41) if you ask for only the next 6 hours?"
+evidence = "GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&forecast_hours=6"
+answer = { rule = "number", value = 6 }

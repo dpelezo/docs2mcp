@@ -1,0 +1,64 @@
+api = "open_meteo_geocoding"
+
+# single: one call
+
+[[task]]
+id = "open_meteo_geocoding-001"
+level = "single"
+question = "What population does Open-Meteo's geocoding give for the top result for Berlin?"
+evidence = "GET https://geocoding-api.open-meteo.com/v1/search?name=Berlin&count=1"
+answer = { rule = "number", value = 3426354 }
+
+[[task]]
+id = "open_meteo_geocoding-002"
+level = "single"
+question = "What country code does Open-Meteo's geocoding give for the top result for Reykjavik?"
+evidence = "GET https://geocoding-api.open-meteo.com/v1/search?name=Reykjavik&count=1"
+answer = { rule = "exact", value = "IS" }
+
+[[task]]
+id = "open_meteo_geocoding-003"
+level = "single"
+question = "What ID does Open-Meteo's geocoding give Paris, France?"
+evidence = "GET https://geocoding-api.open-meteo.com/v1/search?name=Paris&count=3"
+answer = { rule = "number", value = 2988507 }
+
+# multi: the right options
+
+[[task]]
+id = "open_meteo_geocoding-004"
+level = "multi"
+question = "Among the first 10 results Open-Meteo's geocoding returns for Springfield, which US state is the one with the largest population in?"
+evidence = "GET https://geocoding-api.open-meteo.com/v1/search?name=Springfield&count=10"
+answer = { rule = "exact", value = "Missouri" }
+note = "Missouri 170,188; Massachusetts 154,341; Illinois 114,394."
+
+[[task]]
+id = "open_meteo_geocoding-005"
+level = "multi"
+question = "What name does Open-Meteo's geocoding give the top result for Munich when results are in German?"
+evidence = "GET https://geocoding-api.open-meteo.com/v1/search?name=Munich&count=1&language=de"
+answer = { rule = "exact", value = "München" }
+
+[[task]]
+id = "open_meteo_geocoding-006"
+level = "multi"
+question = "Search Open-Meteo's geocoding for London in Canada only. Which province is the top result in?"
+evidence = "GET https://geocoding-api.open-meteo.com/v1/search?name=London&count=1&countryCode=CA"
+answer = { rule = "exact", value = "Ontario" }
+
+# complex: an unusual endpoint, or several steps
+
+[[task]]
+id = "open_meteo_geocoding-007"
+level = "complex"
+question = "Look up the location with Open-Meteo geocoding ID 2950159. What is its time zone?"
+evidence = "GET https://geocoding-api.open-meteo.com/v1/get?id=2950159"
+answer = { rule = "exact", value = "Europe/Berlin" }
+
+[[task]]
+id = "open_meteo_geocoding-008"
+level = "complex"
+question = "Which is further north according to Open-Meteo's geocoding: Portland in Maine or Portland in Oregon? Answer Maine or Oregon."
+evidence = "GET https://geocoding-api.open-meteo.com/v1/search?name=Portland&count=20&countryCode=US"
+answer = { rule = "exact", value = "Oregon" }
