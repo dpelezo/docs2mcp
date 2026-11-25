@@ -38,3 +38,6 @@ coverage.xml
 
 # Live API responses behind agent eval answers (scripts/fetch_evidence.py); some are AGPL
 /evidence/
+
+# Agent eval runs (scripts/agent_eval.py): transcripts can quote AGPL responses
+/runs/

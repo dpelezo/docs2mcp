@@ -1,0 +1,445 @@
+# LangGraph ships no type stubs and its builder methods are loosely typed.
+# pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false
+"""Run the agent eval (ADR 0013): a LangGraph agent answers each task through MCP.
+
+    uv run python -m scripts.agent_eval --pilot                  # 10 tasks, every condition
+    uv run python -m scripts.agent_eval --repeats 3              # all 100 tasks
+    uv run python -m scripts.agent_eval --conditions C --apis frankfurter --tasks frankfurter-001
+
+Build the servers first with `scripts/build_eval_servers.py`. Each condition and
+API gets one server process, started through `scripts/eval_server.py` with that
+API's cassette, so every condition sees the same recorded responses. The agent is
+the same everywhere: one system prompt, the server's tools plus `submit_answer`,
+and a step limit. Answers are scored by the task's rule (docs2mcp.evals.tasks).
+
+Results go to `runs/<name>/`: results.jsonl (one line per task run, appended as
+runs finish, so an interrupted run resumes), metrics.json, summary.md and
+run.json. Each task is one trace when tracing is configured (see docs2mcp.tracing).
+Needs ANTHROPIC_API_KEY. This spends money: the pilot on Haiku is about $0.10.
+"""
+
+import argparse
+import asyncio
+import json
+import os
+import subprocess
+import sys
+import time
+from collections.abc import Sequence
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Annotated, Any, Protocol, TypedDict
+
+from langchain_core.language_models import BaseChatModel
+from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, SystemMessage, ToolMessage
+from langgraph.graph import END, START, StateGraph
+from langgraph.graph.message import add_messages
+from mcp import Client, StdioServerParameters
+from mcp.types import CallToolResult
+
+from docs2mcp.config import Settings
+from docs2mcp.evals.agent import (
+    SUBMIT_TOOL,
+    SYSTEM_PROMPT,
+    Condition,
+    TaskRun,
+    ToolCall,
+    append_run,
+    classify,
+    format_table,
+    load_runs,
+    metrics_json,
+    summarize,
+)
+from docs2mcp.evals.tasks import Task, Verdict, load_tasks, score
+from docs2mcp.tracing import content_enabled, set_attributes, setup_tracing, tracer
+
+ROOT = Path(__file__).resolve().parents[1]
+TASKS = ROOT / "evals" / "agent" / "tasks"
+DEFAULT_MODEL = "claude-haiku-5-5"
+MAX_STEPS = 12
+MAX_TOKENS = 1024
+
+PILOT = (
+    "pokeapi-001",
+    "pokeapi-007",
+    "frankfurter-001",
+    "frankfurter-013",
+    "postcodes_io-001",
+    "postcodes_io-009",
+    "open_library-001",
+    "open_library-014",
+    "open_meteo-004",
+    "open_meteo_geocoding-005",
+)
+"""One single and one harder task per API with an official file, one each for the rest.
+
+pokeapi-007 reads a field past the 20,000-character cut; postcodes_io-009 needs a
+parameter the official file leaves out; frankfurter-013 has a trap in its range."""
+
+
+class ToolSession(Protocol):
+    async def call_tool(self, name: str, arguments: dict[str, Any]) -> CallToolResult: ...
+
+
+class State(TypedDict):
+    messages: Annotated[list[AnyMessage], add_messages]
+    answer: str | None
+    steps: int
+
+
+@dataclass
+class Recorder:
+    """What one task run did, gathered while the graph runs."""
+
+    calls: list[ToolCall] = field(default_factory=list[ToolCall])
+    model_calls: int = 0
+    input_tokens: int = 0
+    output_tokens: int = 0
+    cache_read_tokens: int = 0
+
+    def usage(self, message: AIMessage) -> None:
+        self.model_calls += 1
+        usage = message.usage_metadata
+        if usage is None:
+            return
+        self.input_tokens += usage.get("input_tokens", 0)
+        self.output_tokens += usage.get("output_tokens", 0)
+        details = usage.get("input_token_details") or {}
+        self.cache_read_tokens += details.get("cache_read", 0) or 0
+
+
+def _text(result: CallToolResult) -> str:
+    return "".join(str(getattr(part, "text", "")) for part in result.content)
+
+
+def build_graph(
+    model: Any, session: ToolSession, recorder: Recorder, *, max_steps: int = MAX_STEPS
+) -> Any:
+    """model -> tools -> model ... until submit_answer is called or the steps run out."""
+
+    async def call_model(state: State) -> dict[str, Any]:
+        with tracer.start_as_current_span("chat model") as span:
+            reply = await model.ainvoke([SystemMessage(SYSTEM_PROMPT), *state["messages"]])
+            message = reply if isinstance(reply, AIMessage) else AIMessage(content=str(reply))
+            recorder.usage(message)
+            usage = message.usage_metadata or {}
+            set_attributes(
+                span,
+                {
+                    "gen_ai.operation.name": "chat",
+                    "gen_ai.provider.name": "anthropic",
+                    "gen_ai.usage.input_tokens": usage.get("input_tokens"),
+                    "gen_ai.usage.output_tokens": usage.get("output_tokens"),
+                },
+            )
+        return {"messages": [message], "steps": state["steps"] + 1}
+
+    async def call_tools(state: State) -> dict[str, Any]:
+        last = state["messages"][-1]
+        if not isinstance(last, AIMessage):
+            return {}
+        replies: list[ToolMessage] = []
+        answer = state["answer"]
+        for call in last.tool_calls:
+            call_id = str(call["id"])
+            if call["name"] == SUBMIT_TOOL["name"]:
+                answer = str(call["args"].get("answer", ""))
+                replies.append(ToolMessage("Answer recorded.", tool_call_id=call_id))
+                continue
+            with tracer.start_as_current_span(f"tool {call['name']}") as span:
+                result = await session.call_tool(call["name"], dict(call["args"]))
+                text = _text(result)
+                outcome = classify(bool(result.is_error), text)
+                set_attributes(span, {"docs2mcp.tool.outcome": outcome.value})
+            recorder.calls.append(
+                ToolCall(
+                    name=call["name"], arguments=call["args"], outcome=outcome, chars=len(text)
+                )
+            )
+            status = "error" if result.is_error else "success"
+            replies.append(ToolMessage(text, tool_call_id=call_id, status=status))
+        return {"messages": replies, "answer": answer}
+
+    def after_model(state: State) -> str:
+        last = state["messages"][-1]
+        return "tools" if isinstance(last, AIMessage) and last.tool_calls else END
+
+    def after_tools(state: State) -> str:
+        return END if state["answer"] is not None or state["steps"] >= max_steps else "model"
+
+    graph = StateGraph(State)
+    graph.add_node("model", call_model)
+    graph.add_node("tools", call_tools)
+    graph.add_edge(START, "model")
+    graph.add_conditional_edges("model", after_model, ["tools", END])
+    graph.add_conditional_edges("tools", after_tools, ["model", END])
+    return graph.compile()
+
+
+async def run_task(
+    model: Any,
+    session: ToolSession,
+    task: Task,
+    *,
+    condition: Condition,
+    api: str,
+    repeat: int,
+    model_name: str,
+    max_steps: int = MAX_STEPS,
+) -> TaskRun:
+    """One agent run on one task, scored. Model or tool failures end the run as an error."""
+    recorder = Recorder()
+    started = time.monotonic()
+    answer: str | None = None
+    error: str | None = None
+    steps = 0
+    with tracer.start_as_current_span(f"agent task {task.id}") as span:
+        set_attributes(
+            span,
+            {
+                "docs2mcp.condition": condition,
+                "docs2mcp.api": api,
+                "docs2mcp.task": task.id,
+                "docs2mcp.repeat": repeat,
+                "gen_ai.request.model": model_name,
+            },
+        )
+        try:
+            graph = build_graph(model, session, recorder, max_steps=max_steps)
+            final = await graph.ainvoke(
+                {"messages": [HumanMessage(task.question)], "answer": None, "steps": 0},
+                {"recursion_limit": 2 * max_steps + 5},
+            )
+            answer, steps = final["answer"], final["steps"]
+        except Exception as exc:  # noqa: BLE001 - one failed run must not stop the eval
+            error = f"{type(exc).__name__}: {exc}"[:500]
+        verdict = (
+            score(task.answer, answer)
+            if error is None
+            else Verdict(passed=False, reason="the run failed")
+        )
+        if error is not None:
+            stop = "error"
+        elif answer is not None:
+            stop = "answered"
+        else:
+            stop = "step_limit" if steps >= max_steps else "no_answer"
+        set_attributes(span, {"docs2mcp.passed": verdict.passed, "docs2mcp.stop": stop})
+        if content_enabled() and answer is not None:
+            span.set_attribute("docs2mcp.answer", answer)
+    return TaskRun(
+        condition=condition,
+        api=api,
+        task=task.id,
+        level=task.level,
+        repeat=repeat,
+        model=model_name,
+        answer=answer,
+        verdict=verdict,
+        stop=stop,
+        error=error,
+        calls=recorder.calls,
+        model_calls=recorder.model_calls,
+        input_tokens=recorder.input_tokens,
+        output_tokens=recorder.output_tokens,
+        cache_read_tokens=recorder.cache_read_tokens,
+        seconds=round(time.monotonic() - started, 2),
+    )
+
+
+def tool_definitions(listed: Sequence[Any]) -> list[dict[str, Any]]:
+    """MCP tools as Anthropic tool definitions, plus submit_answer."""
+    tools = [
+        {"name": t.name, "description": t.description or "", "input_schema": t.input_schema}
+        for t in listed
+    ]
+    return [*tools, SUBMIT_TOOL]
+
+
+def make_model(model_name: str, tools: list[dict[str, Any]]) -> Any:
+    from langchain_anthropic import ChatAnthropic  # noqa: PLC0415 - needs the API key
+
+    chat: BaseChatModel = ChatAnthropic.model_validate(
+        {"model": model_name, "max_tokens": MAX_TOKENS, "max_retries": 4}
+    )
+    return chat.bind_tools(tools)
+
+
+def server_params(servers: Path, cassettes: Path, condition: str, api: str, mode: str) -> Any:
+    return StdioServerParameters(
+        command=sys.executable,
+        args=[
+            "-m",
+            "scripts.eval_server",
+            str(servers / condition / api),
+            "--cassette",
+            str(cassettes / f"{api}.jsonl.gz"),
+            "--mode",
+            mode,
+        ],
+        cwd=ROOT,
+        env={**os.environ},
+    )
+
+
+@dataclass
+class Plan:
+    condition: Condition
+    api: str
+    tasks: list[Task]
+
+
+def plan(
+    conditions: Sequence[Condition],
+    apis: Sequence[str] | None,
+    task_ids: Sequence[str] | None,
+    servers: Path,
+) -> tuple[list[Plan], list[str]]:
+    """What to run, and what was skipped because its server was not built."""
+    files = sorted(TASKS.glob("*.toml"))
+    plans: list[Plan] = []
+    skipped: list[str] = []
+    for path in files:
+        loaded = load_tasks(path)
+        if apis and loaded.api not in apis:
+            continue
+        tasks = [t for t in loaded.task if not task_ids or t.id in task_ids]
+        if not tasks:
+            continue
+        for condition in conditions:
+            if not (servers / condition / loaded.api / "server.py").exists():
+                skipped.append(f"{condition}/{loaded.api}")
+                continue
+            plans.append(Plan(condition, loaded.api, tasks))
+    return plans, skipped
+
+
+async def run_plan(
+    item: Plan,
+    args: argparse.Namespace,
+    results: Path,
+    done: set[tuple[str, str, str, int]],
+) -> None:
+    pending = [
+        (task, repeat)
+        for repeat in range(1, args.repeats + 1)
+        for task in item.tasks
+        if (item.condition, item.api, task.id, repeat) not in done
+    ]
+    if not pending:
+        return
+    params = server_params(args.servers, args.cassettes, item.condition, item.api, args.mode)
+    async with Client(params) as client:
+        listed = (await client.list_tools()).tools
+        model = make_model(args.model, tool_definitions(listed))
+        limit = asyncio.Semaphore(args.concurrency)
+
+        async def one(task: Task, repeat: int) -> None:
+            async with limit:
+                run = await run_task(
+                    model,
+                    client,
+                    task,
+                    condition=item.condition,
+                    api=item.api,
+                    repeat=repeat,
+                    model_name=args.model,
+                    max_steps=args.max_steps,
+                )
+            append_run(results, run)
+            mark = "pass" if run.verdict.passed else "FAIL"
+            print(
+                f"{mark} {item.condition} {task.id} r{repeat}: {run.answer!r} "
+                f"({run.tool_calls} calls, {run.input_tokens + run.output_tokens:,} tokens, "
+                f"{run.stop}) {'' if run.verdict.passed else run.verdict.reason}",
+                flush=True,
+            )
+
+        await asyncio.gather(*(one(task, repeat) for task, repeat in pending))
+
+
+def _git_commit() -> str:
+    try:
+        return subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],  # noqa: S607
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=ROOT,
+        ).stdout.strip()
+    except OSError, subprocess.CalledProcessError:
+        return "unknown"
+
+
+def write_summary(out: Path) -> str:
+    runs = load_runs(out / "results.jsonl")
+    metrics = summarize(runs)
+    (out / "metrics.json").write_text(metrics_json(metrics), encoding="utf-8")
+    table = format_table(metrics)
+    (out / "summary.md").write_text(table + "\n", encoding="utf-8")
+    return table
+
+
+def parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Run the agent eval (ADR 0013).")
+    parser.add_argument("--conditions", default="A,B,C", help="comma-separated, default A,B,C")
+    parser.add_argument("--apis", help="comma-separated API ids (default: all)")
+    parser.add_argument("--tasks", help="comma-separated task ids (default: all)")
+    parser.add_argument("--pilot", action="store_true", help="only the 10 pilot tasks")
+    parser.add_argument("--repeats", type=int, default=1)
+    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--max-steps", type=int, default=MAX_STEPS)
+    parser.add_argument("--concurrency", type=int, default=4, help="tasks at once per server")
+    parser.add_argument("--servers", type=Path, default=ROOT / "servers" / "eval")
+    parser.add_argument("--cassettes", type=Path, default=ROOT / "recordings" / "agent")
+    parser.add_argument("--mode", choices=["cache", "replay", "record"], default="cache")
+    parser.add_argument("--out", type=Path, help="run folder (default: runs/<UTC timestamp>)")
+    parser.add_argument("--summary-only", action="store_true", help="rewrite the summary")
+    return parser.parse_args(argv)
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = parse_args(argv)
+    out: Path = args.out or ROOT / "runs" / datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
+    if args.summary_only:
+        print(write_summary(out))
+        return 0
+    conditions: list[Condition] = [c for c in ("A", "B", "C") if c in args.conditions.split(",")]
+    task_ids = PILOT if args.pilot else (args.tasks.split(",") if args.tasks else None)
+    apis = args.apis.split(",") if args.apis else None
+    plans, skipped = plan(conditions, apis, task_ids, args.servers)
+    for missing in skipped:
+        print(f"skipped {missing}: no server built", file=sys.stderr)
+    if not plans:
+        print("Nothing to run. Build the servers with scripts/build_eval_servers.py.")
+        return 1
+    out.mkdir(parents=True, exist_ok=True)
+    results = out / "results.jsonl"
+    done = {r.key for r in load_runs(results)}
+    meta = {
+        "started": datetime.now(UTC).isoformat(timespec="seconds"),
+        "commit": _git_commit(),
+        "model": args.model,
+        "repeats": args.repeats,
+        "max_steps": args.max_steps,
+        "mode": args.mode,
+        "runs": [f"{p.condition}/{p.api}: {len(p.tasks)} tasks" for p in plans],
+        "skipped": skipped,
+    }
+    (out / "run.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
+    provider = setup_tracing(Settings())
+    try:
+        for item in plans:
+            asyncio.run(run_plan(item, args, results, done))
+    finally:
+        if provider is not None:
+            provider.shutdown()
+    print(write_summary(out))
+    print(f"Results: {out}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

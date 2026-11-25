@@ -68,8 +68,9 @@ The first run records every API response that a generated server receives. Later
 
 ### Runner and model
 
-- **Runner:** a LangGraph agent (`langgraph`, `langchain-anthropic`, `langchain-mcp-adapters`) connects to the server over MCP.
+- **Runner:** a LangGraph agent (`langgraph`, `langchain-anthropic`) connects to the server over MCP with the `mcp` client docs2mcp already uses. `langchain-mcp-adapters` was approved too, but every release so far imports the v1 `FastMCP` module and requires `mcp<2`, which the generated servers cannot use. Its job, turning MCP tools into model tool definitions, is a few lines in `scripts/agent_eval.py` (2026-11-24).
 - **Model:** `claude-haiku-5-5`, for cost. One Sonnet run is added when credits allow.
+- **Designs measured:** B is the direct design and C is the task-shaped design made by Haiku from the same extracted spec. Both are approved as generated, with no hand edits, so the eval measures what the pipeline produces (decided 2026-11-24). `evals/agent/conditions.toml` lists the inputs, and the build writes each input's SHA-256 next to the servers.
 - **Tracing:** each task is one trace, using the tracing added in #6.
 - **Pilot first:** 10 tasks across all conditions, before the full run.
 
