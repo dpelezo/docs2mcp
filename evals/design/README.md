@@ -99,7 +99,7 @@ The CI replay designs in `replay/<id>/` are now Haiku run 1 after the change, be
 | 2026-11-24 | First task-shaped design (#29), before the parameter rule | Haiku, run 1 | 70 / 228 of 248 / 11,188 | 9 / 22 of 22 / 1,259 | not reviewed: optional parameters dropped (Open-Meteo forecast 14 of 26) |
 | 2026-11-24 | Every parameter passed or omitted (ADR 0012) | Sonnet, run 1 of 3 | 69 / 245 of 248 / 9,707 | 10 / 22 of 22 / 1,143 | confirmed: 2 of 5 tuned fit to approve (Frankfurter, Open-Meteo forecast); held out not yet |
 | 2026-11-24 | No extra claims in descriptions (#39) | Haiku, run 1 of 3 (before: 11,921) | 69 / 240 of 248 / 11,044 | 9 / 22 of 22 / 1,156 | not re-reviewed; unsupported claims on PokéAPI and geocoding 0 in all runs |
-| 2026-11-24 | Spec contradictions fixed in extraction (#36) | Haiku, 1 run on Postcodes.io, Open-Meteo forecast and Open Library | specs changed, so not comparable | 10 / 21 of 22 / 1,273 | re-review drafted in the three reviews; pending confirmation |
+| 2026-11-24 | Spec contradictions fixed in extraction (#36) | Haiku, 1 run on Postcodes.io, Open-Meteo forecast and Open Library | specs changed, so not comparable | 10 / 21 of 22 / 1,273 | re-reviews confirmed: Postcodes.io and Open Library fail only minor question 7 claims |
 
 ## Measure a design
 

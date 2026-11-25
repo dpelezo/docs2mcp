@@ -36,7 +36,7 @@
 ## Re-review after #36 (draft)
 
 - **tools.json:** Haiku 5.5 run 1 on the repaired spec, on the owner's machine (`tools/open_library/v4/haiku/run1/`).
-- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner: *pending*.
+- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner (dpelezo) on 2026-11-24, as drafted.
 
 The spec now lists `details` among `jscmd`'s values, so the hint an agent follows is accepted. Question 2 passes for `books_by_bibkey`. The design also fixes `format` to `json` and omits `callback` with a reason.
 
