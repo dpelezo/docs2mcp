@@ -257,7 +257,7 @@ def test_api_key_variable_names(api: str, env: str, tmp_path: Path) -> None:
         update={"api": api, "auth": AuthScheme(type=AuthType.BEARER, location="header")}
     )
     generate(keyed, SPEC, tmp_path)
-    assert f"API_KEY_ENV = {env!r}" in (tmp_path / "server.py").read_text()
+    assert f'API_KEY_ENV = "{env}"' in (tmp_path / "server.py").read_text()
     assert f"Set `{env}` to send your API key." in (tmp_path / "README.md").read_text()
 
 
@@ -386,7 +386,7 @@ def test_api_keys_come_from_the_environment(
         (arg("q", required=True), "str"),
         (arg("n", "integer"), "int | None"),
         (arg("ids", "array", items_type="integer"), "list[int] | None"),
-        (arg("unit", enum=["c", "f"], required=True), "Literal['c', 'f']"),
+        (arg("unit", enum=["c", "f"], required=True), 'Literal["c", "f"]'),
         (arg("on", "boolean"), "bool | None"),
         (arg("extra", "object"), "dict[str, Any] | None"),
     ],
