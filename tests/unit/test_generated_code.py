@@ -2,7 +2,8 @@
 
 Each server's pyproject.toml carries the rules, so these checks run the same tools a
 person would run inside the generated folder. The designs are the three committed
-ones and the direct design for each committed spec, plus one built to hit the
+ones, the direct design for each committed spec, the agent eval's condition A
+servers (built from each API's OpenAPI file), plus one built to hit the
 awkward cases: quotes, long text, single-value enums, defaults, every parameter
 location, fixed values, a key, and a tool with no arguments.
 """
@@ -33,6 +34,7 @@ from tests.unit.test_design import arg
 ROOT = Path(__file__).parents[2]
 SPECS = ROOT / "tests" / "fixtures" / "specs"
 REPLAY = ROOT / "evals" / "design" / "replay"
+CONDITION_A = ROOT / "evals" / "agent" / "conditions" / "openapi"
 BIN = Path(sys.executable).parent
 COMMITTED = ("frankfurter", "postcodes_io", "pokeapi")
 
@@ -127,6 +129,10 @@ def _designs() -> list[tuple[str, ToolSet, ApiSpec]]:
         designs.append((api, set_approval(task, every=True).toolset, spec))
         direct = set_approval(direct_design(spec), every=True).toolset
         designs.append((f"{api}_direct", direct, spec))
+        folder = CONDITION_A / api
+        openapi_spec = ApiSpec.model_validate_json((folder / "spec.json").read_text("utf-8"))
+        openapi = ToolSet.model_validate_json((folder / "tools.json").read_text("utf-8"))
+        designs.append((f"{api}_openapi", openapi, openapi_spec))
     return designs
 
 

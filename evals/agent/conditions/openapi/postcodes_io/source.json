@@ -1,0 +1,11 @@
+{
+  "api": "postcodes_io",
+  "url": "https://raw.githubusercontent.com/ideal-postcodes/postcodes.io/main/static/openapi.json",
+  "version": "20.0.0",
+  "sha256": "67a4dcce985675ae1629ae7af868546581aa846d5cd978caff258073f72da0f3",
+  "retrieved": "2026-11-25",
+  "endpoints": 11,
+  "skipped": [
+    "POST /postcodes: the file describes no request body"
+  ]
+}

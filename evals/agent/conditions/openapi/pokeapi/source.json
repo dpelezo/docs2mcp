@@ -1,0 +1,9 @@
+{
+  "api": "pokeapi",
+  "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+  "version": "2.10.0",
+  "sha256": "497e8c4aec10e259a93c5c61f79daf418cee65c1f5e1c748ce1e4cc7c4a7805c",
+  "retrieved": "2026-11-25",
+  "endpoints": 102,
+  "skipped": []
+}

@@ -1,0 +1,305 @@
+{
+  "toolset_version": "1",
+  "api": "Postcodes.io",
+  "base_url": "https://api.postcodes.io/",
+  "auth": {
+    "type": "none"
+  },
+  "design": "direct",
+  "tools": [
+    {
+      "name": "lookup_postcode",
+      "description": "Lookup Postcode ### Postcode Data Lookup a UK postcode against the ONS Postcode Directory (ONSPD). The response is a fully resolved record — every administrative, electoral, statistical and health geography that ONSPD ships for the postcode is returned at the top level by its human-readable name, with the equivalent GSS / official codes mirrored under the `codes` object. The same shape is returned by `/postcodes` (bulk + search) and the reverse-geocoding endpoints. `/outcodes` returns a separate, aggregated [Outcode](#tag/Outward-Codes) shape — one row per outward code, with admin / parish / constituency arrays summarising the postcodes inside. Returns `404` if the postcode does not exist or is not valid.",
+      "parameters": [
+        {
+          "name": "postcode",
+          "type": "string",
+          "required": true,
+          "description": "Postcode to retrieve"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "lookup_postcode",
+          "requires": [],
+          "arguments": {
+            "postcode": "postcode"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "postcode_lookup",
+      "description": "Autocomplete Search a Postcode Query for a postcode either by: - The postcode itself (with `query=`) or by, - A geolocation (`lat=` and `lon=`). ## Query with Postcode Submit a postcode query and receive a complete list of postcode matches and all associated postcode data. This is triggered when `query=` is supplied. This is essentially a postcode search which prefix matches and returns postcodes in sorted order (case insensitive). This method is space sensitive, i.e. it detects for spaces between outward and inward parts of the postcode (some examples detailed in this [issue](https://github.com/ideal-postcodes/postcodes.io/issues/44)). The result set can either be empty or populated with up to 100 postcode entities. Either way it will always return a 200 response code. ## Query with Geolocation Returns nearest postcodes for a given longitude and latitude. This is triggered when `lat=` and `lon=` are supplied.",
+      "parameters": [
+        {
+          "name": "query",
+          "type": "string",
+          "required": false,
+          "description": "Postcode to query. Aliases to `q=`"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "description": "Limits number of postcodes matches to return. Defaults to 10. Needs to be less than 100.",
+          "default": 10
+        },
+        {
+          "name": "longitude",
+          "type": "number",
+          "required": false,
+          "description": "Geographic coordinate that specifies the east-west position of a point"
+        },
+        {
+          "name": "latitude",
+          "type": "number",
+          "required": false,
+          "description": "Latitude"
+        },
+        {
+          "name": "radius",
+          "type": "integer",
+          "required": false,
+          "description": "Limits number of postcodes matches to return. Defaults to 100m. Needs to be less than 2,000m.",
+          "default": 100
+        },
+        {
+          "name": "widesearch",
+          "type": "boolean",
+          "required": false,
+          "description": "Search up to 20km radius, but subject to a maximum of 10 results. Since lookups over a wide area can be very expensive, we've created this method to allow you choose to make the trade off between search radius and number of results. Defaults to false. When enabled, radius and limits over 10 are ign…",
+          "default": false
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "required": false,
+          "description": "A comma separated whitelist of attributes to be returned in the result object(s), e.g. filter=postcode,longitude,latitude. null responses will continue to return null. If no attributes match the result object, an empty object is returned"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "postcode_lookup",
+          "requires": [],
+          "arguments": {
+            "query": "query",
+            "limit": "limit",
+            "longitude": "longitude",
+            "latitude": "latitude",
+            "radius": "radius",
+            "widesearch": "widesearch",
+            "filter": "filter"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "bulk_postcode_lookup",
+      "description": "Bulk Postcode Lookup Accepts a JSON object containing an array of postcodes. Returns a list of matching postcodes and respective available data. Be sure to submit JSON requests setting `Content-Type` to `application/json`. Accepts up to 100 postcodes. ### Post Data This method requires a JSON object containing an array of postcodes to be posted, e.g. ```json { \"postcodes\": [\"PR3 0SG\", \"M45 6GN\", \"EX16 5BL\"] } ``` ## Bulk Reverse Geocoding Bulk translates geolocations into Postcodes. Accepts up to 100 geolocations.",
+      "parameters": [],
+      "routes": [
+        {
+          "endpoint": "bulk_postcode_lookup",
+          "requires": [],
+          "arguments": {},
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "nearest_postcode",
+      "description": "Find the Nearest Postcodes Returns a list of postcodes geographically nearest to the specified postcode, ordered by proximity (closest first).",
+      "parameters": [
+        {
+          "name": "postcode",
+          "type": "string",
+          "required": true,
+          "description": "Valid UK postcode to use as the geographic center point for the proximity search"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "nearest_postcode",
+          "requires": [],
+          "arguments": {
+            "postcode": "postcode"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "random_postcode",
+      "description": "Get a Random Postcode Returns a randomly selected postcode along with comprehensive geographic, administrative, and statistical data associated with that postcode.",
+      "parameters": [
+        {
+          "name": "outcode",
+          "type": "string",
+          "required": false,
+          "description": "Filters random postcodes by outcode. Returns null if invalid outcode."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "random_postcode",
+          "requires": [],
+          "arguments": {
+            "outcode": "outcode"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "lookup_terminated_postcode",
+      "description": "Lookup Terminated Postcodes Lookup a terminated postcode. If the terminated postcode exists, this API returns the year and month of termination plus its last known WGS84 coordinates. Channel Islands and Isle of Man postcodes do not carry coordinates — `longitude` and `latitude` will be `null` for those. Returns `404` if the postcode does not exist in our database of terminated postcodes or is not valid. Source: ONS Postcode Directory (ONSPD). Live and terminated postcodes share the same underlying table; a postcode is terminated when `date_of_termination` is set.",
+      "parameters": [
+        {
+          "name": "postcode",
+          "type": "string",
+          "required": true,
+          "description": "Postcode to query"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "lookup_terminated_postcode",
+          "requires": [],
+          "arguments": {
+            "postcode": "postcode"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "get_scottish_postcode",
+      "description": "Lookup Scottish Postcode Lookup a Scottish postcode. Returns Scottish Postcode Directory (SPD) data associated with the postcode. The response covers the full SPD field set: council area, electoral ward, Scottish and UK parliamentary geographies, health board, integration authority, data zone, intermediate zone, output area, locality, settlement, civil parish, island, national park, travel-to-work area, ITL/LAU, urban-rural classification, SIMD rank, ROA, census counts, and the corresponding GSS / official codes under the `codes` object. Top-level fields hold the latest (canonical) value for each datapoint. Year-suffixed fields surface prior versions where the SPD publishes them. Returns `404` if the postcode does not exist in SPD or is not valid. For postcodes not in SPD but present in ONSPD (i.e. non-Scottish postcodes), a `404` is returned with the error message \"Postcode exists in ONSPD but not in SPD.\" Source: Scottish Postcode Directory (National Records of Scotland).",
+      "parameters": [
+        {
+          "name": "postcode",
+          "type": "string",
+          "required": true,
+          "description": "Specifies the postcode you wish to query"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "get_scottish_postcode",
+          "requires": [],
+          "arguments": {
+            "postcode": "postcode"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "find_outcode",
+      "description": "Find an Outward Code Returns aggregated information for postcodes grouped by their shared outward code. The outward code is the first half of any postcode (3-4 characters and followed by a space). E.g. `SW1A` is the outward code for `SW1A 1AA`.",
+      "parameters": [
+        {
+          "name": "outcode",
+          "type": "string",
+          "required": true,
+          "description": "Specifies the outward code you wish to query."
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "find_outcode",
+          "requires": [],
+          "arguments": {
+            "outcode": "outcode"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "place_query",
+      "description": "Find a Place Submit a place query and receive a complete list of places matches and associated data.",
+      "parameters": [],
+      "routes": [
+        {
+          "endpoint": "place_query",
+          "requires": [],
+          "arguments": {},
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "find_place",
+      "description": "Find a Place by ID Submit a place query and receive a complete list of place matches and associated data. This API uses the Ordnance Survey Open Names Dataset. Places are not available for Northern Ireland.",
+      "parameters": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": true,
+          "description": "Specifies the place you wish to query"
+        }
+      ],
+      "routes": [
+        {
+          "endpoint": "find_place",
+          "requires": [],
+          "arguments": {
+            "code": "code"
+          },
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    },
+    {
+      "name": "random_place",
+      "description": "Retrieve a Random Place Returns a randomly selected place from the database along with all its associated geographical and administrative data. Useful for testing or displaying sample location data.",
+      "parameters": [],
+      "routes": [
+        {
+          "endpoint": "random_place",
+          "requires": [],
+          "arguments": {},
+          "constants": {},
+          "omitted": {}
+        }
+      ],
+      "approved": true,
+      "note": "Condition A: approved without review, as a direct OpenAPI generator would."
+    }
+  ],
+  "excluded": []
+}
