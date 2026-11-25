@@ -32,3 +32,6 @@ coverage.xml
 /specs/
 /recordings/
 /tools/
+
+# docs2mcp generate output (regenerate with `docs2mcp generate`)
+/servers/

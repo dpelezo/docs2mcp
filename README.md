@@ -82,7 +82,20 @@ uv run docs2mcp approve tools/frankfurter/tools.json --all --except provider_rat
 
 `design` asks Claude to group the endpoints into task-shaped tools, such as one `pokemon` tool that gets one Pokémon by name or lists them. Claude names and describes the tools and their arguments, and code copies types, enums and defaults from the spec. Validation problems go back to Claude for another try, and anything still broken after the last try gets a plain one-tool-per-endpoint fallback, listed in `design_report.json`. `--direct` makes that one-tool-per-endpoint design for the whole API, with no LLM. Design uses `claude-sonnet-5-5` by default (`DOCS2MCP_DESIGN_MODEL`); on the eval APIs it turns 129 tools into 69 and cuts the tool list an agent loads by about 28%, while keeping 245 of 248 parameters ([results](evals/design/README.md)).
 
-The output is `tools.json`: each tool's arguments, the API request each call makes, and any endpoints left out, with the reason. Review it and approve tools one by one with `approve`. `generate` (coming next) builds only approved, valid tools, and reports every tool it skips with the reason. `check-tools` reports every problem after a hand edit. Rules: [ADR 0011](docs/adr/0011-tool-design-and-generation.md) and [ADR 0012](docs/adr/0012-task-shaped-design.md); schema: [`docs/tools.schema.json`](docs/tools.schema.json).
+The output is `tools.json`: each tool's arguments, the API request each call makes, and any endpoints left out, with the reason. Review it and approve tools one by one with `approve`. `generate` builds only approved, valid tools, and reports every tool it skips with the reason. `check-tools` reports every problem after a hand edit. Rules: [ADR 0011](docs/adr/0011-tool-design-and-generation.md) and [ADR 0012](docs/adr/0012-task-shaped-design.md); schema: [`docs/tools.schema.json`](docs/tools.schema.json).
+
+### Generate the server
+
+```bash
+uv run docs2mcp generate tools/frankfurter/tools.json --spec specs/frankfurter/spec.json --out servers/frankfurter
+uv run --directory servers/frankfurter server.py          # stdio
+uv run --directory servers/frankfurter server.py --http   # streamable HTTP on :8000/mcp
+uv run python scripts/try_server.py servers/frankfurter exchange_rates '{"base": "EUR"}'
+```
+
+`generate` writes one `server.py`, built on the official MCP Python SDK (`MCPServer`). It has one typed function per approved tool. Each call picks its route, makes one request with httpx, and returns the JSON, cut to 20,000 characters with a note. HTTP and network errors come back as tool errors.
+
+Next to the server are a `pyproject.toml`, a README listing every skipped tool, excluded endpoint and unreachable endpoint with its reason, and `generation_report.json`. `scripts/try_server.py` starts a server, lists its tools and makes one real call.
 
 ### Score an extraction
 
