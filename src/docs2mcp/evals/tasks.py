@@ -15,10 +15,13 @@ Every answer is checked by a rule, never by a model, so a score can be re-derive
 from a transcript.
 """
 
+import contextlib
 import json
 import math
 import re
 import tomllib
+import unicodedata
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Annotated, Literal, Self
 
@@ -63,12 +66,23 @@ class SetOf(_Model):
 Answer = Annotated[Exact | Number | Contains | SetOf, Field(discriminator="rule")]
 
 
+Grounding = Literal["literal", "derived"]
+
+
 class Task(_Model):
     id: str = Field(pattern=r"^[a-z0-9_]+-\d{3}$")
     level: Level
     question: str = Field(min_length=10)
     evidence: str = Field(min_length=1, description="How the expected answer was checked.")
     answer: Answer
+    grounding: Grounding = Field(
+        default="literal",
+        description=(
+            "literal: the answer is a value in an API response, so a grounded answer appears "
+            "in a tool result. derived: it is worked out (a sum, a count, a conversion, yes "
+            "or no), so it is not checked for grounding."
+        ),
+    )
     note: str | None = None
 
 
@@ -170,6 +184,49 @@ def score(answer: Exact | Number | Contains | SetOf, given: str | None) -> Verdi
             return _contains(answer, given)
         case SetOf():
             return _set(answer, given)
+
+
+def _tool_text(text: str) -> str:
+    """A tool result as plain text: JSON escapes such as \\u00f3 decoded, spacing collapsed."""
+    with contextlib.suppress(ValueError):
+        text = json.dumps(json.loads(text), ensure_ascii=False)
+    return " ".join(unicodedata.normalize("NFC", text).split())
+
+
+def grounded(answer: Exact | Number | Contains | SetOf, given: str, results: Sequence[str]) -> bool:
+    """Whether a submitted answer appears in the tool results the agent saw.
+
+    Uses the task's rule: the answer text for `exact`, each expected string for
+    `contains`, each submitted item for `set`, and for `number` any number in the
+    results within the task's tolerance of the submitted one. A number can match
+    by chance, so a grounded number is likely, not certain, to come from the tools.
+    """
+    seen = [_tool_text(r) for r in results]
+    given = unicodedata.normalize("NFC", given)
+    match answer:
+        case Number():
+            found = first_number(given)
+            if found is None:
+                return False
+            limit = answer.abs_tolerance + answer.rel_tolerance * abs(found)
+            return any(
+                (n := first_number(m.group())) is not None and abs(n - found) <= limit
+                for text in seen
+                for m in _NUMBER.finditer(text)
+            )
+        case Exact():
+            sensitive = answer.case_sensitive
+            wanted = [_normalize(given, case_sensitive=sensitive)]
+        case Contains():
+            sensitive = answer.case_sensitive
+            wanted = [_normalize(v, case_sensitive=sensitive) for v in answer.value]
+        case SetOf():
+            sensitive = answer.case_sensitive
+            wanted = [
+                _normalize(p, case_sensitive=sensitive) for p in _SPLIT.split(given) if p.strip()
+            ]
+    blob = " ".join(_normalize(t, case_sensitive=sensitive) for t in seen)
+    return bool(wanted) and all(w in blob for w in wanted)
 
 
 def json_schema() -> str:

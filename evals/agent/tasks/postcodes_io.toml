@@ -91,6 +91,7 @@ GET https://api.postcodes.io/postcodes/OX12JD
 GET https://api.postcodes.io/postcodes/CB21TN
 """
 answer = { rule = "exact", value = "no" }
+grounding = "derived"
 
 [[task]]
 id = "postcodes_io-013"
@@ -109,6 +110,7 @@ GET https://api.postcodes.io/postcodes/SW1A1AA
 GET https://api.postcodes.io/postcodes/EH11YZ
 """
 answer = { rule = "number", value = 533.8, rel_tolerance = 0.02 }
+grounding = "derived"
 note = "Great-circle distance from the two latitude and longitude pairs, 533.79 km with a 6371 km radius. 2% covers other ways of computing it."
 
 [[task]]
@@ -162,4 +164,5 @@ level = "complex"
 question = "Is the outcode EC4V within 1,000 metres of the outcode EC1A? Answer yes or no."
 evidence = "GET https://api.postcodes.io/outcodes/EC1A/nearest?radius=1000&limit=99"
 answer = { rule = "exact", value = "yes" }
+grounding = "derived"
 note = "The response lists 20 outcodes, EC4V among them. Asking whether one is in range, not how many, stays correct even if the API caps the list."

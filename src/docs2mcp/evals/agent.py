@@ -2,8 +2,9 @@
 
 The runner (`scripts/agent_eval.py`) writes one `TaskRun` per task, condition
 and repeat. This module classifies tool errors, and turns runs into the reported
-metrics: success rate (minimum and mean over repeats), tool calls, tokens and
-invalid tool calls per task.
+metrics: success rate and grounded success rate (minimum and mean over repeats),
+tool calls, tokens and invalid tool calls per task. Grounded success counts a
+pass only when a literal answer appears in a tool result the agent saw (#57).
 """
 
 import json
@@ -94,6 +95,8 @@ class TaskRun(_Model):
     model: str
     answer: str | None
     verdict: Verdict
+    grounded: bool | None = None
+    """Whether the answer appears in a tool result the agent saw; None for derived answers."""
     stop: StopReason
     error: str | None = None
     calls: list[ToolCall] = Field(default_factory=list[ToolCall])
@@ -106,6 +109,11 @@ class TaskRun(_Model):
     @property
     def key(self) -> tuple[str, str, str, int]:
         return (self.condition, self.api, self.task, self.repeat)
+
+    @property
+    def grounded_pass(self) -> bool:
+        """Passed, and not shown to have come from somewhere other than the tools."""
+        return self.verdict.passed and self.grounded is not False
 
     @property
     def tool_calls(self) -> int:
@@ -136,6 +144,8 @@ class Metrics(_Model):
     repeats: int
     success_min: float
     success_mean: float
+    grounded_min: float
+    grounded_mean: float
     tool_calls: float
     tokens: float
     input_tokens: float
@@ -150,6 +160,7 @@ def _metrics(condition: Condition, api: str, runs: Sequence[TaskRun]) -> Metrics
     for run in runs:
         by_repeat[run.repeat].append(run)
     rates = [sum(r.verdict.passed for r in rs) / len(rs) for rs in by_repeat.values()]
+    grounded = [sum(r.grounded_pass for r in rs) / len(rs) for rs in by_repeat.values()]
     calls = sum(r.tool_calls for r in runs)
     return Metrics(
         condition=condition,
@@ -158,6 +169,8 @@ def _metrics(condition: Condition, api: str, runs: Sequence[TaskRun]) -> Metrics
         repeats=len(by_repeat),
         success_min=min(rates),
         success_mean=statistics.fmean(rates),
+        grounded_min=min(grounded),
+        grounded_mean=statistics.fmean(grounded),
         tool_calls=calls / len(runs),
         tokens=sum(r.input_tokens + r.output_tokens for r in runs) / len(runs),
         input_tokens=sum(r.input_tokens for r in runs) / len(runs),
@@ -182,12 +195,13 @@ def summarize(runs: Iterable[TaskRun]) -> list[Metrics]:
 def format_table(metrics: Sequence[Metrics]) -> str:
     """A Markdown table of the metrics, one row per condition and API."""
     header = (
-        "| API | Condition | Tasks x repeats | Success (min / mean) | Tool calls | Tokens "
-        "| Invalid calls |\n|---|---|---|---|---|---|---|"
+        "| API | Condition | Tasks x repeats | Success (min / mean) | Grounded success "
+        "| Tool calls | Tokens | Invalid calls |\n|---|---|---|---|---|---|---|---|"
     )
     rows = [
         f"| {m.api} | {m.condition} ({CONDITIONS[m.condition]}) | {m.tasks} x {m.repeats} "
-        f"| {m.success_min:.0%} / {m.success_mean:.0%} | {m.tool_calls:.1f} "
+        f"| {m.success_min:.0%} / {m.success_mean:.0%} "
+        f"| {m.grounded_min:.0%} / {m.grounded_mean:.0%} | {m.tool_calls:.1f} "
         f"| {m.tokens:,.0f} | {m.invalid_rate:.0%} |"
         for m in metrics
     ]
