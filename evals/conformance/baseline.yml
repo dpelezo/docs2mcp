@@ -5,7 +5,7 @@
 # The suite's other scenarios call fixtures that only its reference server defines,
 # such as `test_prompt_with_image`. `--expected-failures` makes CI fail on any new
 # failure and on any entry here that starts passing.
-# Checked with @modelcontextprotocol/conformance 0.1.16 on 2026-11-24: 9 passed, 21 expected.
+# Checked with @modelcontextprotocol/conformance 0.1.16 on 2026-11-24: 8 passed, 22 expected.
 server:
   # Logging and completion: not offered
   - logging-set-level
@@ -17,6 +17,9 @@ server:
   - tools-call-embedded-resource
   - tools-call-mixed-content
   - tools-call-with-progress
+  # Several GET SSE streams on one session: the server is stateless (ADR 0011), so it
+  # gives no session and the scenario records no checks, which the suite counts as failed
+  - server-sse-multiple-streams
   # Server-to-client requests: not used
   - tools-call-sampling
   - tools-call-elicitation
