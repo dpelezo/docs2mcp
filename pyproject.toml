@@ -48,6 +48,7 @@ dev = [
 ]
 # The agent eval runner (ADR 0013, #50). Installed by default for development and CI.
 eval = [
+    "fastmcp>=4.2.6,<5",
     "langchain-anthropic>=1.7.12,<2",
     "langgraph>=1.2.24,<2",
 ]

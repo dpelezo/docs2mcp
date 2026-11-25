@@ -11,7 +11,9 @@ would, and writes evals/agent/conditions/openapi/<id>/:
 - spec.json: the converted spec;
 - tools.json: the approved direct design;
 - source.json: the file's URL, version, SHA-256, retrieval date and every part
-  of it that could not become a parameter.
+  of it that could not become a parameter;
+- openapi.json or openapi.yml: the original file, which condition D (FastMCP)
+  is built from. Each folder also holds the source project's license.
 
 Build the server with:
 
@@ -86,6 +88,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             (folder / "spec.json").write_text(spec, encoding="utf-8")
             (folder / "tools.json").write_text(tools, encoding="utf-8")
             (folder / "source.json").write_text(source, encoding="utf-8")
+            suffix = Path(str(api["openapi"])).suffix or ".json"
+            (folder / f"openapi{suffix}").write_bytes(response.content)
             skipped = json.loads(source)["skipped"]
             print(f"{api['id']}: {json.loads(source)['endpoints']} tools, {len(skipped)} skipped")
             for line in skipped:

@@ -290,13 +290,21 @@ def make_model(model_name: str, tools: list[dict[str, Any]]) -> Any:
     return chat.bind_tools(tools)
 
 
+OPENAPI = ROOT / "evals" / "agent" / "conditions" / "openapi"
+
+
 def server_params(servers: Path, cassettes: Path, condition: str, api: str, mode: str) -> Any:
+    """How to start a condition's server: a generated one, or FastMCP's for condition D."""
+    if condition == "D":
+        launcher, target = "scripts.fastmcp_server", OPENAPI / api
+    else:
+        launcher, target = "scripts.eval_server", servers / condition / api
     return StdioServerParameters(
         command=sys.executable,
         args=[
             "-m",
-            "scripts.eval_server",
-            str(servers / condition / api),
+            launcher,
+            str(target),
             "--cassette",
             str(cassettes / f"{api}.jsonl.gz"),
             "--mode",
@@ -305,6 +313,12 @@ def server_params(servers: Path, cassettes: Path, condition: str, api: str, mode
         cwd=ROOT,
         env={**os.environ},
     )
+
+
+def server_built(servers: Path, condition: str, api: str) -> bool:
+    if condition == "D":
+        return any((OPENAPI / api / name).exists() for name in ("openapi.json", "openapi.yml"))
+    return (servers / condition / api / "server.py").exists()
 
 
 @dataclass
@@ -332,7 +346,7 @@ def plan(
         if not tasks:
             continue
         for condition in conditions:
-            if not (servers / condition / loaded.api / "server.py").exists():
+            if not server_built(servers, condition, loaded.api):
                 skipped.append(f"{condition}/{loaded.api}")
                 continue
             plans.append(Plan(condition, loaded.api, tasks))
@@ -409,7 +423,7 @@ def write_summary(out: Path) -> str:
 
 def parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the agent eval (ADR 0013).")
-    parser.add_argument("--conditions", default="A,B,C", help="comma-separated, default A,B,C")
+    parser.add_argument("--conditions", default="A,B,C,D", help="comma-separated, default A,B,C,D")
     parser.add_argument("--apis", help="comma-separated API ids (default: all)")
     parser.add_argument("--tasks", help="comma-separated task ids (default: all)")
     parser.add_argument("--pilot", action="store_true", help="only the 10 pilot tasks")
@@ -431,7 +445,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.summary_only:
         print(write_summary(out))
         return 0
-    conditions: list[Condition] = [c for c in ("A", "B", "C") if c in args.conditions.split(",")]
+    wanted = args.conditions.split(",")
+    conditions: list[Condition] = [c for c in ("A", "B", "C", "D") if c in wanted]
     task_ids = PILOT if args.pilot else (args.tasks.split(",") if args.tasks else None)
     apis = args.apis.split(",") if args.apis else None
     plans, skipped = plan(conditions, apis, task_ids, args.servers)

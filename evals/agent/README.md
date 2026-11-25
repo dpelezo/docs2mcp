@@ -96,6 +96,19 @@ uv run docs2mcp generate evals/agent/conditions/openapi/postcodes_io/tools.json 
 
 The Postcodes.io gaps take away the direct route for some tasks in condition A: 009 (needs `radius`), 010 (autocomplete), 013 and 019 (place search) and 016 (nearest outcodes). 015 and 017 need one lookup per postcode instead of a bulk request. That is part of what the eval measures: documentation can say more than the official file.
 
+## Condition D: FastMCP from the same file
+
+Condition D is [FastMCP](https://gofastmcp.com)'s `from_openapi`, run on the same official OpenAPI file as condition A, with FastMCP's defaults. `scripts/fastmcp_server.py` changes nothing but the HTTP client's transport, which uses the same cassette as A, B and C (FastMCP uses `httpx2`, so the cassette is wrapped in an `httpx2` transport, with the same request keys).
+
+| | A (docs2mcp converter) | D (FastMCP) |
+|---|---|---|
+| Tools | one per operation | one per operation |
+| Tool list (PokéAPI) | ~12,400 tokens | ~12,800 tokens |
+| Long responses | biggest lists halved to fit 20,000 characters, with a note (#58) | returned whole |
+| Errors | `returned HTTP 4xx`, schema validation | `HTTP error 4xx`, `Missing required arguments` |
+
+Both kinds of error text count as invalid calls. The original files and their licenses are in `conditions/openapi/<api>/`.
+
 ## Running it
 
 1. **Make condition C's designs** (Haiku, a few cents per API). The task design is made from the same extracted spec as condition B:
@@ -113,7 +126,7 @@ The Postcodes.io gaps take away the direct route for some tasks in condition A: 
    uv run python -m scripts.build_eval_servers
    ```
 
-3. **Run the agent.** Start with the pilot: 10 tasks in every condition, 26 runs, about $0.10 on Haiku. Then do the full run with 3 repeats.
+3. **Run the agent.** Start with the pilot: 10 tasks in every condition, 32 runs (6 in A and 6 in D, 10 each in B and C). On Haiku, A, B and C cost about $0.08. D can cost more, because it sends whole PokéAPI responses. Then do the full run with 3 repeats.
 
    ```bash
    uv run python -m scripts.agent_eval --pilot --out runs/pilot
