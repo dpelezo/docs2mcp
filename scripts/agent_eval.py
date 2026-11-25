@@ -416,6 +416,25 @@ def _git_commit() -> str:
         return "unknown"
 
 
+def drop_errored(results: Path) -> int:
+    """Move runs that ended in an error out of results.jsonl, so they run again.
+
+    A run ends in an error only when the model call fails (a rate limit, no
+    credit, the network); tool failures go back to the agent instead. Those runs
+    say nothing about the tools, so they are retried, not scored. The moved lines
+    are appended to errored.jsonl next to the results, for the record.
+    """
+    runs = load_runs(results)
+    errored = [r for r in runs if r.stop == "error"]
+    if not errored:
+        return 0
+    with (results.parent / "errored.jsonl").open("a", encoding="utf-8") as handle:
+        handle.writelines(r.model_dump_json() + "\n" for r in errored)
+    kept = [r for r in runs if r.stop != "error"]
+    results.write_text("".join(r.model_dump_json() + "\n" for r in kept), encoding="utf-8")
+    return len(errored)
+
+
 def write_summary(out: Path) -> str:
     runs = load_runs(out / "results.jsonl")
     metrics = summarize(runs)
@@ -459,6 +478,11 @@ def parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--mode", choices=["cache", "replay", "record"], default="cache")
     parser.add_argument("--out", type=Path, help="run folder (default: runs/<UTC timestamp>)")
     parser.add_argument("--summary-only", action="store_true", help="rewrite the summary")
+    parser.add_argument(
+        "--retry-errors",
+        action="store_true",
+        help="run again every run that ended in an error (rate limit, credits, network)",
+    )
     return parser.parse_args(argv)
 
 
@@ -480,6 +504,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1
     out.mkdir(parents=True, exist_ok=True)
     results = out / "results.jsonl"
+    if args.retry_errors:
+        retried = drop_errored(results)
+        print(f"retrying {retried} runs that ended in an error", file=sys.stderr)
     done = {r.key for r in load_runs(results)}
     meta = {
         "started": datetime.now(UTC).isoformat(timespec="seconds"),

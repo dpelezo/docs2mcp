@@ -137,6 +137,7 @@ Both kinds of error text count as invalid calls. The original files and their li
 - **Output:** each run appends a line to `runs/<name>/results.jsonl` as it finishes, so a stopped run resumes where it left off. At the end it writes `summary.md` and `metrics.json`.
 - **Tracing:** with Langfuse keys set, each task is one trace, with a span per model call and per tool call.
 - **Repeats:** `--condition-repeats D=1` runs condition D once while the others run `--repeats` times. D sends whole PokéAPI responses, about 200,000 tokens per task, and the owner chose one run for it (2026-11-25).
+- **Failed model calls:** a run ends in an error only when the model call itself fails, for example on a rate limit, no credit left or a network error. Those runs say nothing about the tools, so `--retry-errors` moves them to `errored.jsonl` and runs them again. Use it with the same `--out`.
 - **Client-side failures:** if the MCP client rejects a tool result, the agent gets the failure as a tool error (outcome `error`) and can carry on, as it would in an MCP host. The run is not ended. In pilot 2, FastMCP's Postcodes.io tools returned results that didn't match their own output schema, and the client rejected them.
 - **Invalid tool calls** are calls the server rejected for their arguments, either a schema validation error or an HTTP 4xx from the API. A "not recorded" error in replay mode is counted separately, because it is a problem with the run, not the tools.
 
