@@ -39,6 +39,8 @@ Every run produced a valid `spec.json` with no rejected endpoints and no failed 
 
 ### History
 
+The #36 row replays the prompt-caching run's recorded replies through the new merge code, so it makes no new model calls. Recall and precision did not move. Required-flag mismatches, which are counted but not penalised (ADR 0005), fell on Postcodes.io from 4 to 1. The cause was merging. `GET /postcodes?q=` and `GET /postcodes?lon=&lat=` are two operations on one route, and so are the two bulk `POST /postcodes` bodies. A parameter now stays required only if every merged operation requires it.
+
 Each change is measured on the same ingested chunks, before and after, except crawl depth, which changes the chunks themselves. Moves on APIs a change does not touch show run-to-run variation; from ADR 0007 on, the targeted APIs run 3 times.
 
 | Change | Endpoints found | Endpoint precision | Parameters found | Parameter precision |
@@ -49,6 +51,7 @@ Each change is measured on the same ingested chunks, before and after, except cr
 | Shared parameters (ADR 0008) | 137 / 139 (99%) | 98% | 186 / 243 (77%) | 99% |
 | Crawl depth 0, permalink cleanup | 137 / 139 (99%) | 98% | 190 / 243 (78%) | 99% |
 | Prompt caching (ADR 0009) | 137 / 139 (99%) | 99% | 189 / 243 (78%) | 99% |
+| Shared routes and text/schema repairs (#36) | 137 / 139 (99%) | 99% | 189 / 243 (78%) | 99% |
 
 - **PokéAPI:** 51 → 101 endpoints. Claude flagged `GET /{endpoint}` and it expanded into 51 list routes. The parameter denominator grows because the list routes' `limit`, `offset` and `q` are now scored.
 - **Frankfurter:** nothing was flagged, so its v1 `/{date}` was correctly left alone. This run extracted two more v1 routes, so precision fell from 73% to 62%, and 4 more parameters, so recall rose from 55% to 75%. That is run-to-run variation, and all the extras come from the v1 page that change 4 (crawl scope) removes.

@@ -1,9 +1,9 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/design-eval",
+    "code": "fix/spec-contradictions (#36)",
     "design": "docs2mcp design --direct (no model)",
-    "input": "specs/open_meteo/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_meteo.json)"
+    "input": "specs/open_meteo/fix36/spec.json (not committed; the cache-run1 extraction replayed after #36)"
   },
   "api": "Open-Meteo Weather Forecast API",
   "design": "direct",
@@ -13,7 +13,7 @@
   "excluded": 0,
   "tools": 1,
   "routes": 1,
-  "tool_list_tokens": 883,
+  "tool_list_tokens": 890,
   "description_tokens": 444,
   "parameters_exposed": 26,
   "parameters_total": 26,
@@ -24,7 +24,7 @@
       "name": "get_forecast",
       "routes": 1,
       "arguments": 26,
-      "tokens": 883
+      "tokens": 889
     }
   ],
   "max_routes_per_tool": 1

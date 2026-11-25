@@ -1,9 +1,9 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/design-eval",
+    "code": "fix/spec-contradictions (#36)",
     "design": "docs2mcp design --direct (no model)",
-    "input": "specs/open_library/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_library.json)"
+    "input": "specs/open_library/fix36/spec.json (not committed; the cache-run1 extraction replayed after #36)"
   },
   "api": "Open Library",
   "design": "direct",
@@ -13,7 +13,7 @@
   "excluded": 0,
   "tools": 11,
   "routes": 11,
-  "tool_list_tokens": 1091,
+  "tool_list_tokens": 1094,
   "description_tokens": 536,
   "parameters_exposed": 22,
   "parameters_total": 22,
@@ -72,7 +72,7 @@
       "name": "get_books_legacy",
       "routes": 1,
       "arguments": 4,
-      "tokens": 198
+      "tokens": 200
     },
     {
       "name": "get_author",

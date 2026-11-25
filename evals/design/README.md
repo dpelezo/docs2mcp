@@ -46,14 +46,16 @@ Designs are measured on frozen specs, so only the design step differs between ru
 | API | Endpoints | Tools | Routes | Parameters exposed | Tool list (est. tokens) | Descriptions (est. tokens) |
 |---|---|---|---|---|---|---|
 | PokéAPI | 103 | 103 | 103 | 154 / 154 | 9,601 | 4,986 |
-| Postcodes.io | 14 | 14 | 14 | 34 / 34 | 1,701 | 876 |
+| Postcodes.io | 14 | 14 | 14 | 34 / 34 | 1,753 | 944 |
 | Frankfurter | 9 | 9 | 9 | 27 / 27 | 968 | 425 |
-| Open-Meteo forecast | 1 | 1 | 1 | 26 / 26 | 883 | 444 |
+| Open-Meteo forecast | 1 | 1 | 1 | 26 / 26 | 890 | 444 |
 | Open-Meteo geocoding | 2 | 2 | 2 | 7 / 7 | 328 | 179 |
-| **Tuned total** | **129** | **129** | **129** | **248 / 248** | **13,481** | **6,910** |
-| Open Library (held out) | 11 | 11 | 11 | 22 / 22 | 1,091 | 536 |
+| **Tuned total** | **129** | **129** | **129** | **248 / 248** | **13,540** | **6,978** |
+| Open Library (held out) | 11 | 11 | 11 | 22 / 22 | 1,094 | 536 |
 
 Every baseline design is valid, covers every endpoint, excludes none and exposes every parameter.
+
+On 2026-11-24 the #36 extraction fixes changed three input specs: Postcodes.io's merged operations, Open-Meteo's `latitude` type and Open Library's `jscmd` values. Those three baselines were recomputed. Before that, the tuned total was 13,481 tokens and Open Library's was 1,091. Results recorded earlier, and the history below, were measured against the old specs.
 
 ### Task-shaped design
 
@@ -96,6 +98,8 @@ The CI replay designs in `replay/<id>/` are now Haiku run 1 after the change, be
 | 2026-11-24 | Baseline (#29) | direct, no model | 129 / 248 of 248 / 13,481 | 11 / 22 of 22 / 1,091 | not reviewed (no grouping to judge) |
 | 2026-11-24 | First task-shaped design (#29), before the parameter rule | Haiku, run 1 | 70 / 228 of 248 / 11,188 | 9 / 22 of 22 / 1,259 | not reviewed: optional parameters dropped (Open-Meteo forecast 14 of 26) |
 | 2026-11-24 | Every parameter passed or omitted (ADR 0012) | Sonnet, run 1 of 3 | 69 / 245 of 248 / 9,707 | 10 / 22 of 22 / 1,143 | confirmed: 2 of 5 tuned fit to approve (Frankfurter, Open-Meteo forecast); held out not yet |
+| 2026-11-24 | No extra claims in descriptions (#39) | Haiku, run 1 of 3 (before: 11,921) | 69 / 240 of 248 / 11,044 | 9 / 22 of 22 / 1,156 | not re-reviewed; unsupported claims on PokéAPI and geocoding 0 in all runs |
+| 2026-11-24 | Spec contradictions fixed in extraction (#36) | Haiku, 1 run on Postcodes.io, Open-Meteo forecast and Open Library | specs changed, so not comparable | 10 / 21 of 22 / 1,273 | re-review drafted in the three reviews; pending confirmation |
 
 ## Measure a design
 

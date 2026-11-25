@@ -1,9 +1,9 @@
 {
   "run": {
     "date": "2026-11-24",
-    "code": "feat/design-eval",
+    "code": "fix/spec-contradictions (#36)",
     "design": "docs2mcp design --direct (no model)",
-    "input": "tests/fixtures/specs/postcodes_io.json (committed; replay of evals/extraction/replay/postcodes_io)"
+    "input": "tests/fixtures/specs/postcodes_io.json (committed; the replay of evals/extraction/replay/postcodes_io, after #36)"
   },
   "api": "Postcodes.io",
   "design": "direct",
@@ -13,8 +13,8 @@
   "excluded": 0,
   "tools": 14,
   "routes": 14,
-  "tool_list_tokens": 1701,
-  "description_tokens": 876,
+  "tool_list_tokens": 1753,
+  "description_tokens": 944,
   "parameters_exposed": 34,
   "parameters_total": 34,
   "unexposed": [],
@@ -30,13 +30,13 @@
       "name": "bulk_lookup_postcodes",
       "routes": 1,
       "arguments": 6,
-      "tokens": 268
+      "tokens": 309
     },
     {
       "name": "query_postcodes",
       "routes": 1,
       "arguments": 7,
-      "tokens": 225
+      "tokens": 235
     },
     {
       "name": "find_nearest_postcodes",
