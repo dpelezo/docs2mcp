@@ -18,12 +18,16 @@ Each condition is a generated MCP server for an API. The agent, its prompt and t
 | **A. OpenAPI direct** | one tool per endpoint, from the API's own OpenAPI file | PokéAPI, Frankfurter, Postcodes.io |
 | **B. docs2mcp direct** | one tool per endpoint, from the spec docs2mcp extracted (`design --direct`) | all six eval APIs |
 | **C. docs2mcp task-shaped** | the reviewed task design (ADR 0012) | all six eval APIs |
+| **D. FastMCP from OpenAPI** | `FastMCP.from_openapi` on the same official file as A, with FastMCP's defaults | PokéAPI, Frankfurter, Postcodes.io |
 
 Condition A uses docs2mcp's own converter (`src/docs2mcp/openapi.py`), not another project's generator: it feeds the same direct design and server template as B, so response handling and the 20,000-character limit are the same in every condition and only the tools differ (decided 2026-11-24).
 
 - **A vs C** is the headline: docs2mcp against the conversion other generators do.
 - **B vs C** isolates what grouping and LLM-written descriptions add, on the same extracted spec.
 - **A vs B** shows what reading docs instead of an official file costs or gains.
+- **D vs A and C** compares against a generator people use today, not only docs2mcp's own direct conversion (added 2026-11-25 at the owner's request, #59).
+
+Condition D runs FastMCP (`fastmcp`, pinned in the `eval` dependency group) unchanged. Its HTTP client gets a transport that uses the same cassettes, so all four conditions see the same recorded data. D keeps FastMCP's own response handling, which has no size limit, so a PokéAPI `/pokemon` response reaches the model whole (about 360,000 characters). That difference is part of what D measures. The original OpenAPI files are committed under `evals/agent/conditions/openapi/<api>/` with their licenses (BSD-3-Clause for PokéAPI, MIT for Frankfurter and Postcodes.io).
 
 ### Tasks
 

@@ -18,11 +18,12 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from docs2mcp.evals.tasks import Verdict
 
-Condition = Literal["A", "B", "C"]
+Condition = Literal["A", "B", "C", "D"]
 CONDITIONS: dict[Condition, str] = {
     "A": "OpenAPI direct",
     "B": "docs2mcp direct",
     "C": "docs2mcp task-shaped",
+    "D": "FastMCP from OpenAPI",
 }
 
 SYSTEM_PROMPT = """\
@@ -66,7 +67,14 @@ def classify(is_error: bool, text: str) -> Outcome:
     lowered = text.lower()
     if "not recorded:" in lowered:
         return Outcome.NOT_RECORDED
-    if "validation error" in lowered or "returned http 4" in lowered or "unknown tool" in lowered:
+    invalid = (
+        "validation error",  # the MCP SDK rejected the arguments
+        "missing required argument",  # FastMCP's own check (condition D)
+        "returned http 4",  # an API 4xx, from a generated server
+        "http error 4",  # an API 4xx, from FastMCP
+        "unknown tool",
+    )
+    if any(marker in lowered for marker in invalid):
         return Outcome.INVALID
     return Outcome.ERROR
 

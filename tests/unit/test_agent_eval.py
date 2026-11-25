@@ -141,6 +141,10 @@ def _run(server: Path, model: Scripted, max_steps: int = 12) -> TaskRun:
         (True, "Error executing tool x: 1 validation error for xArguments", Outcome.INVALID),
         (True, "Error executing tool x: GET /a returned HTTP 422: {}", Outcome.INVALID),
         (True, "Unknown tool: nope", Outcome.INVALID),
+        (True, "Missing required arguments: quote", Outcome.INVALID),
+        (True, "Error calling tool 'getRate': HTTP error 422: Unprocessable", Outcome.INVALID),
+        (True, "Error calling tool 'getRate': HTTP error 503: Unavailable", Outcome.ERROR),
+        (True, "Error calling tool 'x': not recorded: GET https://a", Outcome.NOT_RECORDED),
         (True, "Error executing tool x: GET /a returned HTTP 503: {}", Outcome.ERROR),
         (
             True,
@@ -360,7 +364,10 @@ def test_the_cli_runs_a_task_over_stdio_and_writes_the_summary(
 
 
 def test_the_cli_says_when_there_is_nothing_to_run(tmp_path: Path) -> None:
-    args = ["--servers", str(tmp_path), "--out", str(tmp_path / "run"), "--pilot"]
+    args = [
+        "--servers", str(tmp_path), "--out", str(tmp_path / "run"), "--pilot",
+        "--conditions", "A,B,C",
+    ]  # fmt: skip
     assert agent_eval.main(args) == 1
 
 
