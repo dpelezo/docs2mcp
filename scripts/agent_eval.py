@@ -261,8 +261,15 @@ def tool_definitions(listed: Sequence[Any]) -> list[dict[str, Any]]:
 def make_model(model_name: str, tools: list[dict[str, Any]]) -> Any:
     from langchain_anthropic import ChatAnthropic  # noqa: PLC0415 - needs the API key
 
+    settings = Settings()
     chat: BaseChatModel = ChatAnthropic.model_validate(
-        {"model": model_name, "max_tokens": MAX_TOKENS, "max_retries": 4}
+        {
+            "model": model_name,
+            "max_tokens": MAX_TOKENS,
+            "max_retries": 4,
+            # From the environment or .env, like every other docs2mcp command.
+            "api_key": settings.require_anthropic_key(),
+        }
     )
     return chat.bind_tools(tools)
 
