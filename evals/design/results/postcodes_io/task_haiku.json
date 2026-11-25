@@ -1,0 +1,175 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-no-extra-claims",
+    "model": "claude-haiku-5-5",
+    "design": "docs2mcp design --model claude-haiku-5-5, run 1 of 3, with the no-extra-claims rule",
+    "input": "tests/fixtures/specs/postcodes_io.json (committed)",
+    "calls": 1,
+    "input_tokens": 6325,
+    "output_tokens": 12948,
+    "cache_read_tokens": 3270,
+    "cache_write_tokens": 3051,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "before_and_after": {
+      "before": {
+        "prompt": "ADR 0012 as merged in #37",
+        "runs": [
+          {
+            "valid": true,
+            "tools": 12,
+            "parameters_exposed": 29,
+            "tool_list_tokens": 1585,
+            "calls": 1,
+            "input_tokens": 6209,
+            "output_tokens": 13286
+          },
+          {
+            "valid": true,
+            "tools": 10,
+            "parameters_exposed": 32,
+            "tool_list_tokens": 1583,
+            "calls": 1,
+            "input_tokens": 6209,
+            "output_tokens": 14156
+          },
+          {
+            "valid": false,
+            "tools": 12,
+            "parameters_exposed": 29,
+            "tool_list_tokens": 1671,
+            "calls": 1,
+            "input_tokens": 6209,
+            "output_tokens": 9586
+          }
+        ]
+      },
+      "after": {
+        "prompt": "with the no-extra-claims rule",
+        "runs": [
+          {
+            "valid": true,
+            "tools": 11,
+            "parameters_exposed": 29,
+            "tool_list_tokens": 1523,
+            "calls": 1,
+            "input_tokens": 6325,
+            "output_tokens": 12948
+          },
+          {
+            "valid": true,
+            "tools": 11,
+            "parameters_exposed": 32,
+            "tool_list_tokens": 1710,
+            "calls": 1,
+            "input_tokens": 6325,
+            "output_tokens": 13099
+          },
+          {
+            "valid": true,
+            "tools": 12,
+            "parameters_exposed": 29,
+            "tool_list_tokens": 1605,
+            "calls": 2,
+            "input_tokens": 16576,
+            "output_tokens": 18650
+          }
+        ]
+      }
+    }
+  },
+  "api": "Postcodes.io",
+  "design": "task",
+  "valid": true,
+  "endpoints": 14,
+  "covered": 14,
+  "excluded": 0,
+  "tools": 11,
+  "routes": 14,
+  "tool_list_tokens": 1523,
+  "description_tokens": 919,
+  "parameters_exposed": 29,
+  "parameters_total": 34,
+  "unexposed": [
+    "bulk_lookup_postcodes.limit",
+    "bulk_lookup_postcodes.radius",
+    "bulk_lookup_postcodes.widesearch",
+    "query_postcodes.query",
+    "query_places.query"
+  ],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "postcode_lookup",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 231
+    },
+    {
+      "name": "postcode_search",
+      "routes": 1,
+      "arguments": 6,
+      "tokens": 248
+    },
+    {
+      "name": "postcode_nearest",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 129
+    },
+    {
+      "name": "postcode_autocomplete",
+      "routes": 1,
+      "arguments": 2,
+      "tokens": 107
+    },
+    {
+      "name": "random_postcode",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 88
+    },
+    {
+      "name": "terminated_postcode_lookup",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 92
+    },
+    {
+      "name": "scottish_postcode_lookup",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 104
+    },
+    {
+      "name": "outcode_lookup",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 94
+    },
+    {
+      "name": "outcode_nearest",
+      "routes": 2,
+      "arguments": 5,
+      "tokens": 225
+    },
+    {
+      "name": "place_lookup",
+      "routes": 2,
+      "arguments": 3,
+      "tokens": 167
+    },
+    {
+      "name": "random_place",
+      "routes": 1,
+      "arguments": 0,
+      "tokens": 38
+    }
+  ],
+  "max_routes_per_tool": 2
+}

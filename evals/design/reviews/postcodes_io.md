@@ -1,7 +1,7 @@
 # Design review: Postcodes.io
 
 - **API:** Postcodes.io (14 endpoints)
-- **tools.json:** `evals/design/replay/postcodes_io/tools.json`, Sonnet 5.5 run 1 (ADR 0012), replayed in CI
+- **tools.json:** Sonnet 5.5 run 1 (ADR 0012), as committed in `evals/design/replay/postcodes_io/tools.json` at 5cece07. That folder now holds a Haiku recording made after the no-extra-claims prompt change.
 - **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner (dpelezo) on 2026-11-24, all answers as drafted
 
 ## Each tool

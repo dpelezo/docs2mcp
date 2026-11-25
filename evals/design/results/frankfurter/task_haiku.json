@@ -1,0 +1,127 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-no-extra-claims",
+    "model": "claude-haiku-5-5",
+    "design": "docs2mcp design --model claude-haiku-5-5, run 1 of 3, with the no-extra-claims rule",
+    "input": "tests/fixtures/specs/frankfurter.json (committed)",
+    "calls": 1,
+    "input_tokens": 5107,
+    "output_tokens": 7035,
+    "cache_read_tokens": 0,
+    "cache_write_tokens": 5103,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "before_and_after": {
+      "before": {
+        "prompt": "ADR 0012 as merged in #37",
+        "runs": [
+          {
+            "valid": true,
+            "tools": 4,
+            "parameters_exposed": 26,
+            "tool_list_tokens": 908,
+            "calls": 1,
+            "input_tokens": 4991,
+            "output_tokens": 7824
+          },
+          {
+            "valid": true,
+            "tools": 4,
+            "parameters_exposed": 27,
+            "tool_list_tokens": 977,
+            "calls": 1,
+            "input_tokens": 4991,
+            "output_tokens": 7018
+          },
+          {
+            "valid": true,
+            "tools": 4,
+            "parameters_exposed": 27,
+            "tool_list_tokens": 1027,
+            "calls": 1,
+            "input_tokens": 4991,
+            "output_tokens": 7120
+          }
+        ]
+      },
+      "after": {
+        "prompt": "with the no-extra-claims rule",
+        "runs": [
+          {
+            "valid": true,
+            "tools": 4,
+            "parameters_exposed": 27,
+            "tool_list_tokens": 975,
+            "calls": 1,
+            "input_tokens": 5107,
+            "output_tokens": 7035
+          },
+          {
+            "valid": true,
+            "tools": 4,
+            "parameters_exposed": 26,
+            "tool_list_tokens": 874,
+            "calls": 1,
+            "input_tokens": 5107,
+            "output_tokens": 5397
+          },
+          {
+            "valid": true,
+            "tools": 4,
+            "parameters_exposed": 27,
+            "tool_list_tokens": 973,
+            "calls": 1,
+            "input_tokens": 5107,
+            "output_tokens": 6605
+          }
+        ]
+      }
+    }
+  },
+  "api": "Frankfurter",
+  "design": "task",
+  "valid": true,
+  "endpoints": 9,
+  "covered": 8,
+  "excluded": 1,
+  "tools": 4,
+  "routes": 8,
+  "tool_list_tokens": 975,
+  "description_tokens": 622,
+  "parameters_exposed": 27,
+  "parameters_total": 27,
+  "unexposed": [],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "exchange_rates",
+      "routes": 2,
+      "arguments": 9,
+      "tokens": 381
+    },
+    {
+      "name": "provider_rates",
+      "routes": 2,
+      "arguments": 10,
+      "tokens": 374
+    },
+    {
+      "name": "currencies",
+      "routes": 2,
+      "arguments": 2,
+      "tokens": 133
+    },
+    {
+      "name": "providers",
+      "routes": 2,
+      "arguments": 1,
+      "tokens": 88
+    }
+  ],
+  "max_routes_per_tool": 2
+}

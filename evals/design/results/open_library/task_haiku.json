@@ -1,0 +1,170 @@
+{
+  "run": {
+    "date": "2026-11-24",
+    "code": "feat/design-no-extra-claims",
+    "model": "claude-haiku-5-5",
+    "design": "docs2mcp design --model claude-haiku-5-5, run 1 of 3, with the no-extra-claims rule",
+    "input": "specs/open_library/cache/run1/spec.json (not committed; the run in evals/extraction/results/open_library.json)",
+    "calls": 2,
+    "input_tokens": 12950,
+    "output_tokens": 10053,
+    "cache_read_tokens": 8549,
+    "cache_write_tokens": 2009,
+    "repairs": {
+      "added_arguments": [],
+      "dropped_tools": [],
+      "dropped_exclusions": [],
+      "added_direct": []
+    },
+    "before_and_after": {
+      "before": {
+        "prompt": "ADR 0012 as merged in #37",
+        "runs": [
+          {
+            "valid": true,
+            "tools": 10,
+            "parameters_exposed": 21,
+            "tool_list_tokens": 1251,
+            "calls": 1,
+            "input_tokens": 5167,
+            "output_tokens": 4910
+          },
+          {
+            "valid": true,
+            "tools": 10,
+            "parameters_exposed": 21,
+            "tool_list_tokens": 1399,
+            "calls": 1,
+            "input_tokens": 5167,
+            "output_tokens": 5310
+          },
+          {
+            "valid": true,
+            "tools": 10,
+            "parameters_exposed": 21,
+            "tool_list_tokens": 1192,
+            "calls": 1,
+            "input_tokens": 5167,
+            "output_tokens": 5588
+          }
+        ]
+      },
+      "after": {
+        "prompt": "with the no-extra-claims rule",
+        "runs": [
+          {
+            "valid": true,
+            "tools": 9,
+            "parameters_exposed": 22,
+            "tool_list_tokens": 1156,
+            "calls": 2,
+            "input_tokens": 12950,
+            "output_tokens": 10053
+          },
+          {
+            "valid": true,
+            "tools": 10,
+            "parameters_exposed": 21,
+            "tool_list_tokens": 1259,
+            "calls": 1,
+            "input_tokens": 5283,
+            "output_tokens": 5777
+          },
+          {
+            "valid": true,
+            "tools": 10,
+            "parameters_exposed": 21,
+            "tool_list_tokens": 1141,
+            "calls": 1,
+            "input_tokens": 5283,
+            "output_tokens": 7749
+          }
+        ]
+      },
+      "tools_with_unsupported_claims": {
+        "before": [
+          5,
+          7,
+          4
+        ],
+        "after": [
+          1,
+          1,
+          2
+        ],
+        "how": "word screen against the spec text, then each flagged tool judged by hand against checklist question 7"
+      }
+    }
+  },
+  "api": "Open Library",
+  "design": "task",
+  "valid": true,
+  "endpoints": 11,
+  "covered": 11,
+  "excluded": 0,
+  "tools": 9,
+  "routes": 11,
+  "tool_list_tokens": 1156,
+  "description_tokens": 661,
+  "parameters_exposed": 22,
+  "parameters_total": 22,
+  "unexposed": [],
+  "problems": [],
+  "per_tool": [
+    {
+      "name": "search_works",
+      "routes": 1,
+      "arguments": 7,
+      "tokens": 269
+    },
+    {
+      "name": "work",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 93
+    },
+    {
+      "name": "work_editions",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 64
+    },
+    {
+      "name": "work_bookshelves",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 67
+    },
+    {
+      "name": "work_ratings",
+      "routes": 1,
+      "arguments": 1,
+      "tokens": 66
+    },
+    {
+      "name": "edition",
+      "routes": 2,
+      "arguments": 2,
+      "tokens": 114
+    },
+    {
+      "name": "book_by_identifier",
+      "routes": 1,
+      "arguments": 4,
+      "tokens": 244
+    },
+    {
+      "name": "author",
+      "routes": 2,
+      "arguments": 2,
+      "tokens": 109
+    },
+    {
+      "name": "author_works",
+      "routes": 1,
+      "arguments": 3,
+      "tokens": 130
+    }
+  ],
+  "max_routes_per_tool": 2
+}

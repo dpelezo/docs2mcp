@@ -57,7 +57,7 @@ Every baseline design is valid, covers every endpoint, excludes none and exposes
 
 ### Task-shaped design
 
-`results/<id>/task.json` is run 1 of `docs2mcp design` with `claude-sonnet-5-5` (ADR 0012), with its run details. Its `repeats` block holds all three Sonnet runs and three Haiku runs on the same inputs. The designs for PokéAPI, Frankfurter and Postcodes.io are committed in `replay/<id>/` with their recordings, and `tests/unit/test_design_replay.py` replays them offline. The reviews are in `reviews/<id>.md`.
+`results/<id>/task.json` is run 1 of `docs2mcp design` with `claude-sonnet-5-5` (ADR 0012), with its run details. Its `repeats` block holds all three Sonnet runs and three Haiku runs on the same inputs. The reviews in `reviews/<id>.md` judge these Sonnet designs. The CI replay folders held them until the no-extra-claims change below, which replaced them with Haiku recordings.
 
 | API | Tools | Routes | Parameters exposed | Excluded | Tool list (est. tokens) | Sonnet runs 1 / 2 / 3 | Haiku runs 1 / 2 / 3 | Review |
 |---|---|---|---|---|---|---|---|---|
@@ -70,6 +70,24 @@ Every baseline design is valid, covers every endpoint, excludes none and exposes
 | Open Library (held out) | 10 | 11 | 22 / 22 | 0 | 1,143 | 1,143 / 1,117 / 1,170 | 1,251 / 1,399 / 1,192 | not yet: an enum hint, extra claims |
 
 Every Sonnet design is valid and needed no repair. Two of 18 Sonnet designs needed a retry, both on held-out Open Library. On the tuned APIs, Sonnet exposed 245 or 246 of 248 parameters, against 240 to 244 for Haiku. Haiku's runs predate the constant type check, which rejects its run 3 Postcodes.io design.
+
+### No extra claims (prompt change, Haiku only)
+
+The reviews failed PokéAPI, Open-Meteo geocoding and Open Library on question 7: descriptions added true but unsupported details such as "(TM/HM)". The design prompt now says descriptions only restate and combine the spec's text. To save credits, it was measured on `claude-haiku-5-5` only: three runs before and three after, on the same specs. `results/<id>/task_haiku.json` holds both sets.
+
+"Unsupported claims" counts tools whose description states something the spec does not. A word screen against the spec text found the candidates, and each candidate was judged by hand against question 7.
+
+| API | Tools with unsupported claims, before → after | Tool list (est. tokens), before → after | Parameters exposed, after |
+|---|---|---|---|
+| PokéAPI | 1 / 1 / 8 → **0 / 0 / 0** | 8,128 / 6,975 / 8,102 → 7,282 / 6,649 / 6,946 | 154 / 154 every run |
+| Open-Meteo geocoding | 1 / 0 / 0 → **0 / 0 / 0** | 304 / 332 / 309 → 281 / 311 / 350 | 5, 7, 7 of 7 |
+| Postcodes.io, Frankfurter, Open-Meteo forecast | none found in spot checks after | tuned total below | unchanged range |
+| **Tuned total** | | 11,921 / 10,876 / 12,113 → **11,044 / 10,521 / 10,881** | 240 / 244 / 241 → 240 / 244 / 242 of 248 |
+| Open Library *(held out)* | 5 / 7 / 4 → **1 / 1 / 2** | 1,251 / 1,399 / 1,192 → 1,156 / 1,259 / 1,141 | 21 or 22 of 22 |
+
+All 18 designs after the change are valid and needed no repair. Two of them needed one retry. Before the change, 1 of 18 was invalid under the constant type check.
+
+The CI replay designs in `replay/<id>/` are now Haiku run 1 after the change, because the old Sonnet recordings no longer match the prompt. **The rule has not been run on Sonnet**, which is still the default, so the Sonnet results above describe the earlier prompt.
 
 ### History
 

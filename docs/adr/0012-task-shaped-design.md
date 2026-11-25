@@ -48,6 +48,12 @@ The result is always valid. Each added argument, dropped tool and added direct t
 
 The first live runs (24 designs, all valid) showed Haiku leaving out optional parameters: Open-Meteo forecast kept 14 of its 26 in every run. Validation only required the required ones, so nothing failed, and an agent would have quietly lost features such as `models` and `elevation`. So a route now has to pass, fix or omit every endpoint parameter, and an omission needs a reason a reviewer can check. The design eval counts what is exposed (`parameters_exposed`), so an omission is also visible in the numbers.
 
+### Descriptions add nothing the spec does not say
+
+The first reviews failed three designs on question 7. Descriptions added details from the model's own knowledge of the API, such as "(TM/HM)" or what a result contains. They were true, but nothing in the spec supports them, and a reviewer cannot check them. The prompt now says descriptions only restate and combine the spec's text. Example argument values that show a format, and advice on which tool to use, are still allowed.
+
+On Haiku, unsupported claims on PokéAPI and geocoding fell to zero in three runs. Held-out Open Library fell from 4–7 tools to 1–2. To save credits, this was not run on Sonnet, and the CI replay recordings are Haiku's (`evals/design/README.md`).
+
 ## Consequences
 
 - Claude spends its output on grouping, names and descriptions, the parts the review checklist judges. Code owns types and enums.

@@ -9,43 +9,43 @@
   "tools": [
     {
       "name": "exchange_rates",
-      "description": "Get currency exchange rates (blended across providers). With base and quote it returns the rate for one pair (optional date). Without quote it returns rates for a base: latest by default, a historical day with date, or a time series with start_date/end_date (downsample with group). Use quotes to filter targets, expand=providers for per-provider rates.",
+      "description": "Get Frankfurter exchange rates for a base currency. Give base and quote to get the rate for one currency pair. Otherwise returns rates from base to the currencies in quotes (comma-separated). Add date for a historical rate, or from and to for a time series, with group to downsample it by week or month. providers restricts rates to a provider or dataset key. expand=providers adds per-provider rates to each row. Use provider_rates to get rates from one specific provider.",
       "parameters": [
         {
           "name": "base",
           "type": "string",
           "required": false,
-          "description": "Base currency code, e.g. EUR."
+          "description": "Base currency code, e.g. EUR. Give with quote for a single pair, or alone or with quotes for rates from this base."
         },
         {
           "name": "quote",
           "type": "string",
           "required": false,
-          "description": "Quote currency code for a single pair, e.g. USD. When given, returns one pair's rate (use base too)."
+          "description": "Quote currency code for a single pair, e.g. USD. Only used together with base."
         },
         {
           "name": "quotes",
           "type": "string",
           "required": false,
-          "description": "Comma-separated target currency codes, e.g. USD,GBP. Used when quote is not given."
+          "description": "Comma-separated target currency codes, e.g. USD,GBP."
         },
         {
           "name": "date",
           "type": "string",
           "required": false,
-          "description": "Date of a historical rate, YYYY-MM-DD."
+          "description": "Date of a historical rate, YYYY-MM-DD, e.g. 2024-01-15."
         },
         {
-          "name": "start_date",
+          "name": "from_",
           "type": "string",
           "required": false,
-          "description": "Start date of a time series, YYYY-MM-DD. Not used with quote."
+          "description": "Start date of a time series, YYYY-MM-DD."
         },
         {
-          "name": "end_date",
+          "name": "to",
           "type": "string",
           "required": false,
-          "description": "End date of a time series, YYYY-MM-DD. Not used with quote."
+          "description": "End date of a time series, YYYY-MM-DD."
         },
         {
           "name": "group",
@@ -67,7 +67,7 @@
           "name": "expand",
           "type": "string",
           "required": false,
-          "description": "Set to providers to add per-provider rates to each row. Not used with quote.",
+          "description": "Set to providers to add per-provider rates to each row.",
           "enum": [
             "providers"
           ]
@@ -96,8 +96,8 @@
             "base": "base",
             "quotes": "quotes",
             "date": "date",
-            "start_date": "from",
-            "end_date": "to",
+            "from_": "from",
+            "to": "to",
             "group": "group",
             "providers": "providers",
             "expand": "expand"
@@ -109,46 +109,46 @@
     },
     {
       "name": "provider_rates",
-      "description": "Get rates directly from one specific provider (e.g. ecb). With base and quote it returns a single pair's rate. Otherwise it returns rates for the provider, with optional date, a time series (start_date/end_date), grouping, base and quotes filters.",
+      "description": "Get exchange rates directly from one provider, chosen with provider (e.g. ecb). Give base and quote to get that provider's rate for one currency pair. Otherwise returns that provider's rates from base to the currencies in quotes. Add date for one day, or from and to for a time series, with group week or month to downsample it. Use exchange_rates for rates across providers.",
       "parameters": [
         {
           "name": "provider",
           "type": "string",
           "required": true,
-          "description": "Provider key, e.g. ecb."
+          "description": "Provider key, e.g. ecb. See the providers tool to list keys."
         },
         {
           "name": "base",
           "type": "string",
           "required": false,
-          "description": "Base currency code, e.g. EUR."
+          "description": "Base currency code, e.g. EUR. Give with quote for a single pair."
         },
         {
           "name": "quote",
           "type": "string",
           "required": false,
-          "description": "Quote currency code for a single pair, e.g. USD. Use together with base."
+          "description": "Quote currency code for a single pair, e.g. USD. Only used together with base."
         },
         {
           "name": "quotes",
           "type": "string",
           "required": false,
-          "description": "Comma-separated target currency codes, e.g. USD,GBP. Used when quote is not given."
+          "description": "Comma-separated target currency codes, e.g. USD,GBP."
         },
         {
           "name": "date",
           "type": "string",
           "required": false,
-          "description": "Date of the rate, YYYY-MM-DD. Not used with quote."
+          "description": "Date of the rate, YYYY-MM-DD, e.g. 2024-01-15."
         },
         {
-          "name": "start_date",
+          "name": "from_",
           "type": "string",
           "required": false,
           "description": "Start date of a time series, YYYY-MM-DD."
         },
         {
-          "name": "end_date",
+          "name": "to",
           "type": "string",
           "required": false,
           "description": "End date of a time series, YYYY-MM-DD."
@@ -183,7 +183,6 @@
         {
           "endpoint": "get_provider_rate",
           "requires": [
-            "provider",
             "base",
             "quote"
           ],
@@ -197,17 +196,15 @@
         },
         {
           "endpoint": "get_provider_rates",
-          "requires": [
-            "provider"
-          ],
+          "requires": [],
           "arguments": {
             "provider": "provider",
+            "date": "date",
+            "from_": "from",
+            "to": "to",
+            "group": "group",
             "base": "base",
             "quotes": "quotes",
-            "date": "date",
-            "start_date": "from",
-            "end_date": "to",
-            "group": "group",
             "providers": "providers",
             "expand": "expand"
           },
@@ -218,19 +215,19 @@
     },
     {
       "name": "currencies",
-      "description": "Look up currencies and their provider coverage. With currency it returns details for that one currency; without it, lists all available currencies (scope=all includes legacy currencies).",
+      "description": "List available currencies with provider coverage, or get details and provider coverage for one currency. Give currency (e.g. EUR) for one currency. Otherwise lists currencies; set scope to all to include legacy currencies.",
       "parameters": [
         {
           "name": "currency",
           "type": "string",
           "required": false,
-          "description": "Currency code, e.g. EUR. Omit to list all currencies."
+          "description": "Currency code, e.g. EUR. Leave out to list currencies."
         },
         {
           "name": "scope",
           "type": "string",
           "required": false,
-          "description": "Set to all to include legacy currencies when listing.",
+          "description": "Set to all to include legacy currencies. Only used when listing.",
           "enum": [
             "all"
           ]
@@ -261,13 +258,13 @@
     },
     {
       "name": "providers",
-      "description": "Look up the data providers behind the API. With provider it returns details including its datasets; without it, lists all providers.",
+      "description": "List the providers behind the API, or get details for one provider including its datasets. Give provider (e.g. ecb) for one provider; otherwise lists all providers.",
       "parameters": [
         {
           "name": "provider",
           "type": "string",
           "required": false,
-          "description": "Provider key, e.g. ecb. Omit to list all providers."
+          "description": "Provider key, e.g. ecb. Leave out to list all providers."
         }
       ],
       "routes": [
@@ -295,7 +292,7 @@
   "excluded": [
     {
       "endpoint": "get_rates_csv",
-      "reason": "Non-JSON CSV response with no parameters; duplicates the rates data available as JSON."
+      "reason": "Returns CSV text rather than JSON; exchange_rates returns the same rates as JSON."
     }
   ],
   "approved": false
