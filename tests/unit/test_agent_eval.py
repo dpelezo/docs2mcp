@@ -1,5 +1,6 @@
 """The agent eval runner and its metrics (#50), with a scripted model and no network."""
 
+import argparse
 import asyncio
 import json
 import shutil
@@ -377,6 +378,9 @@ def test_the_cli_runs_a_task_over_stdio_and_writes_the_summary(
 
     assert agent_eval.main(args) == 0  # resumes: nothing left to run
     assert len(load_runs(out / "results.jsonl")) == 1
+    models = iter([Scripted(replies=[_submit("Icelandic Króna")])])
+    assert agent_eval.main([*args, "--condition-repeats", "C=2"]) == 0  # adds repeat 2 only
+    assert sorted(r.repeat for r in load_runs(out / "results.jsonl")) == [1, 2]
     assert agent_eval.main([*args, "--summary-only"]) == 0
 
 
@@ -390,3 +394,41 @@ def test_the_cli_says_when_there_is_nothing_to_run(tmp_path: Path) -> None:
 
 def test_exact_answers_are_scored_by_the_task_rule() -> None:
     assert isinstance(TASK.answer, Exact)
+
+
+# Pilot 2 fixes (#64)
+
+
+class _Raising:
+    """An MCP session whose client rejects the result, as with FastMCP's Postcodes.io schemas."""
+
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def call_tool(self, name: str, arguments: dict[str, Any]) -> Any:
+        del arguments
+        self.calls += 1
+        message = (
+            f"Invalid structured content returned by tool {name}: None is not of type 'integer'"
+        )
+        raise RuntimeError(message)
+
+
+def test_a_client_side_tool_failure_goes_back_to_the_agent() -> None:
+    model = Scripted(replies=[_call("LookupPostcode", {"postcode": "SW1A 1AA"}), _submit("x")])
+    session = _Raising()
+    run = asyncio.run(
+        agent_eval.run_task(
+            model, session, TASK, condition="D", api="postcodes_io", repeat=1, model_name="m"
+        )
+    )
+    assert (run.stop, run.error, session.calls, model.asked) == ("answered", None, 1, 2)
+    assert [c.outcome for c in run.calls] == [Outcome.ERROR]
+
+
+def test_condition_repeats_parse_and_reject_bad_values() -> None:
+    assert agent_eval._repeats("D=1,A=2") == {"D": 1, "A": 2}  # pyright: ignore[reportPrivateUsage]
+    assert agent_eval._repeats("") == {}  # pyright: ignore[reportPrivateUsage]
+    for bad in ("E=1", "D=0", "D", "D=x"):
+        with pytest.raises(argparse.ArgumentTypeError):
+            agent_eval._repeats(bad)  # pyright: ignore[reportPrivateUsage]

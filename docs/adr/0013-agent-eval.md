@@ -65,7 +65,7 @@ These are the reported metrics, per API and condition:
 - **tokens per task**, input and output;
 - **invalid tool calls (%):** calls rejected by the tool's schema, plus calls the API answered with a 4xx caused by the arguments.
 
-Each condition runs **3 times**, and every metric is reported as the minimum and the mean.
+Each condition runs **3 times**, and every metric is reported as the minimum and the mean. Condition D runs once, because sending whole PokéAPI responses costs about four times as much as the other conditions (decided 2026-11-25). Its numbers are a single run, with no spread.
 
 ### Reproducible runs
 
