@@ -15,7 +15,7 @@ uv run server.py --http   # streamable HTTP on http://127.0.0.1:8000/mcp
 For a client that starts servers itself, use `uv run --directory <this folder> server.py` as the command.
 {% if auth.kind in ("api_key", "bearer") %}
 
-Set `{{ auth.env }}` to your API key before starting it.
+Set `{{ auth.env }}` to send your API key. Without it, calls go out without a key, and an API that requires one answers with an error.
 {% elif auth.kind == "unsupported" %}
 
 This API uses `{{ auth.name }}` auth, which the generated server does not send yet.

@@ -69,7 +69,7 @@ def _auth(headers: dict[str, str], query: dict[str, str]) -> None:
 {% if auth.kind == "api_key" %}
     key = os.environ.get(API_KEY_ENV)
     if not key:
-        raise ToolError(f"set {API_KEY_ENV} to call this API")
+        return  # some APIs take a key only for paid use; one that needs it answers 401
 {% if auth.location == "query" %}
     query[{{ auth.name | py }}] = key
 {% else %}
@@ -78,7 +78,7 @@ def _auth(headers: dict[str, str], query: dict[str, str]) -> None:
 {% elif auth.kind == "bearer" %}
     key = os.environ.get(API_KEY_ENV)
     if not key:
-        raise ToolError(f"set {API_KEY_ENV} to call this API")
+        return  # an API that needs the token answers 401
     headers["Authorization"] = f"Bearer {key}"
 {% else %}
     del headers, query  # the API needs no credentials

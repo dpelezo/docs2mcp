@@ -102,7 +102,8 @@ def _tool_context(tool: Tool, plan: GenerationPlan) -> dict[str, Any]:
 
 def _auth_context(plan: GenerationPlan) -> dict[str, Any]:
     auth = plan.toolset.auth
-    env = f"{slug(plan.toolset.api).replace('-', '_').upper()}_API_KEY"
+    name = slug(plan.toolset.api).removesuffix("-api").replace("-", "_").upper()
+    env = f"{name}_API_KEY"
     match auth.type:
         case AuthType.API_KEY:
             return {"kind": "api_key", "env": env, "location": auth.location, "name": auth.name}
