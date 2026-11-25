@@ -2,7 +2,7 @@
 
 - **API:** Open-Meteo Weather Forecast API (1 endpoint)
 - **tools.json:** Sonnet 5.5 run 1 on the owner's machine (`tools/open_meteo/v2/sonnet/run1/`); not committed, because the docs are AGPL
-- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner: *pending*
+- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner (dpelezo) on 2026-11-24, all answers as drafted
 
 ## Each tool
 

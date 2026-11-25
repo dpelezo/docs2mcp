@@ -2,7 +2,7 @@
 
 - **API:** PokéAPI (103 endpoints)
 - **tools.json:** `evals/design/replay/pokeapi/tools.json`, Sonnet 5.5 run 1 (ADR 0012), replayed in CI
-- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner: *pending*
+- **Reviewer and date:** drafted by Claude on 2026-11-24; confirmed by the owner (dpelezo) on 2026-11-24, all answers as drafted
 
 ## Each tool
 

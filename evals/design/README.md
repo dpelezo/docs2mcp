@@ -24,7 +24,7 @@ Fewer tools and fewer tokens are not a goal on their own. A design that merges u
 
 ## Review
 
-A person reviews every task-shaped design with [checklist.md](checklist.md) and saves the answers as `reviews/<id>.md`. Each question is pass or fail, with the tool names that fail it. A design is fit to approve only when every question passes.
+A person reviews every task-shaped design with [checklist.md](checklist.md) and saves the answers as `reviews/<id>.md`. Claude may draft the answers, and the owner confirms or changes each one; a review counts only once it is confirmed. Each question is pass or fail, with the tool names that fail it. A design is fit to approve only when every question passes.
 
 ## Held-out API
 
@@ -77,7 +77,7 @@ Every Sonnet design is valid and needed no repair. Two of 18 Sonnet designs need
 |---|---|---|---|---|---|
 | 2026-11-24 | Baseline (#29) | direct, no model | 129 / 248 of 248 / 13,481 | 11 / 22 of 22 / 1,091 | not reviewed (no grouping to judge) |
 | 2026-11-24 | First task-shaped design (#29), before the parameter rule | Haiku, run 1 | 70 / 228 of 248 / 11,188 | 9 / 22 of 22 / 1,259 | not reviewed: optional parameters dropped (Open-Meteo forecast 14 of 26) |
-| 2026-11-24 | Every parameter passed or omitted (ADR 0012) | Sonnet, run 1 of 3 | 69 / 245 of 248 / 9,707 | 10 / 22 of 22 / 1,143 | 2 of 5 tuned fit to approve; held out not yet |
+| 2026-11-24 | Every parameter passed or omitted (ADR 0012) | Sonnet, run 1 of 3 | 69 / 245 of 248 / 9,707 | 10 / 22 of 22 / 1,143 | confirmed: 2 of 5 tuned fit to approve (Frankfurter, Open-Meteo forecast); held out not yet |
 
 ## Measure a design
 
