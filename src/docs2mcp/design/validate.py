@@ -97,10 +97,7 @@ def _check_route(
             guaranteed.add(target)
         if target in by_name:
             errors.extend(_check_types(where, params[argument], by_name[target]))
-    for name, value in route.constants.items():
-        enum = by_name[name].enum if name in by_name else None
-        if enum is not None and value not in enum:
-            errors.append(f"{where}: constant {name}={value!r} is not in the endpoint's enum")
+    errors.extend(_check_constants(where, route, by_name))
 
     missing = sorted(
         p.name
@@ -113,6 +110,39 @@ def _check_route(
             "map them from arguments the route requires, from required arguments, or set constants"
         )
     return errors
+
+
+def _check_constants(where: str, route: Route, by_name: dict[str, Parameter]) -> list[str]:
+    errors: list[str] = []
+    for name, value in route.constants.items():
+        if name not in by_name:
+            continue  # reported as an unknown parameter
+        target = by_name[name]
+        if not matches_type(value, target.type):
+            errors.append(
+                f"{where}: constant {name}={value!r} is not a JSON {target.type}, "
+                f"which endpoint parameter '{name}' expects"
+            )
+        elif target.enum is not None and value not in target.enum:
+            errors.append(f"{where}: constant {name}={value!r} is not in the endpoint's enum")
+    return errors
+
+
+def matches_type(value: object, type_: ParamType) -> bool:
+    """Whether a JSON value has the type an endpoint parameter declares."""
+    match type_:
+        case ParamType.STRING:
+            return isinstance(value, str)
+        case ParamType.BOOLEAN:
+            return isinstance(value, bool)
+        case ParamType.INTEGER:
+            return isinstance(value, int) and not isinstance(value, bool)
+        case ParamType.NUMBER:
+            return isinstance(value, int | float) and not isinstance(value, bool)
+        case ParamType.ARRAY:
+            return isinstance(value, list)
+        case ParamType.OBJECT:
+            return isinstance(value, dict)
 
 
 def _check_types(where: str, argument: ToolParameter, target: Parameter) -> list[str]:
