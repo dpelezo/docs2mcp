@@ -116,7 +116,7 @@ This counts tools, routes, covered and excluded endpoints, and the estimated tok
 ### Trace a run
 
 Tracing is off by default. Turn it on by setting either:
-- Langfuse keys (`LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY`, plus `LANGFUSE_HOST` for a US or self-hosted instance);
+- Langfuse keys (`LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY`). The default host is Langfuse's EU region. For a US, Japan or self-hosted project, also set `LANGFUSE_BASE_URL` (or `LANGFUSE_HOST`), for example `https://us.cloud.langfuse.com`. A `401` from the exporter usually means the keys belong to another region;
 - or any OpenTelemetry collector (`OTEL_EXPORTER_OTLP_ENDPOINT`).
 
 ```bash

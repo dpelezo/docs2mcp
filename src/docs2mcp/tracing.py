@@ -3,8 +3,9 @@
 Tracing is off unless an exporter is configured, and then the OpenTelemetry API
 records nothing at almost no cost. Two ways to turn it on:
 
-- Langfuse: set LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY (and LANGFUSE_HOST for
-  a self-hosted or US instance). Spans go to its OTLP endpoint.
+- Langfuse: set LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY, and LANGFUSE_BASE_URL (or
+  LANGFUSE_HOST) unless the project is in the EU region. Spans go to its OTLP endpoint.
+  A 401 from the exporter almost always means the keys belong to another region.
 - Any OTLP backend: set OTEL_EXPORTER_OTLP_ENDPOINT (and the usual OTEL_* variables).
 
 Model call spans follow the OpenTelemetry GenAI conventions (`gen_ai.*`), which
@@ -51,7 +52,7 @@ def langfuse_target(settings: Settings) -> tuple[str, dict[str, str]] | None:
     pair = f"{settings.langfuse_public_key}:{settings.langfuse_secret_key.get_secret_value()}"
     token = base64.b64encode(pair.encode()).decode()
     endpoint = f"{settings.langfuse_host.rstrip('/')}/api/public/otel/v1/traces"
-    return endpoint, {"Authorization": f"Basic {token}"}
+    return endpoint, {"Authorization": f"Basic {token}", "x-langfuse-ingestion-version": "4"}
 
 
 def exporter_for(
