@@ -35,6 +35,10 @@ flowchart LR
 
 **Metrics:** task success rate, tool calls per task, tokens per task, and the share of invalid tool calls.
 
+## Results so far
+
+On the three APIs with an official OpenAPI file, an agent (Claude Haiku) using docs2mcp's task-shaped tools solved **98.3%** of tasks, against **95.0%** with tools converted from the OpenAPI file and **90.0%** with FastMCP's `from_openapi`. It used **22% fewer tokens** than the OpenAPI conversion and **63% fewer** than FastMCP, and on complex tasks it scored 100% against 83%. Across all six APIs, the task-shaped design was level with docs2mcp's own one-tool-per-endpoint design (94.7% against 95.7%): better on PokéAPI and worse on Open Library. The eval also found four real bugs, three of them now fixed. Details, failures and limits: [evals/agent](evals/agent/README.md#results-2026-11-25-claude-haiku-5-5).
+
 ## Develop
 
 Requires [uv](https://docs.astral.sh/uv/) and [just](https://just.systems).
