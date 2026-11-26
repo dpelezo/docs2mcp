@@ -43,6 +43,12 @@ flowchart LR
 
 On the three APIs with an official OpenAPI file, an agent (Claude Haiku) using docs2mcp's task-shaped tools solved **98.3%** of tasks, against **95.0%** with tools converted from the OpenAPI file and **90.0%** with FastMCP's `from_openapi`. It used **22% fewer tokens** than the OpenAPI conversion and **63% fewer** than FastMCP, and on complex tasks it scored 100% against 83%. Across all six APIs, the task-shaped design was level with docs2mcp's own one-tool-per-endpoint design (94.7% against 95.7%): better on PokéAPI and worse on Open Library. The eval also found four real bugs, all now fixed. The redirect fix came after the run, so the Open Library numbers above still include that bug. Details, failures and limits: [evals/agent](evals/agent/README.md#results-2026-11-25-claude-haiku-5-5).
 
+### What one run looks like
+
+A single agent run traced in [Langfuse](https://langfuse.com): the agent calls the task-shaped tool `FindOutcode`, which goes through MCP `tools/call`, and then returns the answer. The run took 2.15 s, cost $0.001 and used about 17k tokens.
+
+![Langfuse trace of one docs2mcp agent run, showing the graph from start through the agent task, chat model, the FindOutcode tool call over MCP, and end](docs/langfuse-trace.png)
+
 ## Install
 
 The package is `docs2mcp-cli` on PyPI (`docs2mcp` there is an unrelated project). It needs Python 3.14.
